@@ -1,0 +1,13 @@
+syntax: glob
+
+*.o
+*.dll
+*.bak
+*.res
+*.exe
+*.layout
+*.depend
+*.7z
+*.diff
+*.save-failed
+
