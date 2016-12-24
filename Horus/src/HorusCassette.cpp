@@ -23,9 +23,27 @@ HorusCartridge::HorusCartridge(HorusCassette *cassette, wxWindow *parent, size_t
     wxBoxSizer *boxSizer1 = new wxBoxSizer(wxHORIZONTAL);
     wxStaticBoxSizer *staticBoxSizer1 = new wxStaticBoxSizer(wxHORIZONTAL, this, wxEmptyString);
     wxBoxSizer *boxSizer2 = new wxBoxSizer(wxHORIZONTAL);
-    m_label = new wxStaticText(this, wxNewId(), wxString::Format(wxT(" Slot %zu "), counter), wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER);
-    m_label->SetBackgroundColour(wxColour(255,255,128));
-    boxSizer2->Add(m_label, 0, wxALL, 5);
+
+    m_panelLabel = new wxPanel(this, wxNewId(), wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER|wxTAB_TRAVERSAL);
+    m_panelLabel->SetBackgroundColour(wxColour(255,255,128));
+    wxBoxSizer *boxSizer6 = new wxBoxSizer(wxHORIZONTAL);
+    m_label = new wxStaticText(m_panelLabel, wxNewId(), wxString::Format(wxT("%zu"), counter), wxDefaultPosition, wxSize(80, -1), wxALIGN_CENTRE);
+
+    // Bold label
+    wxFont StaticTextFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+
+    if (! StaticTextFont.Ok())
+        StaticTextFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+
+    StaticTextFont.SetWeight(wxFONTWEIGHT_BOLD);
+    m_label->SetFont(StaticTextFont);
+    boxSizer6->Add(m_label, 0, wxTOP|wxBOTTOM|wxEXPAND, 6);
+    m_panelLabel->SetSizer(boxSizer6);
+    boxSizer6->Fit(m_panelLabel);
+    boxSizer6->SetSizeHints(m_panelLabel);
+
+    boxSizer2->Add(m_panelLabel, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+
     staticBoxSizer1->Add(boxSizer2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     m_text = new wxTextCtrl(this, wxNewId(), wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator);
     m_text->SetMaxLength(80);
@@ -33,25 +51,11 @@ HorusCartridge::HorusCartridge(HorusCassette *cassette, wxWindow *parent, size_t
     wxBoxSizer *boxSizer3 = new wxBoxSizer(wxHORIZONTAL);
     wxStaticBoxSizer *staticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, wxEmptyString);
 
-#if 0
-    wxBitmapButton *bitmapButton1 = new wxBitmapButton(this, wxNewId(), wxNullBitmap, wxDefaultPosition, wxSize(20,20), wxBU_AUTODRAW|wxNO_BORDER, wxDefaultValidator);
-    bitmapButton1->SetBackgroundColour(wxColour(128,255,0));
-    staticBoxSizer2->Add(bitmapButton1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_slider = new wxSlider(this, wxNewId(), 0, 0, 1, wxDefaultPosition, wxDefaultSize, wxSL_BOTH|wxSL_SELRANGE, wxDefaultValidator);
-    m_slider->SetMinSize(wxSize(50,-1));
-    m_slider->SetMaxSize(wxSize(50,-1));
-    staticBoxSizer2->Add(m_slider, 0, wxEXPAND, 0);
-    wxBitmapButton *bitmapButton2 = new wxBitmapButton(this, wxNewId(), wxNullBitmap, wxDefaultPosition, wxSize(20,20), wxBU_AUTODRAW|wxNO_BORDER, wxDefaultValidator);
-    bitmapButton2->SetBackgroundColour(wxColour(255,0,0));
-    staticBoxSizer2->Add(bitmapButton2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-#else
     m_loadToggle = new wxBitmapToggleButton(this, wxNewId(), *hUtils::CreateBitmapFromPNGResource(wxT("TOGGLE_OUT")), wxDefaultPosition, wxDefaultSize, wxNO_BORDER, wxDefaultValidator);
-    staticBoxSizer2->Add(m_loadToggle, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    staticBoxSizer2->Add(m_loadToggle, 0, wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     m_loadToggle->SetBitmapDisabled(*hUtils::CreateBitmapFromPNGResource(wxT("TOGGLE_OUT_DISABLED")));
     m_loadToggle->SetBitmapPressed(*hUtils::CreateBitmapFromPNGResource(wxT("TOGGLE_IN")));
     m_loadToggle->Enable(false);
-#endif
-
 
     boxSizer3->Add(staticBoxSizer2, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     staticBoxSizer1->Add(boxSizer3, 0, wxLEFT|wxRIGHT|wxEXPAND, 5);
@@ -64,8 +68,8 @@ HorusCartridge::HorusCartridge(HorusCassette *cassette, wxWindow *parent, size_t
     m_empty->SetValue(true);
     boxSizer5->Add(m_empty, 0, wxALL|wxEXPAND, 5);
     boxSizer4->Add(boxSizer5, 1, wxALL|wxEXPAND, 5);
-    staticBoxSizer1->Add(boxSizer4, 0, wxLEFT|wxRIGHT|wxEXPAND, 5);
-    boxSizer1->Add(staticBoxSizer1, 1, wxEXPAND, 5);
+    staticBoxSizer1->Add(boxSizer4, 0, wxTOP|wxLEFT|wxRIGHT|wxEXPAND, 5);
+    boxSizer1->Add(staticBoxSizer1, 1, wxEXPAND, 0);
     this->SetSizer(boxSizer1);
     boxSizer1->Fit(this);
     boxSizer1->SetSizeHints(this);
@@ -201,21 +205,21 @@ void HorusCartridge::_setState(HorusCartridgeState state)
     {
         case CARTRIDGE_STATE_EMPTY:
             m_label->SetForegroundColour(wxColour(0, 0, 0));
-            m_label->SetBackgroundColour(wxColour(255, 255, 128));
+            m_panelLabel->SetBackgroundColour(wxColour(255, 255, 128));
             m_empty->Enable(true);
             m_loadToggle->Enable(false);
             break;
 
         case CARTRIDGE_STATE_OCCUPIED:
             m_label->SetForegroundColour(wxColour(255, 255, 255));
-            m_label->SetBackgroundColour(wxColour(40, 40, 255));
+            m_panelLabel->SetBackgroundColour(wxColour(40, 40, 255));
             m_empty->Enable(true);
             m_loadToggle->Enable(true);
             break;
 
         case CARTRIDGE_STATE_LOADED:
             m_label->SetForegroundColour(wxColour(255, 255, 255));
-            m_label->SetBackgroundColour(wxColour(255, 0, 0));
+            m_panelLabel->SetBackgroundColour(wxColour(255, 0, 0));
 
             m_empty->Enable(false);
             m_loadToggle->Enable(true);
@@ -223,7 +227,7 @@ void HorusCartridge::_setState(HorusCartridgeState state)
             if (! m_loadToggle->GetValue())
                 m_loadToggle->SetValue(true);
 
-            _sendEvent(HORUS_EVENT_CASSETTE_LOAD);
+            _sendEvent(HORUS_EVENT_CARTRIDGE_LOAD);
 
             m_cassette->CartridgeLoaded(this);
             break;
@@ -234,7 +238,7 @@ void HorusCartridge::_setState(HorusCartridgeState state)
             if (m_loadToggle->GetValue())
                 m_loadToggle->SetValue(false);
 
-            _sendEvent(HORUS_EVENT_CASSETTE_UNLOAD);
+            _sendEvent(HORUS_EVENT_CARTRIDGE_UNLOAD);
 
             _setState(m_state);
            break;
@@ -243,7 +247,7 @@ void HorusCartridge::_setState(HorusCartridgeState state)
             break;
     }
 
-    m_label->Refresh();
+    m_panelLabel->Refresh();
 
 #ifdef DEBUG
     wxString s = wxT(">>> State: ");
@@ -356,7 +360,7 @@ HorusCartridge *HorusStage::GetLoadedCartridge() const
 // ///////////////////////////////////////////////////////////////////////
 //
 
-HorusCassette::HorusCassette(wxWindow *parent, wxBoxSizer *sizer)
+HorusCassette::HorusCassette(wxWindow *parent, wxBoxSizer *sizer) : m_parent(parent), m_docked(false)
 {
     for (size_t i = 0; i < MAX_CARTRIDGE_SLOTS; i++)
     {
@@ -365,7 +369,6 @@ HorusCassette::HorusCassette(wxWindow *parent, wxBoxSizer *sizer)
     }
 
     m_stage = new HorusStage();
-
 }
 
 
@@ -374,12 +377,31 @@ HorusCassette::~HorusCassette()
 
 }
 
-bool HorusCassette::LoadNewCassette()
+bool HorusCassette::DockCassette()
 {
-    // Handle stage
+    if (m_docked)
+        return false;
+
+    m_docked = true;
+
+    // Send DOCK event
+    _sendEvent(HORUS_EVENT_CASSETTE_DOCKED);
 
     for (size_t i = 0; i < MAX_CARTRIDGE_SLOTS; i++)
         m_cartridges[i]->Clear();
+
+    return true;
+}
+
+bool HorusCassette::UndockCassette()
+{
+    if (! m_docked)
+        return false;
+
+    m_docked = false;
+
+    // Send undock event
+    _sendEvent(HORUS_EVENT_CASSETTE_UNDOCKED);
 
     return true;
 }

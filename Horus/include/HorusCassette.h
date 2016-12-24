@@ -21,9 +21,11 @@ enum HorusCartridgeState
 
 enum HorusCassetteEvent
 {
-    HORUS_EVENT_CASSETTE_LOAD,
-    HORUS_EVENT_CASSETTE_UNLOAD,
-    HORUS_EVENT_CARTRIDGE_UPDATE
+    HORUS_EVENT_CARTRIDGE_LOAD,
+    HORUS_EVENT_CARTRIDGE_UNLOAD,
+    HORUS_EVENT_CARTRIDGE_UPDATE,
+    HORUS_EVENT_CASSETTE_DOCKED,
+    HORUS_EVENT_CASSETTE_UNDOCKED
 };
 
 
@@ -116,6 +118,7 @@ class HorusCartridge: public wxPanel
     private:
         HorusCassette                  *m_cassette;
         wxWindow                       *m_parent;
+        wxPanel                        *m_panelLabel;
         wxStaticText                   *m_label;
         wxTextCtrl                     *m_text;
         wxBitmapToggleButton           *m_loadToggle;
@@ -183,9 +186,6 @@ class HorusStage
             return true;
         }
 
-
-
-
     private:
         HorusCartridge                 *m_cartridge;
         bool                            m_keepOnStage;
@@ -197,7 +197,12 @@ class HorusCassette
         HorusCassette(wxWindow *parent, wxBoxSizer *sizer);
         ~HorusCassette();
 
-        bool LoadNewCassette();
+        bool DockCassette();
+        bool UndockCassette();
+        bool IsCassetteDocked()
+        {
+            return m_docked;
+        }
 
         bool IsStageEmpty()
         {
@@ -241,9 +246,29 @@ class HorusCassette
             return false;
         }
 
+        void SetCassetteDocked(bool docked)
+        {
+            m_docked = docked;
+        }
+
     private:
+        void _sendEvent(HorusCassetteEvent eventID)
+        {
+            HorusEventCassetteData *data = new HorusEventCassetteData(NULL);
+            wxCommandEvent          event(wxEVT_HORUS_CASSETTE, wxID_ANY);
+
+            event.SetInt(eventID);
+
+            event.SetClientData((void *)data);
+
+            wxPostEvent((wxEvtHandler *)m_parent, event);
+        }
+
+    private:
+        wxWindow                       *m_parent;
         HorusCartridge                 *m_cartridges[MAX_CARTRIDGE_SLOTS];
         HorusStage                     *m_stage;
+        bool                            m_docked;
 };
 
 

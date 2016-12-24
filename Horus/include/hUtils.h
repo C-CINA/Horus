@@ -4,6 +4,16 @@
 #include "../HorusMain.h"
 
 
+// Logger callback prototype
+//typedef void (wxCALLBACK *HorusEventLogger_Callback)(time_t , const wxString &, const wxString &);
+
+class HorusEventLoggerCallbackInterface
+{
+    public:
+        // The prefix "cbi" is to prevent naming clashes.
+        virtual void cbiCallbackFunction(time_t , const wxString &, const wxString &) = 0;
+};
+
 /// \brief Class Operator
 ///
 class Operator

@@ -53,14 +53,17 @@ wxString wxbuildinfo(wxbuildinfoformat format)
 
 //(*IdInit(HorusFrame)
 const long HorusFrame::ID_BUTTON1 = wxNewId();
+const long HorusFrame::ID_BUTTON6 = wxNewId();
+const long HorusFrame::ID_SCROLLEDWINDOW1 = wxNewId();
 const long HorusFrame::ID_STATICTEXT1 = wxNewId();
 const long HorusFrame::ID_STATICTEXT2 = wxNewId();
+const long HorusFrame::ID_CHECKBOX1 = wxNewId();
 const long HorusFrame::ID_BUTTON2 = wxNewId();
-const long HorusFrame::ID_BUTTON3 = wxNewId();
+const long HorusFrame::ID_SCROLLEDWINDOW2 = wxNewId();
 const long HorusFrame::ID_CHOICE1 = wxNewId();
 const long HorusFrame::ID_BUTTON4 = wxNewId();
 const long HorusFrame::ID_BUTTON5 = wxNewId();
-const long HorusFrame::ID_TEXTCTRL1 = wxNewId();
+const long HorusFrame::ID_RICHTEXTCTRL1 = wxNewId();
 const long HorusFrame::ID_PANEL1 = wxNewId();
 const long HorusFrame::ID_AUINOTEBOOK1 = wxNewId();
 const long HorusFrame::idMenuQuit = wxNewId();
@@ -74,7 +77,7 @@ BEGIN_EVENT_TABLE(HorusFrame,wxFrame)
     EVT_COMMAND(wxID_ANY, Horus::wxEVT_HORUS_CASSETTE, HorusFrame::OnCassetteEvent)
 END_EVENT_TABLE()
 
-HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id)// : m_operators
+HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLockout(false)
 {
 #ifdef DEBUG
     wxLogWindow *logger = new wxLogWindow(this, _("Logging Window"));
@@ -88,21 +91,26 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id)// : m_operators
     wxBoxSizer* BoxSizer4;
     wxStaticBoxSizer* StaticBoxSizer2;
     wxBoxSizer* BoxSizer6;
+    wxBoxSizer* BoxSizer19;
+    wxBoxSizer* BoxSizer15;
     wxBoxSizer* BoxSizer5;
     wxBoxSizer* BoxSizer10;
     wxBoxSizer* BoxSizer7;
     wxBoxSizer* BoxSizer8;
     wxMenuItem* MenuItem2;
+    wxBoxSizer* BoxSizer13;
     wxMenuItem* MenuItem1;
     wxBoxSizer* BoxSizer2;
     wxBoxSizer* BoxSizer11;
     wxMenu* Menu1;
+    wxBoxSizer* BoxSizer16;
     wxBoxSizer* BoxSizer12;
-    wxStaticBoxSizer* StaticBoxSizer3;
+    wxBoxSizer* BoxSizer18;
+    wxBoxSizer* BoxSizer14;
+    wxBoxSizer* BoxSizer17;
     wxBoxSizer* BoxSizer1;
     wxBoxSizer* BoxSizer9;
     wxMenuBar* MenuBar1;
-    wxStaticBoxSizer* StaticBoxSizer1;
     wxBoxSizer* BoxSizer3;
     wxMenu* Menu2;
 
@@ -110,34 +118,62 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id)// : m_operators
     BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
     BoxSizer2 = new wxBoxSizer(wxVERTICAL);
     AuiNotebook1 = new wxAuiNotebook(this, ID_AUINOTEBOOK1, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TAB_FIXED_WIDTH);
-    AuiNotebook1->SetMinSize(wxSize(800,300));
+    AuiNotebook1->SetMinSize(wxSize(800,500));
     Panel1 = new wxPanel(AuiNotebook1, ID_PANEL1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
     BoxSizer3 = new wxBoxSizer(wxVERTICAL);
     BoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
-    BoxSizer8 = new wxBoxSizer(wxVERTICAL);
-    BoxSizer4->Add(BoxSizer8, 0, wxALL|wxEXPAND, 5);
     BoxSizer6 = new wxBoxSizer(wxHORIZONTAL);
-    StaticBoxSizer1 = new wxStaticBoxSizer(wxVERTICAL, Panel1, _("  Cassette  "));
-    Button1 = new wxButton(Panel1, ID_BUTTON1, _("New Cassette"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
-    StaticBoxSizer1->Add(Button1, 0, wxALL|wxALIGN_LEFT, 5);
+    m_cassetteSizer = new wxStaticBoxSizer(wxVERTICAL, Panel1, _("  Cassette  "));
+    BoxSizer8 = new wxBoxSizer(wxHORIZONTAL);
+    BoxSizer13 = new wxBoxSizer(wxHORIZONTAL);
+    m_dockCassette = new wxButton(Panel1, ID_BUTTON1, _("Dock Cassette"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
+    BoxSizer13->Add(m_dockCassette, 0, wxALL, 5);
+    m_undockCassette = new wxButton(Panel1, ID_BUTTON6, _("Undock Cassette"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON6"));
+    BoxSizer13->Add(m_undockCassette, 0, wxALL, 5);
+    BoxSizer8->Add(BoxSizer13, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    BoxSizer8->Add(0,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    BoxSizer8->Add(0,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    m_cassetteSizer->Add(BoxSizer8, 0, wxTOP|wxLEFT|wxRIGHT|wxEXPAND, 5);
+    BoxSizer14 = new wxBoxSizer(wxVERTICAL);
+    BoxSizer15 = new wxBoxSizer(wxHORIZONTAL);
+    BoxSizer16 = new wxBoxSizer(wxVERTICAL);
+    m_scrolledCartridges = new wxScrolledWindow(Panel1, ID_SCROLLEDWINDOW1, wxDefaultPosition, wxDefaultSize, wxVSCROLL|wxHSCROLL, _T("ID_SCROLLEDWINDOW1"));
     m_slotSizer = new wxBoxSizer(wxVERTICAL);
-    StaticBoxSizer1->Add(m_slotSizer, 1, wxALL|wxEXPAND, 5);
-    BoxSizer6->Add(StaticBoxSizer1, 1, wxALL|wxEXPAND, 5);
+    m_scrolledCartridges->SetSizer(m_slotSizer);
+    m_slotSizer->Fit(m_scrolledCartridges);
+    m_slotSizer->SetSizeHints(m_scrolledCartridges);
+    BoxSizer16->Add(m_scrolledCartridges, 1, wxEXPAND, 5);
+    BoxSizer15->Add(BoxSizer16, 1, wxEXPAND, 5);
+    BoxSizer14->Add(BoxSizer15, 1, wxEXPAND, 5);
+    m_cassetteSizer->Add(BoxSizer14, 1, wxLEFT|wxRIGHT|wxEXPAND, 5);
+    BoxSizer6->Add(m_cassetteSizer, 1, wxALL|wxEXPAND, 5);
     BoxSizer4->Add(BoxSizer6, 1, wxALL|wxEXPAND, 5);
     BoxSizer5 = new wxBoxSizer(wxVERTICAL);
-    StaticBoxSizer3 = new wxStaticBoxSizer(wxVERTICAL, Panel1, _("  On Stage  "));
+    m_stageSizer = new wxStaticBoxSizer(wxVERTICAL, Panel1, _("  On Stage  "));
     BoxSizer7 = new wxBoxSizer(wxHORIZONTAL);
     StaticText1 = new wxStaticText(Panel1, ID_STATICTEXT1, _("Loaded Cartridge: "), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT, _T("ID_STATICTEXT1"));
     BoxSizer7->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_cartridgeNum = new wxStaticText(Panel1, ID_STATICTEXT2, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
+    m_cartridgeNum = new wxStaticText(Panel1, ID_STATICTEXT2, _("<NONE>"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
     BoxSizer7->Add(m_cartridgeNum, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    StaticBoxSizer3->Add(BoxSizer7, 1, wxALL|wxEXPAND, 5);
-    m_unloadStage = new wxButton(Panel1, ID_BUTTON2, _("Unload"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
+    m_stageSizer->Add(BoxSizer7, 0, wxALL|wxEXPAND, 5);
+    BoxSizer17 = new wxBoxSizer(wxHORIZONTAL);
+    m_scrolledStage = new wxScrolledWindow(Panel1, ID_SCROLLEDWINDOW2, wxDefaultPosition, wxDefaultSize, wxVSCROLL|wxHSCROLL, _T("ID_SCROLLEDWINDOW2"));
+    BoxSizer18 = new wxBoxSizer(wxHORIZONTAL);
+    BoxSizer19 = new wxBoxSizer(wxVERTICAL);
+    m_keepOnStage = new wxCheckBox(m_scrolledStage, ID_CHECKBOX1, _("Keep On Stage"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX1"));
+    m_keepOnStage->SetValue(false);
+    m_keepOnStage->Disable();
+    BoxSizer19->Add(m_keepOnStage, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    m_unloadStage = new wxButton(m_scrolledStage, ID_BUTTON2, _("Unload"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
     m_unloadStage->Disable();
-    StaticBoxSizer3->Add(m_unloadStage, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    Button3 = new wxButton(Panel1, ID_BUTTON3, _("Save DB"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON3"));
-    StaticBoxSizer3->Add(Button3, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    BoxSizer5->Add(StaticBoxSizer3, 0, wxALL|wxEXPAND, 5);
+    BoxSizer19->Add(m_unloadStage, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    BoxSizer18->Add(BoxSizer19, 1, wxALL|wxEXPAND, 5);
+    m_scrolledStage->SetSizer(BoxSizer18);
+    BoxSizer18->Fit(m_scrolledStage);
+    BoxSizer18->SetSizeHints(m_scrolledStage);
+    BoxSizer17->Add(m_scrolledStage, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    m_stageSizer->Add(BoxSizer17, 1, wxALL|wxEXPAND, 5);
+    BoxSizer5->Add(m_stageSizer, 0, wxALL|wxEXPAND, 5);
     StaticBoxSizer2 = new wxStaticBoxSizer(wxVERTICAL, Panel1, _("  Operator  "));
     BoxSizer10 = new wxBoxSizer(wxVERTICAL);
     BoxSizer11 = new wxBoxSizer(wxHORIZONTAL);
@@ -156,9 +192,13 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id)// : m_operators
     StaticBoxSizer2->Add(BoxSizer10, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer5->Add(StaticBoxSizer2, 1, wxALL|wxEXPAND, 5);
     BoxSizer4->Add(BoxSizer5, 0, wxALL|wxEXPAND, 5);
-    BoxSizer3->Add(BoxSizer4, 0, wxALL|wxEXPAND, 5);
+    BoxSizer3->Add(BoxSizer4, 1, wxALL|wxEXPAND, 5);
     BoxSizer9 = new wxBoxSizer(wxHORIZONTAL);
-    m_textLogger = new wxTextCtrl(Panel1, ID_TEXTCTRL1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY, wxDefaultValidator, _T("ID_TEXTCTRL1"));
+    m_textLogger = new wxRichTextCtrl(Panel1, ID_RICHTEXTCTRL1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRE_MULTILINE|wxRE_READONLY, wxDefaultValidator, _T("ID_RICHTEXTCTRL1"));
+    wxRichTextAttr rchtxtAttr_1;
+    rchtxtAttr_1.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_FACE|wxTEXT_ATTR_FONT_SIZE|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_FONT_ITALIC|wxTEXT_ATTR_FONT_UNDERLINE|wxTEXT_ATTR_FONT|wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_LINE_SPACING|wxTEXT_ATTR_CHARACTER_STYLE_NAME|wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_TEXT|wxTEXT_ATTR_BULLET_NAME|wxTEXT_ATTR_URL|wxTEXT_ATTR_PAGE_BREAK|wxTEXT_ATTR_EFFECTS|wxTEXT_ATTR_OUTLINE_LEVEL);
+    rchtxtAttr_1.SetBulletStyle(wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT);
+    m_textLogger->SetBasicStyle(rchtxtAttr_1);
     BoxSizer9->Add(m_textLogger, 1, wxALL|wxEXPAND, 5);
     BoxSizer3->Add(BoxSizer9, 1, wxALL|wxEXPAND, 5);
     Panel1->SetSizer(BoxSizer3);
@@ -187,9 +227,10 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id)// : m_operators
     BoxSizer1->Fit(this);
     BoxSizer1->SetSizeHints(this);
 
-    Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::OnButton1Click);
-    Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::OnButton2Click);
-    Connect(ID_BUTTON3,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::OnButton3Click);
+    Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::Onm_dockCassetteClick);
+    Connect(ID_BUTTON6,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::Onm_undockCassetteClick);
+    Connect(ID_CHECKBOX1,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&HorusFrame::Onm_keepOnStageClick);
+    Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::Onm_unloadStageClick);
     Connect(ID_CHOICE1,wxEVT_COMMAND_CHOICE_SELECTED,(wxObjectEventFunction)&HorusFrame::Onm_operatorChoiceSelect);
     Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::Onm_addOperatorClick);
     Connect(ID_BUTTON5,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::Onm_deleteOperatorClick);
@@ -209,7 +250,13 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id)// : m_operators
     }
 #else
 
-    m_cassette = new HorusCassette(Panel1, m_slotSizer);
+    m_cassette = new HorusCassette(m_scrolledCartridges, m_slotSizer);
+    m_scrolledCartridges->Fit();
+    wxSize ws = m_scrolledCartridges->GetSize();
+    m_scrolledCartridges->SetMinSize(wxSize(-1, ws.GetHeight()));
+    m_scrolledCartridges->SetMaxSize(wxSize(-1, ws.GetHeight()));
+
+//    m_cartridgesPanel->Layout();
 
 #endif
 
@@ -231,25 +278,22 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id)// : m_operators
     SetSize(s);
     SetMinSize(s);
 
+#warning FIX THIS
+//    m_scrolledCartridges->Enable(! m_scrolledCartridges->Enable());
+//    m_scrolledCartridges->Enable(! m_scrolledCartridges->Enable());
+//    m_scrolledCartridges->Enable(! m_scrolledCartridges->Enable());
+//    m_scrolledCartridges->Enable(! m_scrolledCartridges->Enable());
+
     //m_eventLock = true;
 
     m_cassette->SetSilent(true);
+    m_eventLockout = true;
 
     m_databases = new HorusDatabasePool();
 
-    m_operators.Add(new Operator(wxT("zorglub"), wxT("1234657980")));
-    m_operators.Add(new Operator(wxT("Tralala"), wxT("1234657980")));
-    m_operators.Add(new Operator(wxT("AAA"), wxT("1234657980")));
-    m_operators.Add(new Operator(wxT("Glob"), wxT("1234657980")));
-    m_operators.Add(new Operator(wxT("Cuite"), wxT("1234657980")));
-    m_operators.Add(new Operator(wxT("Poele"), wxT("1234657980")));
-
-    m_operators.Sort(&hUtils::CompareOperators);
-
-
     if (m_databases->Initialize(m_cassette))
     {
-        if (! m_databases->ReloadData(m_operators))
+        if (! m_databases->ReloadData(m_operators, this))
             Close();
 
         if (! m_cassette->IsStageEmpty())
@@ -260,11 +304,15 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id)// : m_operators
             m_cartridgeNum->SetLabel(wxString::Format(wxT("%zu"), slot->GetNumber()));
         }
     }
-    else
-    {
 
-    }
+    m_keepOnStage->SetValue(m_databases->GetKeepOnStage());
 
+    _dockCassette(m_databases->GetCassetteDocked());
+
+    if (! m_cassette->IsStageEmpty() && ! m_keepOnStage->IsEnabled())
+        m_keepOnStage->Enable(true);
+
+    m_eventLockout = false;
     m_cassette->SetSilent(false);
 
     //m_eventLock = false;
@@ -327,6 +375,45 @@ void HorusFrame::_updateOperatorChoice()
     }
 }
 
+void HorusFrame::_logEvent(time_t ts, const wxString &op, const wxString &message)
+{
+    wxDateTime dt(ts);
+    wxString timestamp = dt.Format(wxT("%a %b %d %Y %H:%M:%S "));
+
+    m_textLogger->Freeze();
+
+    m_textLogger->SetInsertionPointEnd();
+
+    m_textLogger->BeginFontSize(10);
+
+    // Timestamp in bold
+    m_textLogger->BeginBold();
+    m_textLogger->WriteText(timestamp + wxT("[ "));
+
+    // Operator
+    m_textLogger->BeginTextColour(*wxBLUE);//wxColor(0, 0, 255));
+    m_textLogger->WriteText(op);
+    m_textLogger->EndTextColour();
+
+    m_textLogger->WriteText(wxT(" ] :: "));
+    m_textLogger->EndBold();
+
+    // Then text
+    m_textLogger->WriteText(message + wxT("\n"));
+
+
+    // Move to the end of the text
+    m_textLogger->ScrollIntoView(m_textLogger->GetLastPosition(), /* WXK_PAGEDOWN */ WXK_END);
+    m_textLogger->Thaw();
+
+    if (! m_eventLockout)
+    {
+        if (! m_databases->LogCassetteEvent(ts, op, message))
+            wxMessageBox(wxT("Unable to log the cassette event into database."), wxT("Error"), wxOK|wxICON_ERROR);
+    }
+}
+
+
 void HorusFrame::OnClose(wxCloseEvent& event)
 {
     //_saveDB();
@@ -347,26 +434,46 @@ void HorusFrame::OnAbout(wxCommandEvent& event)
     wxMessageBox(msg, _("Welcome to..."));
 }
 
-void HorusFrame::OnButton1Click(wxCommandEvent& event)
+void HorusFrame::_dockCassette(bool dock, bool silent)
 {
-#if 0
-    wxSizerItemList           &items = m_slotSizer->GetChildren();
-    wxSizerItemList::iterator  it = items.begin();
-
-    while(it != items.end())
+    switch (dock)
     {
-        if ((*it)->IsWindow() && wxIsKindOf((*it)->GetWindow(), HorusSlot))
-        {
-            HorusSlot *slot = wxDynamicCast((*it)->GetWindow(), HorusSlot);
+        case true:
+            m_cassette->DockCassette();
+            m_dockCassette->Enable(false);
+            m_undockCassette->Enable(true);
+            m_scrolledCartridges->Enable(true);
+            m_scrolledStage->Enable(true);
 
-            slot->Nullify();
-        }
+//            if (! silent)
+//                _logEvent(wxDateTime::Now().GetTicks(), m_operatorChoice->GetString(m_operatorChoice->GetSelection()), wxT("Cassette docked."));
+            break;
 
-        it++;
+        case false:
+            if (! m_keepOnStage->GetValue())
+                m_cassette->UnloadStage();
+
+            m_cassette->UndockCassette();
+
+            m_dockCassette->Enable(true);
+            m_undockCassette->Enable(false);
+            m_scrolledCartridges->Enable(false);
+            m_scrolledStage->Enable(false);
+
+//            if (! silent)
+//                _logEvent(wxDateTime::Now().GetTicks(), m_operatorChoice->GetString(m_operatorChoice->GetSelection()), wxT("Cassette undocked."));
+            break;
     }
-#else
-    m_cassette->LoadNewCassette();
-#endif
+}
+
+void HorusFrame::Onm_dockCassetteClick(wxCommandEvent& event)
+{
+    _dockCassette(true);
+}
+
+void HorusFrame::Onm_undockCassetteClick(wxCommandEvent& event)
+{
+    _dockCassette(false);
 }
 
 void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
@@ -375,29 +482,39 @@ void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
 
     //if (! m_eventLock)
     {
-        wxDateTime dt(data->TimeStamp);
+        //wxDateTime dt(data->TimeStamp);
 
         wxLogStatus(wxT("RX Event"));
 
         switch (event.GetInt())
         {
-            case HORUS_EVENT_CASSETTE_LOAD:
-                wxLogStatus(wxT("  ** Cassette LOADED: ") + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()));
+            case HORUS_EVENT_CARTRIDGE_LOAD:
+                wxLogStatus(wxT("  ** Cartridge LOADED: ") + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()));
                 m_cartridgeNum->SetLabel(wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()));
 
-                *m_textLogger << dt.Format(wxT("%a %b %d %Y %H:%M:%S")) << wxT(": Cartridge #") << wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()) << wxT(" Loaded.") << wxT("\n");
+                _logEvent(data->TimeStamp, m_operatorChoice->GetString(m_operatorChoice->GetSelection()), wxT("Cartridge #")
+                          + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()) + wxT(" loaded."));
 
                 m_unloadStage->Enable(true);
+                m_keepOnStage->Enable(true);
                 m_databases->UpdateCartridge(data->Cartridge);
                 break;
 
-            case HORUS_EVENT_CASSETTE_UNLOAD:
-                wxLogStatus(wxT("  ** Cassette UNLOADED: ") + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()));
+            case HORUS_EVENT_CARTRIDGE_UNLOAD:
+                wxLogStatus(wxT("  ** Cartridge UNLOADED: ") + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()));
                 m_cartridgeNum->SetLabel(wxT("<NONE>"));
 
-                *m_textLogger << dt.Format(wxT("%a %b %d %Y %H:%M:%S")) << wxT(": Cartridge #") << wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()) << wxT(" Unloaded.") << wxT("\n");
+                _logEvent(data->TimeStamp, m_operatorChoice->GetString(m_operatorChoice->GetSelection()), wxT("Cartridge #")
+                          + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()) + wxT(" unloaded."));
+
+                if (m_keepOnStage->GetValue())
+                {
+                    m_keepOnStage->SetValue(false);
+                    m_databases->SetKeepOnStage(false);
+                }
 
                 m_unloadStage->Enable(false);
+                m_keepOnStage->Enable(false);
                 m_databases->UpdateCartridge(data->Cartridge);
                 break;
 
@@ -405,6 +522,23 @@ void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
                 // Update Database
                 wxLogStatus(wxT("  ** Cartridge UPDATE: ") + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()));
                 m_databases->UpdateCartridge(data->Cartridge);
+                break;
+
+            case HORUS_EVENT_CASSETTE_DOCKED:
+                wxLogStatus(wxT("  ** Cassette DOCKED."));
+
+                if (! m_cassette->IsStageEmpty() && ! m_keepOnStage->IsEnabled())
+                    m_keepOnStage->Enable(true);
+
+                _logEvent(data->TimeStamp, m_operatorChoice->GetString(m_operatorChoice->GetSelection()), wxT("Cassette Docked."));
+                m_databases->SetCassetteDocked(true);
+                break;
+
+            case HORUS_EVENT_CASSETTE_UNDOCKED:
+                wxLogStatus(wxT("  ** Cassette UNDOCKED."));
+
+                _logEvent(data->TimeStamp, m_operatorChoice->GetString(m_operatorChoice->GetSelection()), wxT("Cassette Undocked."));
+                m_databases->SetCassetteDocked(false);
                 break;
         }
     }
@@ -414,14 +548,14 @@ void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
 
 }
 
-void HorusFrame::OnButton2Click(wxCommandEvent& event)
+void HorusFrame::Onm_unloadStageClick(wxCommandEvent& event)
 {
-    m_cassette->UnloadStage();
-}
+    if (wxMessageBox(wxT("Do you really want to unload cartridge #")
+                     + wxString::Format(wxT("%zu"), m_cassette->GetLoadedCartridge()->GetNumber()) + wxT(" ?."),
+                     wxT("Question"), wxYES_NO|wxNO_DEFAULT|wxICON_QUESTION) == wxYES)
+        m_cassette->UnloadStage();
 
-void HorusFrame::OnButton3Click(wxCommandEvent& event)
-{
-    //m_databases->_saveDB();
+    event.Skip();
 }
 
 void HorusFrame::Onm_addOperatorClick(wxCommandEvent& event)
@@ -516,12 +650,16 @@ void HorusFrame::Onm_operatorChoiceSelect(wxCommandEvent& event)
 {
     if (! m_databases->SetCassetteOperator(m_operators.Item(static_cast<size_t>(m_operatorChoice->GetSelection())).UUID))
     {
-        wxMessageBox(wxT("Uname to update cassette's operator"), wxT("Error"), wxOK|wxICON_ERROR);
+        wxMessageBox(wxT("Unable to update cassette's operator"), wxT("Error"), wxOK|wxICON_ERROR);
     }
 
     event.Skip();
 }
 
+void HorusFrame::Onm_keepOnStageClick(wxCommandEvent& event)
+{
+    m_databases->SetKeepOnStage(m_keepOnStage->GetValue());
+}
 
 } // namespace
 

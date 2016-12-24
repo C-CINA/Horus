@@ -23,6 +23,7 @@
 				</ResourceCompiler>
 				<Linker>
 					<Add library="libwxmsw30ud_aui.a" />
+					<Add library="libwxmsw30ud_richtext.a" />
 					<Add library="libwxmsw30ud_core.a" />
 					<Add library="wxcode_msw30ud_wxsqlite3" />
 					<Add library="libwxbase30ud.a" />
@@ -48,6 +49,7 @@
 				<Linker>
 					<Add option="-s" />
 					<Add library="libwxmsw30u_aui.a" />
+					<Add library="libwxmsw30u_richtext.a" />
 					<Add library="libwxmsw30u_core.a" />
 					<Add library="wxcode_msw30u_wxsqlite3" />
 					<Add library="libwxbase30u.a" />

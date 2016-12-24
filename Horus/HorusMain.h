@@ -11,13 +11,15 @@
 #define HORUSMAIN_H
 
 //(*Headers(HorusFrame)
+#include <wx/scrolwin.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/menu.h>
-#include <wx/textctrl.h>
+#include <wx/checkbox.h>
 #include <wx/aui/aui.h>
 #include <wx/panel.h>
 #include <wx/choice.h>
+#include <wx/richtext/richtextctrl.h>
 #include <wx/button.h>
 #include <wx/frame.h>
 #include <wx/statusbr.h>
@@ -56,7 +58,7 @@
 namespace Horus
 {
 
-class HorusFrame: public wxFrame
+class HorusFrame: public wxFrame, public HorusEventLoggerCallbackInterface
 {
     public:
 
@@ -68,29 +70,39 @@ class HorusFrame: public wxFrame
         //(*Handlers(HorusFrame)
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
-        void OnButton1Click(wxCommandEvent& event);
-        void OnButton2Click(wxCommandEvent& event);
         void OnClose(wxCloseEvent& event);
-        void OnButton3Click(wxCommandEvent& event);
         void Onm_addOperatorClick(wxCommandEvent& event);
         void Onm_deleteOperatorClick(wxCommandEvent& event);
         void Onm_operatorChoiceSelect(wxCommandEvent& event);
+        void Onm_dockCassetteClick(wxCommandEvent& event);
+        void Onm_unloadStageClick(wxCommandEvent& event);
+        void Onm_undockCassetteClick(wxCommandEvent& event);
+        void Onm_keepOnStageClick(wxCommandEvent& event);
         //*)
 
         void OnCassetteEvent(wxCommandEvent &);
         void _updateOperatorChoice();
+        void _logEvent(time_t, const wxString &, const wxString &);
+        void _dockCassette(bool, bool = false);
 
+        void cbiCallbackFunction(time_t ts, const wxString &op, const wxString &msg)
+        {
+            _logEvent(ts, op, msg);
+        }
 
         //(*Identifiers(HorusFrame)
         static const long ID_BUTTON1;
+        static const long ID_BUTTON6;
+        static const long ID_SCROLLEDWINDOW1;
         static const long ID_STATICTEXT1;
         static const long ID_STATICTEXT2;
+        static const long ID_CHECKBOX1;
         static const long ID_BUTTON2;
-        static const long ID_BUTTON3;
+        static const long ID_SCROLLEDWINDOW2;
         static const long ID_CHOICE1;
         static const long ID_BUTTON4;
         static const long ID_BUTTON5;
-        static const long ID_TEXTCTRL1;
+        static const long ID_RICHTEXTCTRL1;
         static const long ID_PANEL1;
         static const long ID_AUINOTEBOOK1;
         static const long idMenuQuit;
@@ -99,25 +111,30 @@ class HorusFrame: public wxFrame
         //*)
 
         //(*Declarations(HorusFrame)
-        wxTextCtrl* m_textLogger;
-        wxButton* Button1;
+        wxStaticBoxSizer* m_cassetteSizer;
+        wxCheckBox* m_keepOnStage;
         wxButton* m_unloadStage;
         wxBoxSizer* m_slotSizer;
         wxPanel* Panel1;
         wxStaticText* StaticText1;
+        wxScrolledWindow* m_scrolledStage;
         wxButton* m_addOperator;
         wxButton* m_deleteOperator;
-        wxButton* Button3;
         wxStatusBar* StatusBar1;
+        wxRichTextCtrl* m_textLogger;
         wxStaticText* m_cartridgeNum;
+        wxScrolledWindow* m_scrolledCartridges;
         wxChoice* m_operatorChoice;
         wxAuiNotebook* AuiNotebook1;
+        wxButton* m_dockCassette;
+        wxButton* m_undockCassette;
+        wxStaticBoxSizer* m_stageSizer;
         //*)
 
         HorusCassette                  *m_cassette;
         HorusDatabasePool              *m_databases;
-        //bool                            m_eventLock;
         wxArrayOperator                 m_operators;
+        bool                            m_eventLockout;
 
 
         DECLARE_EVENT_TABLE()
