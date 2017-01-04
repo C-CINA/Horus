@@ -64,8 +64,6 @@ bool HorusDatabasePool::Initialize(HorusCassette *cassette)
 
     wxSQLite3Database::InitializeSQLite();
 
-    _testDB();
-
     m_initialized = _initializeDatabases();
 
     return m_initialized;
@@ -74,15 +72,16 @@ bool HorusDatabasePool::Initialize(HorusCassette *cassette)
 /// \brief
 ///
 /// \param operators wxArrayOperator&
+/// \param receiver HorusDatabaseEventRestore*
 /// \return bool
 ///
 ///
-bool HorusDatabasePool::ReloadData(wxArrayOperator &operators)
+bool HorusDatabasePool::ReloadData(wxArrayOperator &operators, HorusDatabaseEventRestore *receiver)
 {
     if (!m_initialized)
         return false;
 
-    return _reloadCassette() && _reloadOperators(operators) && _reloadEvents();
+    return _reloadCassette() && _reloadOperators(operators) && _reloadEvents(receiver);
 }
 
 /// \brief
@@ -288,8 +287,8 @@ bool HorusDatabasePool::_setKeepOnStage(bool keep)
 
         int ret = updateStatement.ExecuteUpdate();
 
-        wxLogStatus(updateStatement.GetSQL());
-        wxLogStatus(wxT("CassetteKeepOnStage Updated: ") + wxString::Format(wxT("%d"), ret));
+        //wxLogStatus(updateStatement.GetSQL());
+        //wxLogStatus(wxT("CassetteKeepOnStage Updated: ") + wxString::Format(wxT("%d"), ret));
 
         if (ret == 0)
         {
@@ -300,8 +299,7 @@ bool HorusDatabasePool::_setKeepOnStage(bool keep)
     }
     catch (wxSQLite3Exception e)
     {
-        #warning wxmessagebox
-        wxLogStatus(wxT("Error: ") + e.GetMessage());
+        wxMessageBox(wxT("Error: ") + e.GetMessage(), wxT("Database Error"), wxOK|wxICON_ERROR);
         ok = false;
     }
     return ok;
@@ -372,7 +370,6 @@ bool HorusDatabasePool::_rotateCassette()
         //
         {
             wxString  sqlUpdate = wxString(wxT("UPDATE informations SET funeral=?, docked=?;"));
-
             wxSQLite3Statement updateStatement = backupDB.PrepareStatement(sqlUpdate);
 
             updateStatement.Bind(1, static_cast<int>(dt.GetTicks()));
@@ -380,8 +377,8 @@ bool HorusDatabasePool::_rotateCassette()
 
             int ret = updateStatement.ExecuteUpdate();
 
-            wxLogStatus(updateStatement.GetSQL());
-            wxLogStatus(wxT("CassetteFunerals Updated: ") + wxString::Format(wxT("%d"), ret));
+            //wxLogStatus(updateStatement.GetSQL());
+            //wxLogStatus(wxT("CassetteFunerals Updated: ") + wxString::Format(wxT("%d"), ret));
 
             backupDB.Close();
 
@@ -402,8 +399,8 @@ bool HorusDatabasePool::_rotateCassette()
 
             int ret = updateStatement.ExecuteUpdate();
 
-            wxLogStatus(updateStatement.GetSQL());
-            wxLogStatus(wxT("CassetteDockTS Updated: ") + wxString::Format(wxT("%d"), ret));
+            //wxLogStatus(updateStatement.GetSQL());
+            //wxLogStatus(wxT("CassetteDockTS Updated: ") + wxString::Format(wxT("%d"), ret));
         }
 
         state = 4;
@@ -519,8 +516,6 @@ bool HorusDatabasePool::_rotateCassette()
 ///
 bool HorusDatabasePool::_setCassetteDocked(bool docked, bool self)
 {
-    wxString    dockTS = docked ? wxT(", dockTS=?") : wxEmptyString;
-    wxString    sqlUpdate = wxString(wxT("UPDATE informations SET docked=?")) + dockTS + wxString(wxT(";"));
     bool        hasBeenDocked = false;
     time_t      dts = 0;
     bool        ok = true;
@@ -528,6 +523,9 @@ bool HorusDatabasePool::_setCassetteDocked(bool docked, bool self)
     // Check if this cassette has already been docked
     if (docked && _getCassetteDockTimeStamp(dts))
         hasBeenDocked = (dts != time_t(0));
+
+    wxString    dockTS = (docked && ! hasBeenDocked) ? wxT(", dockTS=?") : wxEmptyString;
+    wxString    sqlUpdate = wxString(wxT("UPDATE informations SET docked=?")) + dockTS + wxString(wxT(";"));
 
     try
     {
@@ -537,12 +535,14 @@ bool HorusDatabasePool::_setCassetteDocked(bool docked, bool self)
 
         // Update dockTS only on {Docking && Never docked} conditions
         if (docked && ! hasBeenDocked)
+        {
             updateStatement.Bind(2, static_cast<int>(wxDateTime::Now().GetTicks()));
+        }
 
         int ret = updateStatement.ExecuteUpdate();
 
-        wxLogStatus(updateStatement.GetSQL());
-        wxLogStatus(wxT("CassetteDocked Updated: ") + wxString::Format(wxT("%d"), ret));
+        //wxLogStatus(updateStatement.GetSQL());
+        //wxLogStatus(wxT("CassetteDocked Updated: ") + wxString::Format(wxT("%d"), ret));
 
         if (ret == 0)
         {
@@ -553,8 +553,7 @@ bool HorusDatabasePool::_setCassetteDocked(bool docked, bool self)
     }
     catch (wxSQLite3Exception e)
     {
-        #warning wxmessagebox
-        wxLogStatus(wxT("Error: ") + e.GetMessage());
+        wxMessageBox(wxT("Error: ") + e.GetMessage(), wxT("Database Error"), wxOK|wxICON_ERROR);
         ok = false;
     }
 
@@ -585,8 +584,8 @@ bool HorusDatabasePool::_setCassetteRedocked()
 
         int ret = updateStatement.ExecuteUpdate();
 
-        wxLogStatus(updateStatement.GetSQL());
-        wxLogStatus(wxT("CassetteRedocked Updated: ") + wxString::Format(wxT("%d"), ret));
+        //wxLogStatus(updateStatement.GetSQL());
+        //wxLogStatus(wxT("CassetteRedocked Updated: ") + wxString::Format(wxT("%d"), ret));
 
         if (ret == 0)
         {
@@ -597,8 +596,7 @@ bool HorusDatabasePool::_setCassetteRedocked()
     }
     catch (wxSQLite3Exception e)
     {
-        #warning wxmessagebox
-        wxLogStatus(wxT("Error: ") + e.GetMessage());
+        wxMessageBox(wxT("Error: ") + e.GetMessage(), wxT("Database Error"), wxOK|wxICON_ERROR);
         ok = false;
     }
 
@@ -688,8 +686,8 @@ bool HorusDatabasePool::_logCassetteEvent(time_t ts, const wxString &op, const w
 
         int ret = insertStatement.ExecuteUpdate();
 
-        wxLogStatus(insertStatement.GetSQL());
-        wxLogStatus(wxT("Event Changed: ") + wxString::Format(wxT("%d"), ret));
+        //wxLogStatus(insertStatement.GetSQL());
+        //wxLogStatus(wxT("Event Changed: ") + wxString::Format(wxT("%d"), ret));
 
         if (ret == 0)
         {
@@ -700,8 +698,7 @@ bool HorusDatabasePool::_logCassetteEvent(time_t ts, const wxString &op, const w
     }
     catch (wxSQLite3Exception e)
     {
-        #warning wxmessagebox
-        wxLogStatus(wxT("Error: ") + e.GetMessage());
+        wxMessageBox(wxT("Error: ") + e.GetMessage(), wxT("Database Error"), wxOK|wxICON_ERROR);
         ok = false;
     }
 
@@ -727,8 +724,8 @@ bool HorusDatabasePool::_updateCassetteOperator(const wxString &uuid)
 
         int ret = updateStatement.ExecuteUpdate();
 
-        wxLogStatus(updateStatement.GetSQL());
-        wxLogStatus(wxT("CassetteOperator Inserted: ") + wxString::Format(wxT("%d"), ret));
+        //wxLogStatus(updateStatement.GetSQL());
+        //wxLogStatus(wxT("CassetteOperator Inserted: ") + wxString::Format(wxT("%d"), ret));
 
         if (ret == 0)
         {
@@ -740,8 +737,7 @@ bool HorusDatabasePool::_updateCassetteOperator(const wxString &uuid)
     }
     catch (wxSQLite3Exception e)
     {
-        #warning wxmessagebox
-        wxLogStatus(wxT("Error: ") + e.GetMessage());
+        wxMessageBox(wxT("Error: ") + e.GetMessage(), wxT("Database Error"), wxOK|wxICON_ERROR);
         ok = false;
     }
 
@@ -787,7 +783,7 @@ bool HorusDatabasePool::_reloadCassette()
     bool    ok = true;
     size_t  cartCnt = static_cast<size_t>(m_dbCassette.ExecuteScalar("SELECT COUNT(*) FROM cartridges;"));
 
-    wxLogStatus(wxT("Cassette DB Count: ") + wxString::Format(wxT("%zu"), cartCnt));
+    //wxLogStatus(wxT("Cassette DB Count: ") + wxString::Format(wxT("%zu"), cartCnt));
 
     if ((cartCnt > 0) && (cartCnt <= MAX_CARTRIDGE_SLOTS))
     {
@@ -840,13 +836,13 @@ bool HorusDatabasePool::_reloadCassette()
                             slot->SetLoaded(loadedFlag);
                         }
 
-                        str = wxT("Cartridge #");
-                        str << cid << wxT(", Text: ") << text;
-                        str << wxT(", Keep: ") << wxString::Format(wxT("%s"), keepFlag ? wxT("YES") : wxT("NO"));
-                        str << wxT(", Empty: ") << wxString::Format(wxT("%s"), emptyFlag ? wxT("YES") : wxT("NO"));
-                        str << wxT(", Loaded: ") << wxString::Format(wxT("%s"), loadedFlag ? wxT("YES") : wxT("NO"));
+                        //str = wxT("Cartridge #");
+                        //str << cid << wxT(", Text: ") << text;
+                        //str << wxT(", Keep: ") << wxString::Format(wxT("%s"), keepFlag ? wxT("YES") : wxT("NO"));
+                        //str << wxT(", Empty: ") << wxString::Format(wxT("%s"), emptyFlag ? wxT("YES") : wxT("NO"));
+                        //str << wxT(", Loaded: ") << wxString::Format(wxT("%s"), loadedFlag ? wxT("YES") : wxT("NO"));
 
-                        wxLogStatus(str);
+                        //wxLogStatus(str);
 
                         cartridgeCount++;
                     }
@@ -858,7 +854,7 @@ bool HorusDatabasePool::_reloadCassette()
                     ok = false;
                 }
 
-                wxLogStatus(wxT("CartridgeCount: ") + wxString::Format(wxT("%zu"), cartridgeCount));
+                //wxLogStatus(wxT("CartridgeCount: ") + wxString::Format(wxT("%zu"), cartridgeCount));
             }
         }
 
@@ -885,7 +881,7 @@ bool HorusDatabasePool::_reloadOperators(wxArrayOperator &operators)
     bool    ok = true;
     size_t  opsCnt = static_cast<size_t>(m_dbOperators.ExecuteScalar("SELECT COUNT(*) FROM operators;"));
 
-    wxLogStatus(wxT("Operator DB Count: ") + wxString::Format(wxT("%zu"), opsCnt));
+    //wxLogStatus(wxT("Operator DB Count: ") + wxString::Format(wxT("%zu"), opsCnt));
 
     operators.Clear();
     //operators.Empty();
@@ -903,12 +899,12 @@ bool HorusDatabasePool::_reloadOperators(wxArrayOperator &operators)
             while (q.NextRow())
             {
                 Operator *op = new Operator(q.GetString(0), q.GetString(1));
-                wxString  str;
+                //wxString  str;
 
                 operators.Add(op);
 
-                str = wxT("Operator ") + op->Name + wxT(", UUID: ") + op->UUID + wxT(" restored.");
-                wxLogStatus(str);
+                //str = wxT("Operator ") + op->Name + wxT(", UUID: ") + op->UUID + wxT(" restored.");
+                //wxLogStatus(str);
 
                 operatorCount++;
             }
@@ -920,7 +916,7 @@ bool HorusDatabasePool::_reloadOperators(wxArrayOperator &operators)
             ok = false;
         }
 
-        wxLogStatus(wxT("OperatorCount: ") + wxString::Format(wxT("%zu"), operatorCount));
+        //wxLogStatus(wxT("OperatorCount: ") + wxString::Format(wxT("%zu"), operatorCount));
     }
 
     operators.Sort(&hUtils::CompareOperators);
@@ -934,12 +930,14 @@ bool HorusDatabasePool::_reloadOperators(wxArrayOperator &operators)
 /// \return bool
 ///
 ///
-bool HorusDatabasePool::_reloadEvents()
+bool HorusDatabasePool::_reloadEvents(HorusDatabaseEventRestore *receiver)
 {
     bool    ok = true;
     size_t  evtCnt = static_cast<size_t>(m_dbCassette.ExecuteScalar("SELECT COUNT(*) FROM events;"));
+    //wxArrayHorusDatabaseEventEntries *entries = new wxArrayHorusDatabaseEventEntries();
+    //HorusEventDatabaseEventData *data = new HorusEventDatabaseEventData();
 
-    wxLogStatus(wxT("Event DB Count: ") + wxString::Format(wxT("%zu"), evtCnt));
+    //wxLogStatus(wxT("Event DB Count: ") + wxString::Format(wxT("%zu"), evtCnt));
 
     if (evtCnt > 0)
     {
@@ -953,15 +951,19 @@ bool HorusDatabasePool::_reloadEvents()
 
             while (q.NextRow())
             {
-                time_t   ts     = static_cast<time_t>(q.GetInt(1));
-                wxString op     = q.GetString(2);
-                wxString msg    = q.GetString(3);
+//                time_t   ts     = static_cast<time_t>(q.GetInt(1));
+//                wxString op     = q.GetString(2);
+//                wxString msg    = q.GetString(3);
 
                 //logger->horusLoggerCallbackFunction(ts, op, msg);
-                _sendReloadEvent(ts, op, msg);
+                //data->AddEntry(static_cast<time_t>(q.GetInt(1)), q.GetString(2), q.GetString(3));
 
-                wxString str = wxT("Restore message ") + wxString::Format(wxT("%llu"), ts) + wxT(" [") + op + wxT("] ") + msg;
-                wxLogStatus(str);
+                receiver->HorusEventRestore(static_cast<time_t>(q.GetInt(1)), q.GetString(2), q.GetString(3));
+
+                //_sendReloadEvent(ts, op, msg);
+
+                //wxString str = wxT("Restore message ") + wxString::Format(wxT("%llu"), ts) + wxT(" [") + op + wxT("] ") + msg;
+                //wxLogStatus(str);
             }
         }
         catch (wxSQLite3Exception e)
@@ -970,6 +972,9 @@ bool HorusDatabasePool::_reloadEvents()
 
             ok = false;
         }
+
+        //_sendReloadEvent(data);
+
     }
 
     return ok;
@@ -1002,25 +1007,16 @@ void _clearDB(wxSQLite3Database* db)
 
 /// \brief
 ///
-/// \return void
-///
-///
-void HorusDatabasePool::_testDB()
-{
-    wxSQLite3Database db;
-
-    wxLogStatus(wxT("wxSQLite3 Version:    ") + wxSQLite3Database::GetWrapperVersion());
-    wxLogStatus(wxT("SQLite3 Version:      ") + db.GetVersion());
-    wxLogStatus(wxT("SQLite3 Source Id:    ") + db.GetSourceId());
-}
-
-/// \brief
-///
 /// \return bool
 ///
 ///
 bool HorusDatabasePool::_initializeDatabases()
 {
+    //wxSQLite3Database db;
+    //wxLogStatus(wxT("wxSQLite3 Version:    ") + wxSQLite3Database::GetWrapperVersion());
+    //wxLogStatus(wxT("SQLite3 Version:      ") + db.GetVersion());
+    //wxLogStatus(wxT("SQLite3 Source Id:    ") + db.GetSourceId());
+
     return _initializeCassetteDatabase() && _initializeOperatorsDatabase();
 }
 
@@ -1089,7 +1085,7 @@ bool HorusDatabasePool::_initializeCassetteDatabase()
                     time_t      ts = static_cast<time_t>(q.GetInt(0));
                     wxDateTime  dt(ts);
 
-                    wxLogStatus(wxT("Database dockTS : ") + dt.Format(wxT("%a %b %d %Y %H:%M:%S")));
+                    //wxLogStatus(wxT("Database dockTS : ") + dt.Format(wxT("%a %b %d %Y %H:%M:%S")));
                 }
             }
             catch (wxSQLite3Exception e)
@@ -1206,8 +1202,8 @@ bool HorusDatabasePool::_updateCartridgeData(HorusCartridge *slot)
 
             int ret = updateStatement.ExecuteUpdate();
 
-            wxLogStatus(updateStatement.GetSQL());
-            wxLogStatus(wxT("Changed: ") + wxString::Format(wxT("%d"), ret));
+            //wxLogStatus(updateStatement.GetSQL());
+            //wxLogStatus(wxT("Changed: ") + wxString::Format(wxT("%d"), ret));
 
             if (ret == 0)
             {
@@ -1219,8 +1215,7 @@ bool HorusDatabasePool::_updateCartridgeData(HorusCartridge *slot)
         }
         catch (wxSQLite3Exception e)
         {
-            #warning wxmessagebox
-            wxLogStatus(wxT("Error: ") + e.GetMessage());
+        wxMessageBox(wxT("Error: ") + e.GetMessage(), wxT("Database Error"), wxOK|wxICON_ERROR);
             ok = false;
         }
 
@@ -1250,8 +1245,8 @@ bool HorusDatabasePool::_insertOperator(const wxString &name, const wxString &uu
 
         int ret = insertStatement.ExecuteUpdate();
 
-        wxLogStatus(insertStatement.GetSQL());
-        wxLogStatus(wxT("Changed: ") + wxString::Format(wxT("%d"), ret));
+        //wxLogStatus(insertStatement.GetSQL());
+        //wxLogStatus(wxT("Changed: ") + wxString::Format(wxT("%d"), ret));
 
         if (ret == 0)
         {
@@ -1263,8 +1258,7 @@ bool HorusDatabasePool::_insertOperator(const wxString &name, const wxString &uu
     }
     catch (wxSQLite3Exception e)
     {
-        #warning wxmessagebox
-        wxLogStatus(wxT("Error: ") + e.GetMessage());
+        wxMessageBox(wxT("Error: ") + e.GetMessage(), wxT("Database Error"), wxOK|wxICON_ERROR);
         ok = false;
     }
 
@@ -1292,8 +1286,8 @@ bool HorusDatabasePool::_updateOperator(const wxString &name, const wxString &uu
 
         int ret = updateStatement.ExecuteUpdate();
 
-        wxLogStatus(updateStatement.GetSQL());
-        wxLogStatus(wxT("Changed: ") + wxString::Format(wxT("%d"), ret));
+        //wxLogStatus(updateStatement.GetSQL());
+        //wxLogStatus(wxT("Changed: ") + wxString::Format(wxT("%d"), ret));
 
         if (ret == 0)
         {
@@ -1305,8 +1299,7 @@ bool HorusDatabasePool::_updateOperator(const wxString &name, const wxString &uu
     }
     catch (wxSQLite3Exception e)
     {
-        #warning wxmessagebox
-        wxLogStatus(wxT("Error: ") + e.GetMessage());
+        wxMessageBox(wxT("Error: ") + e.GetMessage(), wxT("Database Error"), wxOK|wxICON_ERROR);
         ok = false;
     }
 
@@ -1332,8 +1325,8 @@ bool HorusDatabasePool::_deleteOperator(const wxString &uuid)
 
         int ret = deleteStatement.ExecuteUpdate();
 
-        wxLogStatus(deleteStatement.GetSQL());
-        wxLogStatus(wxT("Changed: ") + wxString::Format(wxT("%d"), ret));
+        //wxLogStatus(deleteStatement.GetSQL());
+        //wxLogStatus(wxT("Changed: ") + wxString::Format(wxT("%d"), ret));
 
         if (ret == 0)
         {
@@ -1345,14 +1338,14 @@ bool HorusDatabasePool::_deleteOperator(const wxString &uuid)
     }
     catch (wxSQLite3Exception e)
     {
-        #warning wxmessagebox
-        wxLogStatus(wxT("Error: ") + e.GetMessage());
+        wxMessageBox(wxT("Error: ") + e.GetMessage(), wxT("Database Error"), wxOK|wxICON_ERROR);
         ok = false;
     }
 
     return ok;
 }
 
+#if 0
 /// \brief
 ///
 /// \return bool
@@ -1382,15 +1375,14 @@ bool HorusDatabasePool::_saveDB()
 
                 int ret = updateStatement.ExecuteUpdate();
 
-                wxLogStatus(updateStatement.GetSQL());
-                wxLogStatus(wxT("Changed: ") + wxString::Format(wxT("%d"), ret));
+                //wxLogStatus(updateStatement.GetSQL());
+                //wxLogStatus(wxT("Changed: ") + wxString::Format(wxT("%d"), ret));
 
 
             }
             catch (wxSQLite3Exception e)
             {
-                #warning wxmessagebox
-                wxLogStatus(wxT("Error: ") + e.GetMessage());
+                wxMessageBox(wxT("Error: ") + e.GetMessage(), wxT("Database Error"), wxOK|wxICON_ERROR);
                 ok = false;
             }
         }
@@ -1402,6 +1394,7 @@ bool HorusDatabasePool::_saveDB()
 
     return ok;
 }
+#endif // 0
 
 void HorusDatabasePool::_sendEvent(HorusDatabaseEvent eventID)
 {
@@ -1423,21 +1416,6 @@ void HorusDatabasePool::_sendBackupEvent(const wxString &dbName)
     data->BackupFile = dbName;
 
     event.SetInt(HORUS_EVENT_DATABASEPOOL_BACKUP);
-
-    event.SetClientData((void *)data);
-
-    wxPostEvent((wxEvtHandler *)m_parent, event);
-}
-
-void HorusDatabasePool::_sendReloadEvent(time_t ts, const wxString &op, const wxString &message)
-{
-    HorusEventDatabaseData *data = new HorusEventDatabaseData(ts);
-    wxCommandEvent          event(wxEVT_HORUS_DATABASEPOOL, GetId());
-
-    data->Operator = op;
-    data->Message = message;
-
-    event.SetInt(HORUS_EVENT_DATABASEPOOL_RELOAD_EVENTS);
 
     event.SetClientData((void *)data);
 
@@ -1467,8 +1445,8 @@ bool HorusDatabasePool::_fillCartridgesData()
 
         int ret = insertStatement.ExecuteUpdate();
 
-        //wxLogStatus(wxT("SQL: ") + insertStatement.GetSQL());
-        wxLogStatus(wxT("dockTS and Docked Inserted: ") + wxString::Format(wxT("%d"), ret));
+        ////wxLogStatus(wxT("SQL: ") + insertStatement.GetSQL());
+        //wxLogStatus(wxT("dockTS and Docked Inserted: ") + wxString::Format(wxT("%d"), ret));
 
     }
     catch (wxSQLite3Exception e)
@@ -1503,8 +1481,8 @@ bool HorusDatabasePool::_fillCartridgesData()
 
                 int ret = insertStatement.ExecuteUpdate();
 
-                //wxLogStatus(wxT("SQL: ") + insertStatement.GetSQL());
-                wxLogStatus(wxT("Cartridge Inserted: ") + wxString::Format(wxT("%d"), ret));
+                ////wxLogStatus(wxT("SQL: ") + insertStatement.GetSQL());
+                //wxLogStatus(wxT("Cartridge Inserted: ") + wxString::Format(wxT("%d"), ret));
 
             }
             catch (wxSQLite3Exception e)
@@ -1518,6 +1496,5 @@ bool HorusDatabasePool::_fillCartridgesData()
 
     return ok;
 }
-
 
 } // namespace

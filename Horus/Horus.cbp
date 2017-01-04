@@ -70,6 +70,9 @@
 			<Add option="-DWXUSINGDLL" />
 			<Add option="-DwxUSE_UNICODE" />
 			<Add option="-DMAX_CARTRIDGE_SLOTS=6" />
+			<Add option='-DHOSTNAME=&quot;\&quot;%COMPUTERNAME%\&quot;&quot;' />
+			<Add option='-DUSERNAME=&quot;\&quot;%USERNAME%\&quot;&quot;' />
+			<Add option='-DHOSTSYSTEM=&quot;\&quot;`ver`\&quot;&quot;' />
 			<Add directory="C:/wxWidgets-3.0.2-libs/include" />
 		</Compiler>
 		<ResourceCompiler>
@@ -81,6 +84,7 @@
 			<Add library="Ole32" />
 			<Add library="Rpcrt4" />
 		</Linker>
+		<Unit filename="../HorusAbout/HorusAbout/HorusAboutMain.cpp" />
 		<Unit filename="HorusApp.cpp" />
 		<Unit filename="HorusApp.h" />
 		<Unit filename="HorusMain.cpp" />
@@ -116,8 +120,8 @@
 				<general />
 			</DoxyBlocks>
 			<AutoVersioning>
-				<Scheme minor_max="10" build_max="0" rev_max="0" rev_rand_max="10" build_times_to_increment_minor="100" />
-				<Settings autoincrement="1" date_declarations="1" use_define="0" update_manifest="1" do_auto_increment="0" ask_to_increment="0" language="C++" svn="0" svn_directory="" header_path="version.h" />
+				<Scheme minor_max="99" build_max="0" rev_max="0" rev_rand_max="10" build_times_to_increment_minor="100" />
+				<Settings autoincrement="0" date_declarations="1" use_define="0" update_manifest="1" do_auto_increment="0" ask_to_increment="0" language="C++" svn="0" svn_directory="" header_path="version.h" />
 				<Changes_Log show_changes_editor="0" app_title="released version %M.%m.%b of %p" changeslog_path="ChangesLog.txt" />
 				<Code header_guard="VERSION_H" namespace="AutoVersion" prefix="" />
 			</AutoVersioning>

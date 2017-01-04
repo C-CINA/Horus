@@ -74,7 +74,7 @@ HorusCartridge::HorusCartridge(HorusCassette *cassette, wxWindow *parent, size_t
     boxSizer1->Fit(this);
     boxSizer1->SetSizeHints(this);
 
-    Connect(wxEVT_CONTEXT_MENU, (wxObjectEventFunction)&HorusCartridge::OnContextMenu);
+    //Connect(wxEVT_CONTEXT_MENU, (wxObjectEventFunction)&HorusCartridge::OnContextMenu);
     Connect(m_text->GetId(), wxEVT_COMMAND_TEXT_UPDATED, (wxObjectEventFunction)&HorusCartridge::OnText);
     Connect(m_empty->GetId(), wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&HorusCartridge::OnEmpty);
     Connect(m_keepIt->GetId(), wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&HorusCartridge::OnKeepIt);
@@ -130,10 +130,9 @@ bool HorusCartridge::Unload()
     return Load(false);
 }
 
+#if 0
 void HorusCartridge::OnContextMenu(wxContextMenuEvent &event)
 {
-    wxLogStatus(wxT("Context"));
-
     wxMenu menu;
 
     menu.SetTitle(wxString::Format(wxT("Slot #%zu"), m_counter));
@@ -145,6 +144,7 @@ void HorusCartridge::OnContextMenu(wxContextMenuEvent &event)
 
     PopupMenu(&menu);
 }
+#endif // 0
 
 void HorusCartridge::_changeText(const wxString &str)
 {

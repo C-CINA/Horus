@@ -22,6 +22,11 @@
 namespace Horus
 {
 
+const wxString   PROGRAM_AUTHOR_NAME    = wxT("Daniel Caujolle-Bert");
+const wxString   PROGRAM_AUTHOR_ADDRESS = wxT("daniel.caujolle-bert@unibas.ch");
+const wxString   PROGRAM_COMPANY        = wxT("BioEM Lab");
+const wxString   PROGRAM_COMPANY_URL    = wxT("https://c-cina.unibas.ch/bioem");
+
 //helper functions
 enum wxbuildinfoformat {
     short_f, long_f };
@@ -64,6 +69,8 @@ const long HorusFrame::ID_BUTTON4 = wxNewId();
 const long HorusFrame::ID_BUTTON5 = wxNewId();
 const long HorusFrame::ID_RICHTEXTCTRL1 = wxNewId();
 const long HorusFrame::ID_PANEL1 = wxNewId();
+const long HorusFrame::ID_BUTTON7 = wxNewId();
+const long HorusFrame::ID_BUTTON8 = wxNewId();
 const long HorusFrame::ID_TREECTRL1 = wxNewId();
 const long HorusFrame::ID_PANEL3 = wxNewId();
 const long HorusFrame::ID_STATICTEXT6 = wxNewId();
@@ -87,7 +94,7 @@ BEGIN_EVENT_TABLE(HorusFrame,wxFrame)
     EVT_COMMAND(wxID_ANY, Horus::wxEVT_HORUS_DATABASEPOOL, HorusFrame::OnDatabasePoolEvent)
 END_EVENT_TABLE()
 
-HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLockout(false)
+HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(false)
 {
 #ifdef DEBUG
     wxLogWindow *logger = new wxLogWindow(this, _("Logging Window"));
@@ -96,6 +103,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLockout(false)
 #else
     wxLogNull noLog;
 #endif
+    Hide();
 
     //(*Initialize(HorusFrame)
     wxBoxSizer* BoxSizer4;
@@ -123,6 +131,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLockout(false)
     wxBoxSizer* BoxSizer14;
     wxStaticBoxSizer* StaticBoxSizer3;
     wxStaticBoxSizer* StaticBoxSizer6;
+    wxBoxSizer* BoxSizer27;
     wxBoxSizer* BoxSizer17;
     wxBoxSizer* BoxSizer24;
     wxBoxSizer* BoxSizer26;
@@ -224,7 +233,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLockout(false)
     BoxSizer9 = new wxBoxSizer(wxHORIZONTAL);
     m_wtextLogger = new wxRichTextCtrl(m_wloggerPanel, ID_RICHTEXTCTRL1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRE_MULTILINE|wxRE_READONLY, wxDefaultValidator, _T("ID_RICHTEXTCTRL1"));
     wxRichTextAttr rchtxtAttr_1;
-    rchtxtAttr_1.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_FACE|wxTEXT_ATTR_FONT_SIZE|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_FONT_ITALIC|wxTEXT_ATTR_FONT_UNDERLINE|wxTEXT_ATTR_FONT|wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_LINE_SPACING|wxTEXT_ATTR_CHARACTER_STYLE_NAME|wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_TEXT|wxTEXT_ATTR_BULLET_NAME|wxTEXT_ATTR_URL|wxTEXT_ATTR_PAGE_BREAK|wxTEXT_ATTR_EFFECTS|wxTEXT_ATTR_OUTLINE_LEVEL);
+    rchtxtAttr_1.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_FACE|wxTEXT_ATTR_FONT_SIZE|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_FONT_ITALIC|wxTEXT_ATTR_FONT_UNDERLINE|wxTEXT_ATTR_FONT|wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT);
     rchtxtAttr_1.SetBulletStyle(wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT);
     m_wtextLogger->SetBasicStyle(rchtxtAttr_1);
     BoxSizer9->Add(m_wtextLogger, 1, wxALL|wxEXPAND, 5);
@@ -241,6 +250,15 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLockout(false)
     SplitterWindow1->SetSashGravity(0);
     Panel1 = new wxPanel(SplitterWindow1, ID_PANEL3, wxPoint(133,10), wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL3"));
     BoxSizer22 = new wxBoxSizer(wxVERTICAL);
+    BoxSizer27 = new wxBoxSizer(wxHORIZONTAL);
+    BoxSizer27->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    m_wtreeExpandAll = new wxButton(Panel1, ID_BUTTON7, _("+"), wxDefaultPosition, wxSize(20,20), 0, wxDefaultValidator, _T("ID_BUTTON7"));
+    m_wtreeExpandAll->SetToolTip(_("Expand All"));
+    BoxSizer27->Add(m_wtreeExpandAll, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    m_wtreeCollapseAll = new wxButton(Panel1, ID_BUTTON8, _("-"), wxDefaultPosition, wxSize(20,20), 0, wxDefaultValidator, _T("ID_BUTTON8"));
+    m_wtreeCollapseAll->SetToolTip(_("Collapse All"));
+    BoxSizer27->Add(m_wtreeCollapseAll, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    BoxSizer22->Add(BoxSizer27, 0, wxALL|wxEXPAND, 5);
     m_wtreeCassettes = new wxTreeCtrl(Panel1, ID_TREECTRL1, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE, wxDefaultValidator, _T("ID_TREECTRL1"));
     BoxSizer22->Add(m_wtreeCassettes, 1, wxALL|wxEXPAND, 10);
     Panel1->SetSizer(BoxSizer22);
@@ -276,7 +294,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLockout(false)
     BoxSizer26 = new wxBoxSizer(wxHORIZONTAL);
     m_wbrowserText = new wxRichTextCtrl(Panel2, ID_RICHTEXTCTRL2, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRE_MULTILINE|wxRE_READONLY, wxDefaultValidator, _T("ID_RICHTEXTCTRL2"));
     wxRichTextAttr rchtxtAttr_2;
-    rchtxtAttr_2.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_FACE|wxTEXT_ATTR_FONT_SIZE|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_FONT_ITALIC|wxTEXT_ATTR_FONT_UNDERLINE|wxTEXT_ATTR_FONT|wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_LINE_SPACING|wxTEXT_ATTR_CHARACTER_STYLE_NAME|wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_TEXT|wxTEXT_ATTR_BULLET_NAME|wxTEXT_ATTR_URL|wxTEXT_ATTR_PAGE_BREAK|wxTEXT_ATTR_EFFECTS|wxTEXT_ATTR_OUTLINE_LEVEL);
+    rchtxtAttr_2.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_FACE|wxTEXT_ATTR_FONT_SIZE|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_FONT_ITALIC|wxTEXT_ATTR_FONT_UNDERLINE|wxTEXT_ATTR_FONT|wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT);
     rchtxtAttr_2.SetBulletStyle(wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT);
     m_wbrowserText->SetBasicStyle(rchtxtAttr_2);
     BoxSizer26->Add(m_wbrowserText, 1, wxALL|wxEXPAND, 5);
@@ -324,6 +342,8 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLockout(false)
     Connect(ID_CHOICE1,wxEVT_COMMAND_CHOICE_SELECTED,(wxObjectEventFunction)&HorusFrame::Onm_operatorChoiceSelect);
     Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::Onm_addOperatorClick);
     Connect(ID_BUTTON5,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::Onm_deleteOperatorClick);
+    Connect(ID_BUTTON7,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::Onm_wtreeExpandAllClick);
+    Connect(ID_BUTTON8,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::Onm_wtreeCollapseAllClick);
     Connect(ID_TREECTRL1,wxEVT_COMMAND_TREE_SEL_CHANGED,(wxObjectEventFunction)&HorusFrame::OnCassettesSelectionChanged);
     m_wbrowserGrid->Connect(wxEVT_SIZE,(wxObjectEventFunction)&HorusFrame::OnBrowserGridResize,0,this);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&HorusFrame::OnQuit);
@@ -331,16 +351,9 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLockout(false)
     Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&HorusFrame::OnClose);
     //*)
 
-    //StaticBoxSizer2->GetContainingWindow()->Connect(wxEVT_CONTEXT_MENU, (wxObjectEventFunction)&HorusFrame::OnContext, 0, this);
-
-#if 0
-    for (size_t i = 0; i < 6; i++)
-    {
-        HorusSlot *slot = new HorusSlot(Panel1, i + 1);
-        m_slotSizer->Add(slot, 0, wxEXPAND, 5);
-
-    }
-#else
+    wxSplashScreen* splash = new wxSplashScreen(*hUtils::CreateBitmapFromPNGResource(wxT("SPLASH")), wxSPLASH_CENTRE_ON_SCREEN/*|wxSPLASH_TIMEOUT*/,
+                                                0/*6000*/, NULL, -1, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxSTAY_ON_TOP);
+    wxYield();
 
     m_cassette = new HorusCassette(m_wscrolledCartridges, m_wslotSizer);
     m_wscrolledCartridges->Fit();
@@ -348,20 +361,10 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLockout(false)
     m_wscrolledCartridges->SetMinSize(wxSize(-1, ws.GetHeight()));
     m_wscrolledCartridges->SetMaxSize(wxSize(-1, ws.GetHeight()));
 
-//    m_cartridgesPanel->Layout();
-
-#endif
-
-
     SetIcon(wxICON(MAINICON));
     SetTitle(wxGetApp().GetAppName() + wxT(" ")
              + wxString::FromAscii(AutoVersion::FULLVERSION_STRING)
              + wxString::FromAscii(AutoVersion::STATUS_SHORT));
-
-//    Custom1->SetBitmapPressed(*hUtils::CreateBitmapFromPNGResource(wxT("TOGGLE_IN")));
-//    Custom1->SetBitmapPressed(*hUtils::CreateBitmapFromPNGResource(wxT("TOGGLE_OUT_DISABLED")));
-
-    //Custom1->SetMaxSize(wxSize(50, 25));
 
     Fit();
     Layout();
@@ -370,22 +373,14 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLockout(false)
     SetSize(s);
     SetMinSize(s);
 
-#warning FIX THIS
-//    m_scrolledCartridges->Enable(! m_scrolledCartridges->Enable());
-//    m_scrolledCartridges->Enable(! m_scrolledCartridges->Enable());
-//    m_scrolledCartridges->Enable(! m_scrolledCartridges->Enable());
-//    m_scrolledCartridges->Enable(! m_scrolledCartridges->Enable());
-
-    //m_eventLock = true;
-
     m_cassette->SetSilent(true);
-    m_eventLockout = true;
+    m_eventLoggerLockout = true;
 
     m_databases = new HorusDatabasePool(this);
 
     if (m_databases->Initialize(m_cassette))
     {
-        if (! m_databases->ReloadData(m_operators))
+        if (! m_databases->ReloadData(m_operators, this))
             Close();
 
         if (! m_cassette->IsStageEmpty())
@@ -413,25 +408,15 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLockout(false)
     if (! m_cassette->IsStageEmpty() && ! m_wkeepOnStage->IsEnabled())
         m_wkeepOnStage->Enable(true);
 
-    m_eventLockout = false;
+    m_eventLoggerLockout = false;
     m_cassette->SetSilent(false);
 
-    //m_eventLock = false;
-
-
-//    wxLogStatus(wxT("GetUserDataDir: ") + wxStandardPaths::Get().GetUserDataDir());
-//
-//    m_databases->AddOperator(wxT("Daniel"), wxT("17069590be3c40148674aadd0b88d591"));
-//    m_databases->UpdateOperator(wxT("Daniel"), wxT("17069590be3c40148674aadd0b88d591") /*hUtils::CreateGUID()*/ );
-//    m_databases->DeleteOperator(wxT("c52e5fc5acb544688e19e1ed8e8caf1f"));
-
     _updateOperatorChoice();
+
     wxString opUUID = m_databases->GetCassetteOperator();
 
     if (opUUID != wxEmptyString && opUUID != wxT("-1"))
     {
-        wxLogStatus(wxT("opUUID is not null"));
-
         for (size_t i = 0; i < m_operators.GetCount(); i++)
         {
             if (m_operators.Item(i).UUID.Cmp(opUUID) == 0)
@@ -447,8 +432,11 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLockout(false)
             m_databases->SetCassetteOperator(m_operators.Item(static_cast<size_t>(m_woperatorChoice->GetSelection())).UUID);
     }
 
-
     _initBrowser();
+
+    delete splash;
+
+    Show();
 }
 
 HorusFrame::~HorusFrame()
@@ -479,12 +467,13 @@ void HorusFrame::_updateOperatorChoice()
     }
 }
 
-void HorusFrame::_logEvent(wxRichTextCtrl *ctrl, time_t ts, const wxString &op, const wxString &message, bool saveToDatabase)
+inline void HorusFrame::_logEvent(wxRichTextCtrl *ctrl, time_t ts, const wxString &op, const wxString &message, bool frozen, bool saveToDatabase)
 {
     wxDateTime dt(ts);
     wxString timestamp = dt.Format(wxT("%a %b %d %Y %H:%M:%S "));
 
-    ctrl->Freeze();
+    if (frozen)
+        ctrl->Freeze();
 
     ctrl->SetInsertionPointEnd();
 
@@ -505,12 +494,15 @@ void HorusFrame::_logEvent(wxRichTextCtrl *ctrl, time_t ts, const wxString &op, 
     // Then text
     ctrl->WriteText(message + wxT("\n"));
 
-
     // Move to the end of the text
-    ctrl->ScrollIntoView(m_wtextLogger->GetLastPosition(), /* WXK_PAGEDOWN */ WXK_END);
-    ctrl->Thaw();
 
-    if (! m_eventLockout)
+    if (frozen)
+    {
+        ctrl->ScrollIntoView(ctrl->GetLastPosition(), /* WXK_PAGEDOWN */ WXK_END);
+        ctrl->Thaw();
+    }
+
+    if (saveToDatabase && m_eventLoggerLockout == false)
     {
         if (! m_databases->LogCassetteEvent(ts, op != wxEmptyString ? op : wxT("-1"), message))
             wxMessageBox(wxT("Unable to log the cassette event into database."), wxT("Error"), wxOK|wxICON_ERROR);
@@ -534,8 +526,334 @@ void HorusFrame::OnQuit(wxCommandEvent& event)
 
 void HorusFrame::OnAbout(wxCommandEvent& event)
 {
-    wxString msg = wxbuildinfo(long_f);
-    wxMessageBox(msg, _("Welcome to..."));
+    HorusAboutInformations infos;
+
+    infos.Program.Name = wxGetApp().GetAppName();
+    infos.Program.Version = wxString::FromAscii(AutoVersion::FULLVERSION_STRING) + wxT("-") + wxString::FromAscii(AutoVersion::STATUS);
+    infos.Program.Pitch = wxT("A Cassette Logger");
+    infos.Copyright.Year = wxT("2016-") + wxString::FromAscii(AutoVersion::YEAR);
+    infos.Copyright.AuthorName = PROGRAM_AUTHOR_NAME;
+    infos.Copyright.AuthorAddress = PROGRAM_AUTHOR_ADDRESS;
+    infos.Copyright.Company = PROGRAM_COMPANY;
+    infos.Copyright.URL = PROGRAM_COMPANY_URL;
+    infos.Copyright.LicenseExcerpt = wxT("Released under the terms of the GPL v2");
+    infos.Copyright.LicenseComplete = \
+    wxT("\
+                        GNU GENERAL PUBLIC LICENSE\n\
+                           Version 2, June 1991\n\
+    \n\
+     Copyright (C) 1989, 1991 Free Software Foundation, Inc.,\n\
+     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA\n\
+     Everyone is permitted to copy and distribute verbatim copies\n\
+     of this license document, but changing it is not allowed.\n\
+    \n\
+                                Preamble\n\
+    \n\
+      The licenses for most software are designed to take away your\n\
+    freedom to share and change it.  By contrast, the GNU General Public\n\
+    License is intended to guarantee your freedom to share and change free\n\
+    software--to make sure the software is free for all its users.  This\n\
+    General Public License applies to most of the Free Software\n\
+    Foundation's software and to any other program whose authors commit to\n\
+    using it.  (Some other Free Software Foundation software is covered by\n\
+    the GNU Lesser General Public License instead.)  You can apply it to\n\
+    your programs, too.\n\
+    \n\
+      When we speak of free software, we are referring to freedom, not\n\
+    price.  Our General Public Licenses are designed to make sure that you\n\
+    have the freedom to distribute copies of free software (and charge for\n\
+    this service if you wish), that you receive source code or can get it\n\
+    if you want it, that you can change the software or use pieces of it\n\
+    in new free programs; and that you know you can do these things.\n\
+    \n\
+      To protect your rights, we need to make restrictions that forbid\n\
+    anyone to deny you these rights or to ask you to surrender the rights.\n\
+    These restrictions translate to certain responsibilities for you if you\n\
+    distribute copies of the software, or if you modify it.\n\
+    \n\
+      For example, if you distribute copies of such a program, whether\n\
+    gratis or for a fee, you must give the recipients all the rights that\n\
+    you have.  You must make sure that they, too, receive or can get the\n\
+    source code.  And you must show them these terms so they know their\n\
+    rights.\n\
+    \n\
+      We protect your rights with two steps: (1) copyright the software, and\n\
+    (2) offer you this license which gives you legal permission to copy,\n\
+    distribute and/or modify the software.\n\
+    \n\
+      Also, for each author's protection and ours, we want to make certain\n\
+    that everyone understands that there is no warranty for this free\n\
+    software.  If the software is modified by someone else and passed on, we\n\
+    want its recipients to know that what they have is not the original, so\n\
+    that any problems introduced by others will not reflect on the original\n\
+    authors' reputations.\n\
+    \n\
+      Finally, any free program is threatened constantly by software\n\
+    patents.  We wish to avoid the danger that redistributors of a free\n\
+    program will individually obtain patent licenses, in effect making the\n\
+    program proprietary.  To prevent this, we have made it clear that any\n\
+    patent must be licensed for everyone's free use or not licensed at all.\n\
+    \n\
+      The precise terms and conditions for copying, distribution and\n\
+    modification follow.\n\
+    \n\
+                        GNU GENERAL PUBLIC LICENSE\n\
+       TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION\n\
+    \n\
+      0. This License applies to any program or other work which contains\n\
+    a notice placed by the copyright holder saying it may be distributed\n\
+    under the terms of this General Public License.  The \"Program\", below,\n\
+    refers to any such program or work, and a \"work based on the Program\"\n\
+    means either the Program or any derivative work under copyright law:\n\
+    that is to say, a work containing the Program or a portion of it,\n\
+    either verbatim or with modifications and/or translated into another\n\
+    language.  (Hereinafter, translation is included without limitation in\n\
+    the term \"modification\".)  Each licensee is addressed as \"you\".\n\
+    \n\
+    Activities other than copying, distribution and modification are not\n\
+    covered by this License; they are outside its scope.  The act of\n\
+    running the Program is not restricted, and the output from the Program\n\
+    is covered only if its contents constitute a work based on the\n\
+    Program (independent of having been made by running the Program).\n\
+    Whether that is true depends on what the Program does.\n\
+    \n\
+      1. You may copy and distribute verbatim copies of the Program's\n\
+    source code as you receive it, in any medium, provided that you\n\
+    conspicuously and appropriately publish on each copy an appropriate\n\
+    copyright notice and disclaimer of warranty; keep intact all the\n\
+    notices that refer to this License and to the absence of any warranty;\n\
+    and give any other recipients of the Program a copy of this License\n\
+    along with the Program.\n\
+    \n\
+    You may charge a fee for the physical act of transferring a copy, and\n\
+    you may at your option offer warranty protection in exchange for a fee.\n\
+    \n\
+      2. You may modify your copy or copies of the Program or any portion\n\
+    of it, thus forming a work based on the Program, and copy and\n\
+    distribute such modifications or work under the terms of Section 1\n\
+    above, provided that you also meet all of these conditions:\n\
+    \n\
+        a) You must cause the modified files to carry prominent notices\n\
+        stating that you changed the files and the date of any change.\n\
+    \n\
+        b) You must cause any work that you distribute or publish, that in\n\
+        whole or in part contains or is derived from the Program or any\n\
+        part thereof, to be licensed as a whole at no charge to all third\n\
+        parties under the terms of this License.\n\
+    \n\
+        c) If the modified program normally reads commands interactively\n\
+        when run, you must cause it, when started running for such\n\
+        interactive use in the most ordinary way, to print or display an\n\
+        announcement including an appropriate copyright notice and a\n\
+        notice that there is no warranty (or else, saying that you provide\n\
+        a warranty) and that users may redistribute the program under\n\
+        these conditions, and telling the user how to view a copy of this\n\
+        License.  (Exception: if the Program itself is interactive but\n\
+        does not normally print such an announcement, your work based on\n\
+        the Program is not required to print an announcement.)\n\
+    \n\
+    These requirements apply to the modified work as a whole.  If\n\
+    identifiable sections of that work are not derived from the Program,\n\
+    and can be reasonably considered independent and separate works in\n\
+    themselves, then this License, and its terms, do not apply to those\n\
+    sections when you distribute them as separate works.  But when you\n\
+    distribute the same sections as part of a whole which is a work based\n\
+    on the Program, the distribution of the whole must be on the terms of\n\
+    this License, whose permissions for other licensees extend to the\n\
+    entire whole, and thus to each and every part regardless of who wrote it.\n\
+    \n\
+    Thus, it is not the intent of this section to claim rights or contest\n\
+    your rights to work written entirely by you; rather, the intent is to\n\
+    exercise the right to control the distribution of derivative or\n\
+    collective works based on the Program.\n\
+    \n\
+    In addition, mere aggregation of another work not based on the Program\n\
+    with the Program (or with a work based on the Program) on a volume of\n\
+    a storage or distribution medium does not bring the other work under\n\
+    the scope of this License.\n\
+    \n\
+      3. You may copy and distribute the Program (or a work based on it,\n\
+    under Section 2) in object code or executable form under the terms of\n\
+    Sections 1 and 2 above provided that you also do one of the following:\n\
+    \n\
+        a) Accompany it with the complete corresponding machine-readable\n\
+        source code, which must be distributed under the terms of Sections\n\
+        1 and 2 above on a medium customarily used for software interchange; or,\n\
+    \n\
+        b) Accompany it with a written offer, valid for at least three\n\
+        years, to give any third party, for a charge no more than your\n\
+        cost of physically performing source distribution, a complete\n\
+        machine-readable copy of the corresponding source code, to be\n\
+        distributed under the terms of Sections 1 and 2 above on a medium\n\
+        customarily used for software interchange; or,\n\
+    \n\
+        c) Accompany it with the information you received as to the offer\n\
+        to distribute corresponding source code.  (This alternative is\n\
+        allowed only for noncommercial distribution and only if you\n\
+        received the program in object code or executable form with such\n\
+        an offer, in accord with Subsection b above.)\n\
+    \n\
+    The source code for a work means the preferred form of the work for\n\
+    making modifications to it.  For an executable work, complete source\n\
+    code means all the source code for all modules it contains, plus any\n\
+    associated interface definition files, plus the scripts used to\n\
+    control compilation and installation of the executable.  However, as a\n\
+    special exception, the source code distributed need not include\n\
+    anything that is normally distributed (in either source or binary\n\
+    form) with the major components (compiler, kernel, and so on) of the\n\
+    operating system on which the executable runs, unless that component\n\
+    itself accompanies the executable.\n\
+    \n\
+    If distribution of executable or object code is made by offering\n\
+    access to copy from a designated place, then offering equivalent\n\
+    access to copy the source code from the same place counts as\n\
+    distribution of the source code, even though third parties are not\n\
+    compelled to copy the source along with the object code.\n\
+    \n\
+      4. You may not copy, modify, sublicense, or distribute the Program\n\
+    except as expressly provided under this License.  Any attempt\n\
+    otherwise to copy, modify, sublicense or distribute the Program is\n\
+    void, and will automatically terminate your rights under this License.\n\
+    However, parties who have received copies, or rights, from you under\n\
+    this License will not have their licenses terminated so long as such\n\
+    parties remain in full compliance.\n\
+    \n\
+      5. You are not required to accept this License, since you have not\n\
+    signed it.  However, nothing else grants you permission to modify or\n\
+    distribute the Program or its derivative works.  These actions are\n\
+    prohibited by law if you do not accept this License.  Therefore, by\n\
+    modifying or distributing the Program (or any work based on the\n\
+    Program), you indicate your acceptance of this License to do so, and\n\
+    all its terms and conditions for copying, distributing or modifying\n\
+    the Program or works based on it.\n\
+    \n\
+      6. Each time you redistribute the Program (or any work based on the\n\
+    Program), the recipient automatically receives a license from the\n\
+    original licensor to copy, distribute or modify the Program subject to\n\
+    these terms and conditions.  You may not impose any further\n\
+    restrictions on the recipients' exercise of the rights granted herein.\n\
+    You are not responsible for enforcing compliance by third parties to\n\
+    this License.\n\
+    \n\
+      7. If, as a consequence of a court judgment or allegation of patent\n\
+    infringement or for any other reason (not limited to patent issues),\n\
+    conditions are imposed on you (whether by court order, agreement or\n\
+    otherwise) that contradict the conditions of this License, they do not\n\
+    excuse you from the conditions of this License.  If you cannot\n\
+    distribute so as to satisfy simultaneously your obligations under this\n\
+    License and any other pertinent obligations, then as a consequence you\n\
+    may not distribute the Program at all.  For example, if a patent\n\
+    license would not permit royalty-free redistribution of the Program by\n\
+    all those who receive copies directly or indirectly through you, then\n\
+    the only way you could satisfy both it and this License would be to\n\
+    refrain entirely from distribution of the Program.\n\
+    \n\
+    If any portion of this section is held invalid or unenforceable under\n\
+    any particular circumstance, the balance of the section is intended to\n\
+    apply and the section as a whole is intended to apply in other\n\
+    circumstances.\n\
+    \n\
+    It is not the purpose of this section to induce you to infringe any\n\
+    patents or other property right claims or to contest validity of any\n\
+    such claims; this section has the sole purpose of protecting the\n\
+    integrity of the free software distribution system, which is\n\
+    implemented by public license practices.  Many people have made\n\
+    generous contributions to the wide range of software distributed\n\
+    through that system in reliance on consistent application of that\n\
+    system; it is up to the author/donor to decide if he or she is willing\n\
+    to distribute software through any other system and a licensee cannot\n\
+    impose that choice.\n\
+    \n\
+    This section is intended to make thoroughly clear what is believed to\n\
+    be a consequence of the rest of this License.\n\
+    \n\
+      8. If the distribution and/or use of the Program is restricted in\n\
+    certain countries either by patents or by copyrighted interfaces, the\n\
+    original copyright holder who places the Program under this License\n\
+    may add an explicit geographical distribution limitation excluding\n\
+    those countries, so that distribution is permitted only in or among\n\
+    countries not thus excluded.  In such case, this License incorporates\n\
+    the limitation as if written in the body of this License.\n\
+    \n\
+      9. The Free Software Foundation may publish revised and/or new versions\n\
+    of the General Public License from time to time.  Such new versions will\n\
+    be similar in spirit to the present version, but may differ in detail to\n\
+    address new problems or concerns.\n\
+    \n\
+    Each version is given a distinguishing version number.  If the Program\n\
+    specifies a version number of this License which applies to it and \"any\n\
+    later version\", you have the option of following the terms and conditions\n\
+    either of that version or of any later version published by the Free\n\
+    Software Foundation.  If the Program does not specify a version number of\n\
+    this License, you may choose any version ever published by the Free Software\n\
+    Foundation.\n\
+    \n\
+      10. If you wish to incorporate parts of the Program into other free\n\
+    programs whose distribution conditions are different, write to the author\n\
+    to ask for permission.  For software which is copyrighted by the Free\n\
+    Software Foundation, write to the Free Software Foundation; we sometimes\n\
+    make exceptions for this.  Our decision will be guided by the two goals\n\
+    of preserving the free status of all derivatives of our free software and\n\
+    of promoting the sharing and reuse of software generally.\n\
+    \n\
+                                NO WARRANTY\n\
+    \n\
+      11. BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY\n\
+    FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN\n\
+    OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES\n\
+    PROVIDE THE PROGRAM \"AS IS\" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED\n\
+    OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF\n\
+    MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK AS\n\
+    TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.  SHOULD THE\n\
+    PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING,\n\
+    REPAIR OR CORRECTION.\n\
+    \n\
+      12. IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING\n\
+    WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR\n\
+    REDISTRIBUTE THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES,\n\
+    INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING\n\
+    OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED\n\
+    TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY\n\
+    YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER\n\
+    PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE\n\
+    POSSIBILITY OF SUCH DAMAGES.\n\
+    \n\
+                         END OF TERMS AND CONDITIONS\
+");
+
+    wxString buildstr = wxbuildinfo(long_f) + wxT("\n");
+#ifdef __GNUG__
+    buildstr << wxT("GNU C++ Compiler: ") << __GNUC__ << wxT(".") << __GNUC_MINOR__ << wxT(".") << __GNUC_PATCHLEVEL__ << wxT("\n");
+#endif
+
+#ifdef __WIN64__
+    buildstr << wxT("Build Platform: x64") << wxT(".\n");
+#else
+#ifdef __WIN32__
+    buildstr << wxT("Build Platform: x86") << wxT(".\n");
+#else
+#error Are you kidding me ? ;)
+#endif // __WIN32__
+#endif // __WIN64__
+
+    buildstr << wxT("Build Date: ") << wxString::FromAscii(__DATE__) << wxT(" at ") << wxString::FromAscii(__TIME__) << wxT("\n");
+    buildstr << wxT("By: ") << wxString::FromAscii(USERNAME).Lower() << wxT("@") << wxString::FromAscii(HOSTNAME).Lower();// << wxT(" On ") << HOSTSYSTEM;
+
+    if (wxWindow::IsDoubleBuffered())
+        buildstr << wxT(".\n") << wxT("Features: ") << wxT("DOUBLE_BUFFER");
+
+    infos.BuildInfos = buildstr;
+
+    // Logos
+    infos.Bitmaps.Program = *hUtils::CreateBitmapFromPNGResource(wxT("HORUSLOGO"));
+    infos.Bitmaps.Company1 = *hUtils::CreateBitmapFromPNGResource(wxT("BIOEMLABLOGO"));
+    infos.Bitmaps.Company2 = *hUtils::CreateBitmapFromPNGResource(wxT("CINALOGO"));
+    infos.Bitmaps.Company3 = *hUtils::CreateBitmapFromPNGResource(wxT("BIOZLOGO"));
+
+    HorusAboutDialog dialog(this);
+
+    dialog.SetInformations(infos);
+    dialog.ShowModal();
 }
 
 void HorusFrame::_dockCassette(bool dock, bool redock)
@@ -586,18 +904,14 @@ void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
 
     //if (! m_eventLock)
     {
-        //wxDateTime dt(data->TimeStamp);
-
-        wxLogStatus(wxT("RX Event"));
-
         switch (event.GetInt())
         {
             case HORUS_EVENT_CARTRIDGE_LOAD:
-                wxLogStatus(wxT("  ** Cartridge LOADED: ") + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()));
+                //wxLogStatus(wxT("  ** Cartridge LOADED: ") + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()));
                 m_wcartridgeNum->SetLabel(wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()));
 
                 _logEvent(m_wtextLogger, data->TimeStamp, m_woperatorChoice->GetString(m_woperatorChoice->GetSelection()), wxT("Cartridge #")
-                          + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()) + wxT(" loaded."));
+                          + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()) + wxT(" loaded."), true);
 
                 m_wunloadStage->Enable(true);
                 m_wkeepOnStage->Enable(true);
@@ -605,11 +919,11 @@ void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
                 break;
 
             case HORUS_EVENT_CARTRIDGE_UNLOAD:
-                wxLogStatus(wxT("  ** Cartridge UNLOADED: ") + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()));
+                //wxLogStatus(wxT("  ** Cartridge UNLOADED: ") + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()));
                 m_wcartridgeNum->SetLabel(wxT("<NONE>"));
 
                 _logEvent(m_wtextLogger, data->TimeStamp, m_woperatorChoice->GetString(m_woperatorChoice->GetSelection()), wxT("Cartridge #")
-                          + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()) + wxT(" unloaded."));
+                          + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()) + wxT(" unloaded."), true);
 
                 if (m_wkeepOnStage->GetValue())
                 {
@@ -624,18 +938,19 @@ void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
 
             case HORUS_EVENT_CARTRIDGE_UPDATE:
                 // Update Database
-                wxLogStatus(wxT("  ** Cartridge UPDATE: ") + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()));
+                //wxLogStatus(wxT("  ** Cartridge UPDATE: ") + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()));
                 m_databases->UpdateCartridge(data->Cartridge);
                 break;
 
             case HORUS_EVENT_CASSETTE_DOCKED:
                 {
-                    wxLogStatus(wxT("  ** Cassette DOCKED."));
+                    //wxLogStatus(wxT("  ** Cassette DOCKED."));
 
                     if (! m_cassette->IsStageEmpty() && ! m_wkeepOnStage->IsEnabled())
                         m_wkeepOnStage->Enable(true);
 
-                    _logEvent(m_wtextLogger, data->TimeStamp, m_woperatorChoice->GetString(m_woperatorChoice->GetSelection()), wxT("Cassette Docked."));
+                    _logEvent(m_wtextLogger, data->TimeStamp, m_woperatorChoice->GetString(m_woperatorChoice->GetSelection()),
+                              wxT("Cassette Docked."), true);
 
                     m_wtextLogger->Clear();
 
@@ -649,21 +964,20 @@ void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
                         //Panel1->Layout();
                     }
 
-    #warning CRAPPY
-                    m_eventLockout = true;
-                    _logEvent(m_wtextLogger, data->TimeStamp, m_woperatorChoice->GetString(m_woperatorChoice->GetSelection()), wxT("Cassette Docked."));
-                    m_eventLockout = false;
+                    _logEvent(m_wtextLogger, data->TimeStamp, m_woperatorChoice->GetString(m_woperatorChoice->GetSelection()),
+                              wxT("Cassette Docked."), true, false);
                 }
                 break;
 
             case HORUS_EVENT_CASSETTE_REDOCKED:
                 {
-                    wxLogStatus(wxT("  ** Cassette REDOCKED."));
+                    //wxLogStatus(wxT("  ** Cassette REDOCKED."));
 
                     if (! m_cassette->IsStageEmpty() && ! m_wkeepOnStage->IsEnabled())
                         m_wkeepOnStage->Enable(true);
 
-                    _logEvent(m_wtextLogger, data->TimeStamp, m_woperatorChoice->GetString(m_woperatorChoice->GetSelection()), wxT("Cassette Redocked."));
+                    _logEvent(m_wtextLogger, data->TimeStamp, m_woperatorChoice->GetString(m_woperatorChoice->GetSelection()),
+                              wxT("Cassette Redocked."), true);
 
                     //m_wtextLogger->Clear();
 
@@ -675,18 +989,14 @@ void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
                         m_wdockedLabel->SetLabel(hUtils::GetTimeStampString(ts, false));
                         //Panel1->Layout();
                     }
-
-    //#warning CRAPPY
-    //                m_eventLockout = true;
-    //                _logEvent(data->TimeStamp, m_woperatorChoice->GetString(m_woperatorChoice->GetSelection()), wxT("Cassette Redocked."));
-    //                m_eventLockout = false;
                 }
                 break;
 
             case HORUS_EVENT_CASSETTE_UNDOCKED:
-                wxLogStatus(wxT("  ** Cassette UNDOCKED."));
+                //wxLogStatus(wxT("  ** Cassette UNDOCKED."));
 
-                _logEvent(m_wtextLogger, data->TimeStamp, m_woperatorChoice->GetString(m_woperatorChoice->GetSelection()), wxT("Cassette Undocked."));
+                _logEvent(m_wtextLogger, data->TimeStamp, m_woperatorChoice->GetString(m_woperatorChoice->GetSelection()),
+                          wxT("Cassette Undocked."), true);
                 m_databases->SetCassetteDocked(false);
                 m_wdockedLabel->SetLabel(wxT("< ----/--/-- --:--:-- >"));
                 //m_wdockedOnSizer->La
@@ -698,6 +1008,7 @@ void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
     if (data)
         delete data;
 
+    event.Skip();
 }
 
 void HorusFrame::OnDatabasePoolEvent(wxCommandEvent &event)
@@ -706,25 +1017,22 @@ void HorusFrame::OnDatabasePoolEvent(wxCommandEvent &event)
 
     switch (event.GetInt())
     {
-        case HORUS_EVENT_DATABASEPOOL_RELOAD_EVENTS:
-            m_eventLockout = true;
-            wxLogStatus("EVENT!!!!!!");
-            _logEvent(m_wtextLogger, data->TimeStamp, data->Operator, data->Message);
-            m_eventLockout = false;
-            break;
-
         case HORUS_EVENT_DATABASEPOOL_BACKUP:
             if (data)
-            {
-                wxLogStatus(wxT("New backup: ") + data->BackupFile);
                 _extractCassetteFromDatabase(data->BackupFile);
-            }
             break;
     }
 
-
     if (data)
         delete data;
+
+    event.Skip();
+}
+
+void HorusFrame::HorusEventRestore(time_t ts, const wxString &op, const wxString &msg)
+{
+    _logEvent(m_wtextLogger, ts, op, msg, false, false);
+    //wxYield();
 }
 
 void HorusFrame::Onm_unloadStageClick(wxCommandEvent& event)
@@ -998,8 +1306,6 @@ bool HorusFrame::_extractCassetteFromDatabase(const wxString &dbName)
     {
         wxDateTime  dt(ts);
 
-        wxLogStatus(wxT("Database ") + dbName + wxT(" dockTS : ") + dt.Format(wxT("%a %b %d %Y %H:%M:%S")));
-
         _addCassetteToTree(ts, op, dbName);
     }
 
@@ -1031,14 +1337,9 @@ void HorusFrame::_initBrowser()
 
         if (wxDir::GetAllFiles(directory, &backupFiles, wxT("cassette_*.db3"), wxDIR_FILES))
         {
-            //wxDateTime pastDt = wxDateTime::Now().Subtract(wxDateSpan(0, 0, 0, m_config->GetBackupDuration()));
-
             for (size_t i = 0; i < backupFiles.GetCount(); i++)
             {
-                wxLogStatus(wxT("Found Backupfile: ") + backupFiles.Item(i));
-
                 _extractCassetteFromDatabase(backupFiles.Item(i));
-
             }
 
         }
@@ -1068,12 +1369,8 @@ void HorusFrame::_displayCassetteInfos(const wxString &opName, const wxString &d
     }
     else
     {
-        time_t dockedTS, funeralTS;
-        bool ok = true;
-        int step = 0;
-        //time_t ts = 0;
-        //wxString op = wxEmptyString;
-        wxSQLite3Database db;
+        int                 step = 0;
+        wxSQLite3Database   db;
 
         m_wbrowserOperator->SetLabel(opName);
 
@@ -1122,8 +1419,8 @@ void HorusFrame::_displayCassetteInfos(const wxString &opName, const wxString &d
                 selcmd = wxString(wxT("SELECT e.idx, e.timestamp, e.operator, e.text FROM events e ORDER BY e.idx;"));
                 stmt = db.PrepareStatement(selcmd);
                 q = stmt.ExecuteQuery();
-
-                //m_wbrowserText->Freeze();
+#if 1
+                m_wbrowserText->Freeze();
 
                 while (q.NextRow())
                 {
@@ -1136,7 +1433,7 @@ void HorusFrame::_displayCassetteInfos(const wxString &opName, const wxString &d
                     //wxString str = wxT("Restore message ") + wxString::Format(wxT("%llu"), ts) + wxT(" [") + op + wxT("] ") + msg;
                     //wxLogStatus(str);
 
-                    _logEvent(m_wbrowserText, ts, op, msg);
+                    _logEvent(m_wbrowserText, ts, op, msg, false, false);
 #if 0
                     wxDateTime dt(ts);
                     wxString timestamp = dt.Format(wxT("%a %b %d %Y %H:%M:%S "));
@@ -1167,7 +1464,9 @@ void HorusFrame::_displayCassetteInfos(const wxString &opName, const wxString &d
 #endif
                 }
 
-                //m_wbrowserText->Thaw();
+                m_wbrowserText->ScrollIntoView(m_wbrowserText->GetLastPosition(), /* WXK_PAGEDOWN */ WXK_END);
+                m_wbrowserText->Thaw();
+#endif
             }
 
         }
@@ -1187,8 +1486,6 @@ void HorusFrame::_displayCassetteInfos(const wxString &opName, const wxString &d
             msg << e.GetMessage();
 
             wxMessageBox(msg, wxT("Database Error"), wxOK|wxICON_ERROR);
-
-            ok = false;
         }
 
         db.Close();
@@ -1205,16 +1502,11 @@ void HorusFrame::OnCassettesSelectionChanged(wxTreeEvent& event)
 
     if (data)
     {
-        wxLogStatus(wxT("CLICKED: data OK"));
-        //_displayCassetteInfos(data->GetDatabaseFilename();
         opName = data->GetOperatorName();
         dbName = data->GetDatabaseFilename();
     }
-    else
-    {
-        wxLogStatus(wxT("CLICKED: NO data"));
-    }
 
+    wxBusyCursor busy;
     _displayCassetteInfos(opName, dbName);
 
     event.Skip();
@@ -1236,4 +1528,19 @@ void HorusFrame::OnSplitterWindow1SashPosChanged(wxSplitterEvent& event)
     event.Skip();
 }
 
+void HorusFrame::Onm_wtreeExpandAllClick(wxCommandEvent& event)
+{
+    m_wtreeCassettes->ExpandAll();
+
+    event.Skip();
+}
+
+void HorusFrame::Onm_wtreeCollapseAllClick(wxCommandEvent& event)
+{
+    m_wtreeCassettes->CollapseAll();
+
+    event.Skip();
+}
+
 } // namespace
+

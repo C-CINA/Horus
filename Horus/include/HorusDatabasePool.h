@@ -11,9 +11,17 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_HORUS_DATABASEPOOL, wxNewEventType()) ///<
 END_DECLARE_EVENT_TYPES()
 
+
+class HorusDatabaseEventRestore
+{
+    public:
+        virtual void HorusEventRestore(time_t, const wxString &, const wxString &) = 0;
+};
+
+class HorusEventDatabaseEventData;
+
 enum HorusDatabaseEvent
 {
-    HORUS_EVENT_DATABASEPOOL_RELOAD_EVENTS,
     HORUS_EVENT_DATABASEPOOL_BACKUP
 };
 
@@ -34,7 +42,7 @@ class HorusDatabasePool
             return m_id;
         }
 
-        bool                            ReloadData(wxArrayOperator &);
+        bool                            ReloadData(wxArrayOperator &, HorusDatabaseEventRestore *);
         bool                            UpdateCartridge(HorusCartridge *);
         bool                            AddOperator(const wxString &, const wxString &);
         bool                            UpdateOperator(const wxString &, const wxString &);
@@ -63,9 +71,7 @@ class HorusDatabasePool
         wxString const                  _getCassetteOperator();
         bool                            _reloadCassette();
         bool                            _reloadOperators(wxArrayOperator &);
-        bool                            _reloadEvents();
-
-        void                            _testDB();
+        bool                            _reloadEvents(HorusDatabaseEventRestore *);
 
         bool                            _initializeDatabases();
         bool                            _initializeCassetteDatabase();
@@ -76,11 +82,10 @@ class HorusDatabasePool
         bool                            _deleteOperator(const wxString &);
         bool                            _fillCartridgesData();
 
-        bool                            _saveDB();
+        //bool                            _saveDB();
 
         void                            _sendEvent(HorusDatabaseEvent);
         void                            _sendBackupEvent(const wxString &dbName);
-        void                            _sendReloadEvent(time_t, const wxString &, const wxString &);
 
     private:
         wxWindow                       *m_parent;
@@ -98,22 +103,14 @@ class HorusDatabasePool
 
 struct HorusEventDatabaseData
 {
-    HorusEventDatabaseData() :
-        TimeStamp(wxDateTime::Now().GetTicks()),
-        BackupFile(wxEmptyString),
-        Operator(wxEmptyString),
-        Message(wxEmptyString)
+    HorusEventDatabaseData() : TimeStamp(wxDateTime::Now().GetTicks()), BackupFile(wxEmptyString)
     {
-        //TimeStamp = wxDateTime::Now().GetTicks();
     }
 
-    HorusEventDatabaseData(time_t ts) :
-        TimeStamp(ts),
-        BackupFile(wxEmptyString),
-        Operator(wxEmptyString),
-        Message(wxEmptyString)
+    HorusEventDatabaseData(time_t ts) : TimeStamp(ts), BackupFile(wxEmptyString)
     {
     }
+
     ~HorusEventDatabaseData()
     {
 
@@ -121,8 +118,6 @@ struct HorusEventDatabaseData
 
     time_t                              TimeStamp;
     wxString                            BackupFile;
-    wxString                            Operator;
-    wxString                            Message;
 };
 
 

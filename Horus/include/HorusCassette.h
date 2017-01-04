@@ -107,7 +107,7 @@ class HorusCartridge: public wxPanel
 
     private:
         void _changeText(const wxString &);
-        void OnContextMenu(wxContextMenuEvent &);
+        //void OnContextMenu(wxContextMenuEvent &);
         void OnText(wxCommandEvent &);
         void OnEmpty(wxCommandEvent &);
         void OnKeepIt(wxCommandEvent &);

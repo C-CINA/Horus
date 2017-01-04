@@ -19,7 +19,6 @@ class Operator
 
         ~Operator()
         {
-            wxLogStatus(wxT("** DESTROY ") + Name);
         }
 
         wxString Name;

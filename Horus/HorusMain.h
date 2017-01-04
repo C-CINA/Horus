@@ -46,6 +46,7 @@
 #include <wx/filename.h>
 #include <wx/textdlg.h>
 #include <wx/dynarray.h>
+#include <wx/splash.h>
 
 // Windows
 #include <Uxtheme.h>
@@ -58,6 +59,8 @@
 
 #include "HorusCassette.h"
 #include "HorusDatabasePool.h"
+
+#include "../HorusAbout/HorusAbout/HorusAboutMain.h"
 
 namespace Horus
 {
@@ -85,7 +88,7 @@ class hTreeItemData: public wxTreeItemData
 
 };
 
-class HorusFrame: public wxFrame
+class HorusFrame: public wxFrame, HorusDatabaseEventRestore
 {
     public:
         HorusFrame(wxWindow* parent,wxWindowID id = -1);
@@ -108,12 +111,17 @@ class HorusFrame: public wxFrame
         void OnCassettesSelectionChanged(wxTreeEvent& event);
         void OnSplitterWindow1SashPosChanged(wxSplitterEvent& event);
         void OnBrowserGridResize(wxSizeEvent& event);
+        void Onm_wtreeExpandAllClick(wxCommandEvent& event);
+        void Onm_wtreeCollapseAllClick(wxCommandEvent& event);
         //*)
 
         void OnCassetteEvent(wxCommandEvent &);
         void OnDatabasePoolEvent(wxCommandEvent &);
+
+        void HorusEventRestore(time_t, const wxString &, const wxString &);
+
         void _updateOperatorChoice();
-        void _logEvent(wxRichTextCtrl *, time_t, const wxString &, const wxString &, bool = false);
+        void _logEvent(wxRichTextCtrl *, time_t, const wxString &, const wxString &, bool, bool = true);
         void _dockCassette(bool, bool = false);
 
         wxTreeItemId _getItemID(wxTreeItemId, const wxString &);
@@ -139,6 +147,8 @@ class HorusFrame: public wxFrame
         static const long ID_BUTTON5;
         static const long ID_RICHTEXTCTRL1;
         static const long ID_PANEL1;
+        static const long ID_BUTTON7;
+        static const long ID_BUTTON8;
         static const long ID_TREECTRL1;
         static const long ID_PANEL3;
         static const long ID_STATICTEXT6;
@@ -158,11 +168,13 @@ class HorusFrame: public wxFrame
         //(*Declarations(HorusFrame)
         wxScrolledWindow* m_wscrolledStage;
         wxChoice* m_woperatorChoice;
+        wxButton* m_wtreeExpandAll;
         wxButton* m_waddOperator;
         wxCheckBox* m_wkeepOnStage;
         wxStaticText* m_wbrowserDocked;
         wxStaticBoxSizer* m_wcassetteSizer;
         wxButton* m_wundockCassette;
+        wxButton* m_wtreeCollapseAll;
         wxStaticText* m_wbrowserFuneral;
         wxStaticText* m_wcartridgeNum;
         wxButton* m_wunloadStage;
@@ -192,7 +204,7 @@ class HorusFrame: public wxFrame
         HorusCassette                  *m_cassette;
         HorusDatabasePool              *m_databases;
         wxArrayOperator                 m_operators;
-        bool                            m_eventLockout;
+        bool                            m_eventLoggerLockout;
 
 
         DECLARE_EVENT_TABLE()
