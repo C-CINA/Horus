@@ -377,7 +377,7 @@ HorusCassette::~HorusCassette()
 
 }
 
-bool HorusCassette::DockCassette()
+bool HorusCassette::_dock(bool redock)
 {
     if (m_docked)
         return false;
@@ -385,12 +385,25 @@ bool HorusCassette::DockCassette()
     m_docked = true;
 
     // Send DOCK event
-    _sendEvent(HORUS_EVENT_CASSETTE_DOCKED);
+    _sendEvent(redock ? HORUS_EVENT_CASSETTE_REDOCKED : HORUS_EVENT_CASSETTE_DOCKED);
 
-    for (size_t i = 0; i < MAX_CARTRIDGE_SLOTS; i++)
-        m_cartridges[i]->Clear();
+    if (! redock)
+    {
+        for (size_t i = 0; i < MAX_CARTRIDGE_SLOTS; i++)
+            m_cartridges[i]->Clear();
+    }
 
     return true;
+}
+
+bool HorusCassette::RedockCassette()
+{
+    return _dock(true);
+}
+
+bool HorusCassette::DockCassette()
+{
+    return _dock(false);
 }
 
 bool HorusCassette::UndockCassette()

@@ -4,16 +4,6 @@
 #include "../HorusMain.h"
 
 
-// Logger callback prototype
-//typedef void (wxCALLBACK *HorusEventLogger_Callback)(time_t , const wxString &, const wxString &);
-
-class HorusEventLoggerCallbackInterface
-{
-    public:
-        // The prefix "cbi" is to prevent naming clashes.
-        virtual void cbiCallbackFunction(time_t , const wxString &, const wxString &) = 0;
-};
-
 /// \brief Class Operator
 ///
 class Operator
@@ -51,6 +41,9 @@ class hUtils
         static wxBitmap*                CreateBitmapFromPNGResource(const wxString &);
 
         static wxString const           CreateGUID(int = 32);
+
+        static wxString const           GetTimeStampString(wxDateTime, bool);
+        static wxString const           GetTimeStampString(time_t, bool);
 
         static wxCMPFUNC_CONV           CompareOperators(Operator **l, Operator **h);
 

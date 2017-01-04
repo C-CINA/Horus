@@ -2,6 +2,7 @@
 <wxsmith>
 	<object class="wxFrame" name="HorusFrame">
 		<id_arg>0</id_arg>
+		<style>wxCAPTION|wxCLOSE_BOX|wxMINIMIZE_BOX</style>
 		<handler function="OnClose" entry="EVT_CLOSE" />
 		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
 			<object class="sizeritem">
@@ -9,10 +10,10 @@
 					<orient>wxVERTICAL</orient>
 					<object class="sizeritem">
 						<object class="wxAuiNotebook" name="ID_AUINOTEBOOK1" variable="AuiNotebook1" member="yes">
-							<minsize>800,500</minsize>
+							<minsize>1200,500</minsize>
 							<style>wxAUI_NB_TAB_FIXED_WIDTH</style>
 							<object class="AuiNotebookPage">
-								<object class="wxPanel" name="ID_PANEL1" variable="Panel1" member="yes">
+								<object class="wxPanel" name="ID_PANEL1" variable="m_wloggerPanel" member="yes">
 									<object class="wxBoxSizer" variable="BoxSizer3" member="no">
 										<orient>wxVERTICAL</orient>
 										<object class="sizeritem">
@@ -20,7 +21,7 @@
 												<object class="sizeritem">
 													<object class="wxBoxSizer" variable="BoxSizer6" member="no">
 														<object class="sizeritem">
-															<object class="wxStaticBoxSizer" variable="m_cassetteSizer" member="yes">
+															<object class="wxStaticBoxSizer" variable="m_wcassetteSizer" member="yes">
 																<label>  Cassette  </label>
 																<orient>wxVERTICAL</orient>
 																<object class="sizeritem">
@@ -28,37 +29,68 @@
 																		<object class="sizeritem">
 																			<object class="wxBoxSizer" variable="BoxSizer13" member="no">
 																				<object class="sizeritem">
-																					<object class="wxButton" name="ID_BUTTON1" variable="m_dockCassette" member="yes">
-																						<label>Dock Cassette</label>
+																					<object class="wxButton" name="ID_BUTTON1" variable="m_wdockCassette" member="yes">
+																						<label>Dock</label>
 																						<handler function="Onm_dockCassetteClick" entry="EVT_BUTTON" />
 																					</object>
-																					<flag>wxALL</flag>
+																					<flag>wxLEFT|wxRIGHT</flag>
 																					<border>5</border>
+																					<option>1</option>
 																				</object>
 																				<object class="sizeritem">
-																					<object class="wxButton" name="ID_BUTTON6" variable="m_undockCassette" member="yes">
-																						<label>Undock Cassette</label>
+																					<object class="wxButton" name="ID_BUTTON3" variable="m_wredockCassette" member="yes">
+																						<label>Redock</label>
+																						<handler function="Onm_wredockCassetteClick" entry="EVT_BUTTON" />
+																					</object>
+																					<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																					<border>5</border>
+																					<option>1</option>
+																				</object>
+																				<object class="sizeritem">
+																					<object class="wxButton" name="ID_BUTTON6" variable="m_wundockCassette" member="yes">
+																						<label>Undock</label>
 																						<handler function="Onm_undockCassetteClick" entry="EVT_BUTTON" />
 																					</object>
-																					<flag>wxALL</flag>
+																					<flag>wxLEFT|wxRIGHT</flag>
 																					<border>5</border>
+																					<option>1</option>
 																				</object>
 																			</object>
 																			<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 																			<border>5</border>
-																		</object>
-																		<object class="spacer">
-																			<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-																			<border>5</border>
 																			<option>1</option>
 																		</object>
 																		<object class="spacer">
 																			<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 																			<border>5</border>
 																			<option>1</option>
+																		</object>
+																		<object class="sizeritem">
+																			<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="yes">
+																				<label>  Docked On  </label>
+																				<object class="spacer">
+																					<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																					<border>5</border>
+																				</object>
+																				<object class="sizeritem">
+																					<object class="wxStaticText" name="ID_STATICTEXT3" variable="m_wdockedLabel" member="yes">
+																						<label>&lt; ----/--/-- --:--:-- &gt;</label>
+																						<style>wxALIGN_CENTRE</style>
+																					</object>
+																					<flag>wxALL|wxEXPAND</flag>
+																					<border>5</border>
+																					<option>1</option>
+																				</object>
+																				<object class="spacer">
+																					<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																					<border>5</border>
+																				</object>
+																			</object>
+																			<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																			<border>5</border>
 																		</object>
 																	</object>
-																	<flag>wxTOP|wxLEFT|wxRIGHT|wxEXPAND</flag>
+																	<flag>wxLEFT|wxRIGHT|wxEXPAND</flag>
 																	<border>5</border>
 																</object>
 																<object class="sizeritem">
@@ -70,12 +102,12 @@
 																					<object class="wxBoxSizer" variable="BoxSizer16" member="no">
 																						<orient>wxVERTICAL</orient>
 																						<object class="sizeritem">
-																							<object class="wxScrolledWindow" name="ID_SCROLLEDWINDOW1" variable="m_scrolledCartridges" member="yes">
-																								<object class="wxBoxSizer" variable="m_slotSizer" member="yes">
+																							<object class="wxScrolledWindow" name="ID_SCROLLEDWINDOW1" variable="m_wscrolledCartridges" member="yes">
+																								<object class="wxBoxSizer" variable="m_wslotSizer" member="yes">
 																									<orient>wxVERTICAL</orient>
 																								</object>
 																							</object>
-																							<flag>wxEXPAND</flag>
+																							<flag>wxBOTTOM|wxEXPAND</flag>
 																							<border>5</border>
 																							<option>1</option>
 																						</object>
@@ -95,12 +127,12 @@
 																	<option>1</option>
 																</object>
 															</object>
-															<flag>wxALL|wxEXPAND</flag>
+															<flag>wxTOP|wxBOTTOM|wxLEFT|wxEXPAND</flag>
 															<border>5</border>
 															<option>1</option>
 														</object>
 													</object>
-													<flag>wxALL|wxEXPAND</flag>
+													<flag>wxTOP|wxLEFT|wxRIGHT|wxEXPAND</flag>
 													<border>5</border>
 													<option>1</option>
 												</object>
@@ -108,7 +140,7 @@
 													<object class="wxBoxSizer" variable="BoxSizer5" member="no">
 														<orient>wxVERTICAL</orient>
 														<object class="sizeritem">
-															<object class="wxStaticBoxSizer" variable="m_stageSizer" member="yes">
+															<object class="wxStaticBoxSizer" variable="m_wstageSizer" member="yes">
 																<label>  On Stage  </label>
 																<orient>wxVERTICAL</orient>
 																<object class="sizeritem">
@@ -123,7 +155,7 @@
 																			<option>1</option>
 																		</object>
 																		<object class="sizeritem">
-																			<object class="wxStaticText" name="ID_STATICTEXT2" variable="m_cartridgeNum" member="yes">
+																			<object class="wxStaticText" name="ID_STATICTEXT2" variable="m_wcartridgeNum" member="yes">
 																				<label>&lt;NONE&gt;</label>
 																			</object>
 																			<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -137,13 +169,13 @@
 																<object class="sizeritem">
 																	<object class="wxBoxSizer" variable="BoxSizer17" member="no">
 																		<object class="sizeritem">
-																			<object class="wxScrolledWindow" name="ID_SCROLLEDWINDOW2" variable="m_scrolledStage" member="yes">
+																			<object class="wxScrolledWindow" name="ID_SCROLLEDWINDOW2" variable="m_wscrolledStage" member="yes">
 																				<object class="wxBoxSizer" variable="BoxSizer18" member="no">
 																					<object class="sizeritem">
 																						<object class="wxBoxSizer" variable="BoxSizer19" member="no">
 																							<orient>wxVERTICAL</orient>
 																							<object class="sizeritem">
-																								<object class="wxCheckBox" name="ID_CHECKBOX1" variable="m_keepOnStage" member="yes">
+																								<object class="wxCheckBox" name="ID_CHECKBOX1" variable="m_wkeepOnStage" member="yes">
 																									<label>Keep On Stage</label>
 																									<enabled>0</enabled>
 																									<handler function="Onm_keepOnStageClick" entry="EVT_CHECKBOX" />
@@ -153,7 +185,7 @@
 																								<option>1</option>
 																							</object>
 																							<object class="sizeritem">
-																								<object class="wxButton" name="ID_BUTTON2" variable="m_unloadStage" member="yes">
+																								<object class="wxButton" name="ID_BUTTON2" variable="m_wunloadStage" member="yes">
 																									<label>Unload</label>
 																									<enabled>0</enabled>
 																									<handler function="Onm_unloadStageClick" entry="EVT_BUTTON" />
@@ -178,7 +210,7 @@
 																	<option>1</option>
 																</object>
 															</object>
-															<flag>wxALL|wxEXPAND</flag>
+															<flag>wxTOP|wxLEFT|wxRIGHT|wxEXPAND</flag>
 															<border>5</border>
 														</object>
 														<object class="sizeritem">
@@ -191,7 +223,7 @@
 																		<object class="sizeritem">
 																			<object class="wxBoxSizer" variable="BoxSizer11" member="no">
 																				<object class="sizeritem">
-																					<object class="wxChoice" name="ID_CHOICE1" variable="m_operatorChoice" member="yes">
+																					<object class="wxChoice" name="ID_CHOICE1" variable="m_woperatorChoice" member="yes">
 																						<handler function="Onm_operatorChoiceSelect" entry="EVT_CHOICE" />
 																					</object>
 																					<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -202,7 +234,7 @@
 																					<object class="wxBoxSizer" variable="BoxSizer12" member="no">
 																						<orient>wxVERTICAL</orient>
 																						<object class="sizeritem">
-																							<object class="wxButton" name="ID_BUTTON4" variable="m_addOperator" member="yes">
+																							<object class="wxButton" name="ID_BUTTON4" variable="m_waddOperator" member="yes">
 																								<label>+</label>
 																								<size>20,20</size>
 																								<tooltip>Add an Operator</tooltip>
@@ -212,7 +244,7 @@
 																							<border>5</border>
 																						</object>
 																						<object class="sizeritem">
-																							<object class="wxButton" name="ID_BUTTON5" variable="m_deleteOperator" member="yes">
+																							<object class="wxButton" name="ID_BUTTON5" variable="m_wdeleteOperator" member="yes">
 																								<label>-</label>
 																								<size>20,20</size>
 																								<enabled>0</enabled>
@@ -235,25 +267,179 @@
 																	<border>5</border>
 																</object>
 															</object>
-															<flag>wxALL|wxEXPAND</flag>
+															<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
 															<border>5</border>
-															<option>1</option>
 														</object>
 													</object>
-													<flag>wxALL|wxEXPAND</flag>
+													<flag>wxTOP|wxRIGHT|wxEXPAND</flag>
 													<border>5</border>
 												</object>
 											</object>
-											<flag>wxALL|wxEXPAND</flag>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
 										<object class="sizeritem">
 											<object class="wxBoxSizer" variable="BoxSizer9" member="no">
 												<object class="sizeritem">
-													<object class="wxRichTextCtrl" name="ID_RICHTEXTCTRL1" variable="m_textLogger" member="yes">
+													<object class="wxRichTextCtrl" name="ID_RICHTEXTCTRL1" variable="m_wtextLogger" member="yes">
 														<attributes>wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_FACE|wxTEXT_ATTR_FONT_SIZE|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_FONT_ITALIC|wxTEXT_ATTR_FONT_UNDERLINE|wxTEXT_ATTR_FONT|wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_LINE_SPACING|wxTEXT_ATTR_CHARACTER_STYLE_NAME|wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_TEXT|wxTEXT_ATTR_BULLET_NAME|wxTEXT_ATTR_URL|wxTEXT_ATTR_PAGE_BREAK|wxTEXT_ATTR_EFFECTS|wxTEXT_ATTR_OUTLINE_LEVEL</attributes>
 														<style>wxRE_MULTILINE|wxRE_READONLY</style>
+													</object>
+													<flag>wxALL|wxEXPAND</flag>
+													<border>5</border>
+													<option>1</option>
+												</object>
+											</object>
+											<flag>wxEXPAND</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+									</object>
+								</object>
+								<label>Cassette Logger</label>
+							</object>
+							<object class="AuiNotebookPage">
+								<object class="wxPanel" name="ID_PANEL2" variable="m_wbrowserPanel" member="yes">
+									<object class="wxBoxSizer" variable="BoxSizer20" member="no">
+										<orient>wxVERTICAL</orient>
+										<object class="sizeritem">
+											<object class="wxBoxSizer" variable="BoxSizer21" member="no">
+												<object class="sizeritem">
+													<object class="wxSplitterWindow" name="ID_SPLITTERWINDOW1" variable="SplitterWindow1" member="yes">
+														<sashpos>250</sashpos>
+														<sashgravity>0.000000</sashgravity>
+														<minsize>250</minsize>
+														<orientation>vertical</orientation>
+														<minsize>250,250</minsize>
+														<object class="wxPanel" name="ID_PANEL3" variable="Panel1" member="yes">
+															<pos>133,10</pos>
+															<object class="wxBoxSizer" variable="BoxSizer22" member="no">
+																<orient>wxVERTICAL</orient>
+																<object class="sizeritem">
+																	<object class="wxTreeCtrl" name="ID_TREECTRL1" variable="m_wtreeCassettes" member="yes">
+																		<image_list>&lt;none&gt;</image_list>
+																		<tree_items>
+																			<item>m_wtreeCassettes</item>
+																			<item>&lt;none&gt;</item>
+																		</tree_items>
+																		<items_text>
+																			<item2>m_wtreeCassettes</item2>
+																			<item2>&lt;none&gt;</item2>
+																		</items_text>
+																		<handler function="OnCassettesSelectionChanged" entry="EVT_TREE_SEL_CHANGED" />
+																	</object>
+																	<flag>wxALL|wxEXPAND</flag>
+																	<border>10</border>
+																	<option>1</option>
+																</object>
+															</object>
+														</object>
+														<object class="wxPanel" name="ID_PANEL4" variable="Panel2" member="yes">
+															<object class="wxBoxSizer" variable="BoxSizer23" member="no">
+																<orient>wxVERTICAL</orient>
+																<object class="sizeritem">
+																	<object class="wxStaticBoxSizer" variable="StaticBoxSizer3" member="no">
+																		<label>  Cassette  </label>
+																		<orient>wxVERTICAL</orient>
+																		<object class="sizeritem">
+																			<object class="wxBoxSizer" variable="BoxSizer24" member="no">
+																				<object class="sizeritem">
+																					<object class="wxStaticBoxSizer" variable="StaticBoxSizer6" member="no">
+																						<label>  Operator  </label>
+																						<object class="sizeritem">
+																							<object class="wxStaticText" name="ID_STATICTEXT6" variable="m_wbrowserOperator" member="yes">
+																								<label></label>
+																							</object>
+																							<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																							<border>5</border>
+																							<option>1</option>
+																						</object>
+																					</object>
+																					<flag>wxALL</flag>
+																					<border>5</border>
+																					<option>1</option>
+																				</object>
+																				<object class="sizeritem">
+																					<object class="wxStaticBoxSizer" variable="StaticBoxSizer4" member="no">
+																						<label>  Docked On  </label>
+																						<object class="sizeritem">
+																							<object class="wxStaticText" name="ID_STATICTEXT4" variable="m_wbrowserDocked" member="yes">
+																								<label></label>
+																							</object>
+																							<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																							<border>5</border>
+																							<option>1</option>
+																						</object>
+																					</object>
+																					<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																					<border>5</border>
+																					<option>1</option>
+																				</object>
+																				<object class="sizeritem">
+																					<object class="wxStaticBoxSizer" variable="StaticBoxSizer5" member="no">
+																						<label>  Funeral On  </label>
+																						<object class="sizeritem">
+																							<object class="wxStaticText" name="ID_STATICTEXT5" variable="m_wbrowserFuneral" member="yes">
+																								<label></label>
+																							</object>
+																							<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																							<border>5</border>
+																							<option>1</option>
+																						</object>
+																					</object>
+																					<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																					<border>5</border>
+																					<option>1</option>
+																				</object>
+																			</object>
+																			<flag>wxALL|wxEXPAND</flag>
+																			<border>5</border>
+																		</object>
+																		<object class="sizeritem">
+																			<object class="wxBoxSizer" variable="BoxSizer25" member="no">
+																				<object class="sizeritem">
+																					<object class="wxGrid" name="ID_GRID1" variable="m_wbrowserGrid" member="yes">
+																						<cols>1</cols>
+																						<rows>6</rows>
+																						<readonly>1</readonly>
+																						<collabels>
+																							<item>Cartridges</item>
+																						</collabels>
+																						<style>wxSTATIC_BORDER</style>
+																						<handler function="OnBrowserGridResize" entry="EVT_SIZE" />
+																					</object>
+																					<flag>wxALL</flag>
+																					<border>5</border>
+																					<option>1</option>
+																				</object>
+																			</object>
+																			<flag>wxALL|wxEXPAND</flag>
+																			<border>5</border>
+																		</object>
+																		<object class="sizeritem">
+																			<object class="wxBoxSizer" variable="BoxSizer26" member="no">
+																				<object class="sizeritem">
+																					<object class="wxRichTextCtrl" name="ID_RICHTEXTCTRL2" variable="m_wbrowserText" member="yes">
+																						<attributes>wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_FACE|wxTEXT_ATTR_FONT_SIZE|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_FONT_ITALIC|wxTEXT_ATTR_FONT_UNDERLINE|wxTEXT_ATTR_FONT|wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_LINE_SPACING|wxTEXT_ATTR_CHARACTER_STYLE_NAME|wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_TEXT|wxTEXT_ATTR_BULLET_NAME|wxTEXT_ATTR_URL|wxTEXT_ATTR_PAGE_BREAK|wxTEXT_ATTR_EFFECTS|wxTEXT_ATTR_OUTLINE_LEVEL</attributes>
+																						<style>wxRE_MULTILINE|wxRE_READONLY</style>
+																					</object>
+																					<flag>wxALL|wxEXPAND</flag>
+																					<border>5</border>
+																					<option>1</option>
+																				</object>
+																			</object>
+																			<flag>wxALL|wxEXPAND</flag>
+																			<border>5</border>
+																			<option>1</option>
+																		</object>
+																	</object>
+																	<flag>wxBOTTOM|wxEXPAND</flag>
+																	<border>10</border>
+																	<option>1</option>
+																</object>
+															</object>
+														</object>
 													</object>
 													<flag>wxALL|wxEXPAND</flag>
 													<border>5</border>
@@ -266,7 +452,7 @@
 										</object>
 									</object>
 								</object>
-								<label>Cassette Logger</label>
+								<label>Cassettes Browser</label>
 							</object>
 						</object>
 						<flag>wxALL|wxEXPAND|wxFIXED_MINSIZE</flag>

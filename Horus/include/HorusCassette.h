@@ -25,6 +25,7 @@ enum HorusCassetteEvent
     HORUS_EVENT_CARTRIDGE_UNLOAD,
     HORUS_EVENT_CARTRIDGE_UPDATE,
     HORUS_EVENT_CASSETTE_DOCKED,
+    HORUS_EVENT_CASSETTE_REDOCKED,
     HORUS_EVENT_CASSETTE_UNDOCKED
 };
 
@@ -198,6 +199,7 @@ class HorusCassette
         ~HorusCassette();
 
         bool DockCassette();
+        bool RedockCassette();
         bool UndockCassette();
         bool IsCassetteDocked()
         {
@@ -263,6 +265,8 @@ class HorusCassette
 
             wxPostEvent((wxEvtHandler *)m_parent, event);
         }
+
+        bool _dock(bool);
 
     private:
         wxWindow                       *m_parent;

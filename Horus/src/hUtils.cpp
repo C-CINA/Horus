@@ -121,6 +121,36 @@ wxString const hUtils::CreateGUID(int nSize)
     return wxT("Error-from-CreateGUID");
 }
 
+/// \brief Get a timestamp formatted string, possibily filesystem friendly.
+///
+/// \param now wxDateTime Date/Time to put in the timestamp
+/// \param fsfriendly bool Make it filesystem friendly.
+/// \return wxString const Returns a formatted string.
+///
+///
+wxString const hUtils::GetTimeStampString(wxDateTime now, bool fsfriendly)
+{
+    return ((wxString::Format(wxT("%d%c%02d%c%02d%c%02d%c%02d%c%02d"),
+                              now.GetYear(), (fsfriendly ? '-' : '/'), now.GetMonth() + 1, (fsfriendly ? '-' : '/'), now.GetDay(), (fsfriendly ? '_' : ' '),
+                              now.GetHour(), (fsfriendly ? '.' : ':'), now.GetMinute(), (fsfriendly ? '.' : ':'), now.GetSecond())));
+
+}
+
+/// \brief Get a timestamp formatted string, possibily filesystem friendly.
+///
+/// \param now time_t ticks to put in the timestamp
+/// \param fsfriendly bool Make it filesystem friendly.
+/// \return wxString const Returns a formatted string.
+///
+///
+wxString const hUtils::GetTimeStampString(time_t now, bool fsfriendly)
+{
+    wxDateTime dt(now);
+
+    return GetTimeStampString(dt, fsfriendly);
+}
+
+
 /// \brief Sort function used for Operator array
 ///
 /// \param l Operator** first operator

@@ -26,6 +26,7 @@
 					<Add library="libwxmsw30ud_richtext.a" />
 					<Add library="libwxmsw30ud_core.a" />
 					<Add library="wxcode_msw30ud_wxsqlite3" />
+					<Add library="libwxmsw30ud_adv.a" />
 					<Add library="libwxbase30ud.a" />
 					<Add library="libwxpngd.a" />
 					<Add library="libwxzlibd.a" />
@@ -52,6 +53,7 @@
 					<Add library="libwxmsw30u_richtext.a" />
 					<Add library="libwxmsw30u_core.a" />
 					<Add library="wxcode_msw30u_wxsqlite3" />
+					<Add library="libwxmsw30u_adv.a" />
 					<Add library="libwxbase30u.a" />
 					<Add library="libwxpng.a" />
 					<Add library="libwxzlib.a" />

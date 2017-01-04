@@ -12,12 +12,15 @@
 
 //(*Headers(HorusFrame)
 #include <wx/scrolwin.h>
+#include <wx/treectrl.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/menu.h>
 #include <wx/checkbox.h>
+#include <wx/splitter.h>
 #include <wx/aui/aui.h>
 #include <wx/panel.h>
+#include <wx/grid.h>
 #include <wx/choice.h>
 #include <wx/richtext/richtextctrl.h>
 #include <wx/button.h>
@@ -39,6 +42,7 @@
 #include <wx/tglbtn.h>
 #include <wx/wxsqlite3.h>
 #include <wx/stdpaths.h>
+#include <wx/dir.h>
 #include <wx/filename.h>
 #include <wx/textdlg.h>
 #include <wx/dynarray.h>
@@ -58,10 +62,32 @@
 namespace Horus
 {
 
-class HorusFrame: public wxFrame, public HorusEventLoggerCallbackInterface
+class hTreeItemData: public wxTreeItemData
 {
     public:
+        hTreeItemData(const wxString &op, const wxString &dbFilename) : wxTreeItemData(), m_operator(op), m_dbFilename(dbFilename)
+        {
+        }
 
+        wxString const GetOperatorName()
+        {
+            return m_operator;
+        }
+
+        wxString const GetDatabaseFilename()
+        {
+            return m_dbFilename;
+        }
+
+    private:
+        wxString                        m_operator;
+        wxString                        m_dbFilename;
+
+};
+
+class HorusFrame: public wxFrame
+{
+    public:
         HorusFrame(wxWindow* parent,wxWindowID id = -1);
         virtual ~HorusFrame();
 
@@ -78,21 +104,30 @@ class HorusFrame: public wxFrame, public HorusEventLoggerCallbackInterface
         void Onm_unloadStageClick(wxCommandEvent& event);
         void Onm_undockCassetteClick(wxCommandEvent& event);
         void Onm_keepOnStageClick(wxCommandEvent& event);
+        void Onm_wredockCassetteClick(wxCommandEvent& event);
+        void OnCassettesSelectionChanged(wxTreeEvent& event);
+        void OnSplitterWindow1SashPosChanged(wxSplitterEvent& event);
+        void OnBrowserGridResize(wxSizeEvent& event);
         //*)
 
         void OnCassetteEvent(wxCommandEvent &);
+        void OnDatabasePoolEvent(wxCommandEvent &);
         void _updateOperatorChoice();
-        void _logEvent(time_t, const wxString &, const wxString &);
+        void _logEvent(wxRichTextCtrl *, time_t, const wxString &, const wxString &, bool = false);
         void _dockCassette(bool, bool = false);
 
-        void cbiCallbackFunction(time_t ts, const wxString &op, const wxString &msg)
-        {
-            _logEvent(ts, op, msg);
-        }
+        wxTreeItemId _getItemID(wxTreeItemId, const wxString &);
+        wxString const _getOperatorFromUUID(const wxString &);
+        void _addCassetteToTree(time_t, const wxString &, const wxString &);
+        bool _extractCassetteFromDatabase(const wxString &dbName);
+        void _initBrowser();
+        void _displayCassetteInfos(const wxString &, const wxString &);
 
         //(*Identifiers(HorusFrame)
         static const long ID_BUTTON1;
+        static const long ID_BUTTON3;
         static const long ID_BUTTON6;
+        static const long ID_STATICTEXT3;
         static const long ID_SCROLLEDWINDOW1;
         static const long ID_STATICTEXT1;
         static const long ID_STATICTEXT2;
@@ -104,6 +139,16 @@ class HorusFrame: public wxFrame, public HorusEventLoggerCallbackInterface
         static const long ID_BUTTON5;
         static const long ID_RICHTEXTCTRL1;
         static const long ID_PANEL1;
+        static const long ID_TREECTRL1;
+        static const long ID_PANEL3;
+        static const long ID_STATICTEXT6;
+        static const long ID_STATICTEXT4;
+        static const long ID_STATICTEXT5;
+        static const long ID_GRID1;
+        static const long ID_RICHTEXTCTRL2;
+        static const long ID_PANEL4;
+        static const long ID_SPLITTERWINDOW1;
+        static const long ID_PANEL2;
         static const long ID_AUINOTEBOOK1;
         static const long idMenuQuit;
         static const long idMenuAbout;
@@ -111,24 +156,37 @@ class HorusFrame: public wxFrame, public HorusEventLoggerCallbackInterface
         //*)
 
         //(*Declarations(HorusFrame)
-        wxStaticBoxSizer* m_cassetteSizer;
-        wxCheckBox* m_keepOnStage;
-        wxButton* m_unloadStage;
-        wxBoxSizer* m_slotSizer;
+        wxScrolledWindow* m_wscrolledStage;
+        wxChoice* m_woperatorChoice;
+        wxButton* m_waddOperator;
+        wxCheckBox* m_wkeepOnStage;
+        wxStaticText* m_wbrowserDocked;
+        wxStaticBoxSizer* m_wcassetteSizer;
+        wxButton* m_wundockCassette;
+        wxStaticText* m_wbrowserFuneral;
+        wxStaticText* m_wcartridgeNum;
+        wxButton* m_wunloadStage;
         wxPanel* Panel1;
         wxStaticText* StaticText1;
-        wxScrolledWindow* m_scrolledStage;
-        wxButton* m_addOperator;
-        wxButton* m_deleteOperator;
+        wxStaticText* m_wbrowserOperator;
+        wxPanel* m_wbrowserPanel;
+        wxButton* m_wdockCassette;
+        wxScrolledWindow* m_wscrolledCartridges;
+        wxPanel* m_wloggerPanel;
+        wxRichTextCtrl* m_wbrowserText;
+        wxGrid* m_wbrowserGrid;
         wxStatusBar* StatusBar1;
-        wxRichTextCtrl* m_textLogger;
-        wxStaticText* m_cartridgeNum;
-        wxScrolledWindow* m_scrolledCartridges;
-        wxChoice* m_operatorChoice;
         wxAuiNotebook* AuiNotebook1;
-        wxButton* m_dockCassette;
-        wxButton* m_undockCassette;
-        wxStaticBoxSizer* m_stageSizer;
+        wxRichTextCtrl* m_wtextLogger;
+        wxStaticBoxSizer* m_wstageSizer;
+        wxBoxSizer* m_wslotSizer;
+        wxPanel* Panel2;
+        wxStaticBoxSizer* StaticBoxSizer1;
+        wxButton* m_wdeleteOperator;
+        wxButton* m_wredockCassette;
+        wxSplitterWindow* SplitterWindow1;
+        wxStaticText* m_wdockedLabel;
+        wxTreeCtrl* m_wtreeCassettes;
         //*)
 
         HorusCassette                  *m_cassette;
