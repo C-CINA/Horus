@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxDialog" name="HorusAboutDialog">
+		<title>wxWidgets app</title>
+		<id_arg>0</id_arg>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="yes">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer4" member="no">
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer15" member="no">
+							<object class="spacer">
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticBitmap" name="ID_STATICBITMAP4" variable="m_wstaticbitmapCompany3" member="yes">
+									<style>wxNO_BORDER</style>
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+							</object>
+							<object class="spacer">
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticBitmap" name="ID_STATICBITMAP3" variable="m_wstaticbitmapCompany2" member="yes">
+									<style>wxNO_BORDER</style>
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+							</object>
+							<object class="spacer">
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticBitmap" name="ID_STATICBITMAP1" variable="m_wstaticbitmapCompany1" member="yes">
+									<style>wxNO_BORDER</style>
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+							</object>
+							<object class="spacer">
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticLine" name="ID_STATICLINE7" variable="StaticLine7" member="yes">
+					<size>10,-1</size>
+				</object>
+				<flag>wxEXPAND</flag>
+				<border>5</border>
+			</object>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer7" member="no">
+					<orient>wxVERTICAL</orient>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer8" member="no">
+							<object class="sizeritem">
+								<object class="wxBoxSizer" variable="BoxSizer10" member="no">
+									<object class="spacer">
+										<flag>wxALL|wxALIGN_TOP</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxBoxSizer" variable="BoxSizer6" member="no">
+											<orient>wxVERTICAL</orient>
+											<object class="sizeritem">
+												<object class="wxBoxSizer" variable="BoxSizer20" member="no">
+													<object class="sizeritem">
+														<object class="wxBoxSizer" variable="BoxSizer17" member="no">
+															<orient>wxVERTICAL</orient>
+															<object class="spacer">
+																<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																<border>5</border>
+																<option>1</option>
+															</object>
+															<object class="sizeritem">
+																<object class="wxBoxSizer" variable="BoxSizer28" member="no">
+																	<object class="spacer">
+																		<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																		<border>5</border>
+																		<option>1</option>
+																	</object>
+																	<object class="sizeritem">
+																		<object class="wxBoxSizer" variable="BoxSizer21" member="no">
+																			<orient>wxVERTICAL</orient>
+																			<object class="sizeritem">
+																				<object class="wxStaticBitmap" name="ID_STATICBITMAP2" variable="m_wstaticbitmapLogo" member="yes">
+																					<style>wxNO_BORDER</style>
+																				</object>
+																				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																				<border>5</border>
+																				<option>1</option>
+																			</object>
+																		</object>
+																		<flag>wxALIGN_LEFT</flag>
+																		<border>10</border>
+																	</object>
+																	<object class="spacer">
+																		<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																		<border>5</border>
+																		<option>1</option>
+																	</object>
+																</object>
+																<flag>wxEXPAND</flag>
+																<border>5</border>
+															</object>
+															<object class="sizeritem">
+																<object class="wxBoxSizer" variable="BoxSizer11" member="no">
+																	<object class="sizeritem">
+																		<object class="wxStaticText" name="ID_STATICTEXT1" variable="m_wtextProgramName" member="yes">
+																			<label>P</label>
+																			<font>
+																				<size>20</size>
+																				<weight>bold</weight>
+																				<sysfont>wxSYS_DEFAULT_GUI_FONT</sysfont>
+																			</font>
+																		</object>
+																		<flag>wxALL</flag>
+																		<border>5</border>
+																	</object>
+																	<object class="sizeritem">
+																		<object class="wxBoxSizer" variable="BoxSizer26" member="no">
+																			<orient>wxVERTICAL</orient>
+																			<object class="spacer">
+																				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																				<border>5</border>
+																				<option>1</option>
+																			</object>
+																			<object class="sizeritem">
+																				<object class="wxStaticText" name="ID_STATICTEXT14" variable="m_wtextProgramPitch" member="yes">
+																					<label>tag</label>
+																					<font>
+																						<size>9</size>
+																						<style>italic</style>
+																						<sysfont>wxSYS_DEFAULT_GUI_FONT</sysfont>
+																					</font>
+																					<style>wxALIGN_LEFT</style>
+																				</object>
+																				<flag>wxLEFT|wxRIGHT|wxEXPAND</flag>
+																				<border>5</border>
+																				<option>1</option>
+																			</object>
+																			<object class="sizeritem">
+																				<object class="wxBoxSizer" variable="BoxSizer27" member="no">
+																					<object class="sizeritem">
+																						<object class="wxStaticText" name="ID_STATICTEXT16" variable="StaticText6" member="yes">
+																							<label>v</label>
+																							<style>wxALIGN_RIGHT</style>
+																						</object>
+																						<flag>wxALL|wxEXPAND</flag>
+																						<border>5</border>
+																					</object>
+																					<object class="sizeritem">
+																						<object class="wxStaticText" name="ID_STATICTEXT2" variable="m_wtextProgramVersion" member="yes">
+																							<label>0.0.0</label>
+																							<style>wxALIGN_RIGHT</style>
+																						</object>
+																						<flag>wxTOP|wxBOTTOM|wxRIGHT|wxEXPAND</flag>
+																						<border>5</border>
+																						<option>1</option>
+																					</object>
+																				</object>
+																				<flag>wxALIGN_RIGHT</flag>
+																				<border>5</border>
+																				<option>1</option>
+																			</object>
+																		</object>
+																		<flag>wxALL|wxEXPAND</flag>
+																	</object>
+																</object>
+																<flag>wxLEFT|wxRIGHT|wxEXPAND</flag>
+																<border>10</border>
+															</object>
+															<object class="spacer">
+																<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																<border>5</border>
+																<option>1</option>
+															</object>
+														</object>
+														<flag>wxALL</flag>
+													</object>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+										</object>
+										<flag>wxALL|wxEXPAND</flag>
+									</object>
+									<object class="spacer">
+										<flag>wxALL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxBoxSizer" variable="BoxSizer14" member="no">
+											<object class="sizeritem">
+												<object class="wxStaticLine" name="ID_STATICLINE3" variable="StaticLine3" member="yes">
+													<size>2,-1</size>
+													<style>wxLI_VERTICAL</style>
+												</object>
+												<flag>wxALL|wxEXPAND</flag>
+												<border>5</border>
+											</object>
+											<object class="sizeritem">
+												<object class="wxBoxSizer" variable="BoxSizer9" member="no">
+													<orient>wxVERTICAL</orient>
+													<object class="sizeritem">
+														<object class="wxBoxSizer" variable="BoxSizer18" member="no">
+															<orient>wxVERTICAL</orient>
+															<object class="sizeritem">
+																<object class="wxBoxSizer" variable="BoxSizer19" member="no">
+																	<orient>wxVERTICAL</orient>
+																	<object class="sizeritem">
+																		<object class="wxBoxSizer" variable="BoxSizer23" member="no">
+																			<object class="sizeritem">
+																				<object class="wxStaticText" name="ID_STATICTEXT11" variable="StaticText3" member="yes">
+																					<label>(c)</label>
+																					<font>
+																						<size>9</size>
+																						<sysfont>wxSYS_DEFAULT_GUI_FONT</sysfont>
+																					</font>
+																				</object>
+																				<flag>wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL</flag>
+																				<border>5</border>
+																				<option>1</option>
+																			</object>
+																			<object class="sizeritem">
+																				<object class="wxStaticText" name="ID_STATICTEXT9" variable="m_wtextCopyrightYear" member="yes">
+																					<label>20xx</label>
+																					<font>
+																						<size>9</size>
+																						<sysfont>wxSYS_DEFAULT_GUI_FONT</sysfont>
+																					</font>
+																				</object>
+																				<flag>wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL</flag>
+																				<border>5</border>
+																			</object>
+																			<object class="sizeritem">
+																				<object class="wxStaticText" name="ID_STATICTEXT15" variable="StaticText7" member="yes">
+																					<label>-</label>
+																					<font>
+																						<size>9</size>
+																						<sysfont>wxSYS_DEFAULT_GUI_FONT</sysfont>
+																					</font>
+																				</object>
+																				<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+																				<border>5</border>
+																			</object>
+																			<object class="sizeritem">
+																				<object class="wxStaticText" name="ID_STATICTEXT7" variable="m_wtextCopyrightAuthorName" member="yes">
+																					<label>John Doe</label>
+																					<font>
+																						<size>9</size>
+																						<sysfont>wxSYS_DEFAULT_GUI_FONT</sysfont>
+																					</font>
+																				</object>
+																				<flag>wxTOP|wxBOTTOM</flag>
+																				<border>5</border>
+																			</object>
+																			<object class="sizeritem">
+																				<object class="wxStaticText" name="ID_STATICTEXT13" variable="StaticText5" member="yes">
+																					<label>&lt;</label>
+																					<font>
+																						<size>9</size>
+																						<sysfont>wxSYS_DEFAULT_GUI_FONT</sysfont>
+																					</font>
+																				</object>
+																				<flag>wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																				<border>5</border>
+																			</object>
+																			<object class="sizeritem">
+																				<object class="wxStaticText" name="ID_STATICTEXT10" variable="m_wtextCopyrightAuthorAddress" member="yes">
+																					<label>john.doe@nowhere.com</label>
+																					<font>
+																						<size>9</size>
+																						<style>italic</style>
+																						<sysfont>wxSYS_DEFAULT_GUI_FONT</sysfont>
+																					</font>
+																				</object>
+																				<flag>wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL</flag>
+																				<border>5</border>
+																			</object>
+																			<object class="sizeritem">
+																				<object class="wxStaticText" name="ID_STATICTEXT12" variable="StaticText4" member="yes">
+																					<label>&gt;</label>
+																					<font>
+																						<size>9</size>
+																						<sysfont>wxSYS_DEFAULT_GUI_FONT</sysfont>
+																					</font>
+																				</object>
+																				<flag>wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL</flag>
+																				<border>5</border>
+																			</object>
+																		</object>
+																		<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																		<option>1</option>
+																	</object>
+																	<object class="sizeritem">
+																		<object class="wxBoxSizer" variable="BoxSizer29" member="no">
+																			<object class="sizeritem">
+																				<object class="wxStaticText" name="ID_STATICTEXT8" variable="m_wtextCopyrightCompany" member="yes">
+																					<label>Company</label>
+																					<font>
+																						<size>9</size>
+																						<weight>bold</weight>
+																						<sysfont>wxSYS_DEFAULT_GUI_FONT</sysfont>
+																					</font>
+																				</object>
+																				<flag>wxALL</flag>
+																				<border>5</border>
+																			</object>
+																			<object class="sizeritem">
+																				<object class="wxHyperlinkCtrl" name="ID_HYPERLINKCTRL1" variable="m_whyperlinkURL" member="yes">
+																					<label>url</label>
+																				</object>
+																				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																				<border>5</border>
+																			</object>
+																		</object>
+																		<flag>wxALL|wxALIGN_RIGHT</flag>
+																	</object>
+																</object>
+																<flag>wxALL|wxALIGN_RIGHT</flag>
+																<border>5</border>
+															</object>
+															<object class="sizeritem">
+																<object class="wxStaticLine" name="ID_STATICLINE4" variable="StaticLine4" member="yes">
+																	<size>10,-1</size>
+																</object>
+																<flag>wxALL|wxEXPAND</flag>
+															</object>
+															<object class="sizeritem">
+																<object class="wxBoxSizer" variable="BoxSizer22" member="no">
+																	<orient>wxVERTICAL</orient>
+																	<object class="sizeritem">
+																		<object class="wxStaticText" name="ID_STATICTEXT5" variable="StaticText1" member="yes">
+																			<label>Build Informations</label>
+																			<font>
+																				<size>9</size>
+																				<weight>bold</weight>
+																				<sysfont>wxSYS_DEFAULT_GUI_FONT</sysfont>
+																			</font>
+																			<style>wxALIGN_RIGHT</style>
+																		</object>
+																		<flag>wxTOP|wxLEFT|wxRIGHT|wxEXPAND</flag>
+																		<border>5</border>
+																	</object>
+																	<object class="sizeritem">
+																		<object class="wxStaticLine" name="ID_STATICLINE6" variable="StaticLine6" member="yes">
+																			<size>10,-1</size>
+																		</object>
+																		<flag>wxALL|wxEXPAND</flag>
+																	</object>
+																</object>
+																<flag>wxALL|wxALIGN_RIGHT</flag>
+																<border>5</border>
+																<option>1</option>
+															</object>
+															<object class="sizeritem">
+																<object class="wxStaticText" name="ID_STATICTEXT3" variable="m_wtextBuildInfos" member="yes">
+																	<label>gcc-xxx</label>
+																	<style>wxALIGN_RIGHT</style>
+																</object>
+																<flag>wxALL|wxEXPAND</flag>
+																<border>5</border>
+															</object>
+															<object class="spacer">
+																<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																<border>5</border>
+															</object>
+														</object>
+														<flag>wxALL|wxALIGN_RIGHT</flag>
+													</object>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxEXPAND</flag>
+												<border>5</border>
+											</object>
+										</object>
+										<flag>wxEXPAND</flag>
+									</object>
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticLine" name="ID_STATICLINE1" variable="StaticLine1" member="yes" />
+						<flag>wxEXPAND</flag>
+						<border>5</border>
+					</object>
+				</object>
+				<flag>wxEXPAND</flag>
+				<border>5</border>
+			</object>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+					<orient>wxVERTICAL</orient>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer13" member="no">
+							<object class="spacer">
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxBoxSizer" variable="BoxSizer25" member="no">
+									<object class="sizeritem">
+										<object class="wxBoxSizer" variable="BoxSizer16" member="no">
+											<orient>wxVERTICAL</orient>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT6" variable="StaticText2" member="yes">
+													<label>License Informations</label>
+													<font>
+														<size>9</size>
+														<weight>bold</weight>
+														<sysfont>wxSYS_DEFAULT_GUI_FONT</sysfont>
+													</font>
+													<style>wxALIGN_RIGHT</style>
+												</object>
+												<flag>wxTOP|wxLEFT|wxRIGHT|wxEXPAND</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticLine" name="ID_STATICLINE5" variable="StaticLine5" member="yes">
+													<size>10,-1</size>
+												</object>
+												<flag>wxALL|wxEXPAND</flag>
+											</object>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+									</object>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+					</object>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer12" member="no">
+							<object class="spacer">
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+							</object>
+							<object class="sizeritem">
+								<object class="wxBoxSizer" variable="BoxSizer24" member="no">
+									<orient>wxVERTICAL</orient>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT4" variable="m_wtextCopyrightLicenseShort" member="yes">
+											<label>Released under the terms of....</label>
+										</object>
+										<flag>wxALL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="spacer">
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+							</object>
+							<object class="sizeritem">
+								<object class="wxToggleButton" name="ID_TOGGLEBUTTON1" variable="m_toggleLicense" member="yes">
+									<label>Show License</label>
+									<handler function="OnToggleButton1Toggle" entry="EVT_TOGGLEBUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+							</object>
+						</object>
+						<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
+					</object>
+				</object>
+				<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
+			</object>
+			<object class="spacer">
+				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<border>5</border>
+			</object>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer5" member="no">
+					<object class="spacer">
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxTextCtrl" name="ID_TEXTCTRL1" variable="m_textCopyrightLicenseLong" member="yes">
+							<value>blah&#x0A;&#x0A;blah blah blah blah blah blah blah blah blah blah blah &#x0A;blah blah blah blah blah blah blah blah blah &#x0A;&#x0A;blah blah blah blah blah blah blah blah blah &#x0A;blah blah blah blah blah blah blah blah blah blah &#x0A;</value>
+							<hidden>1</hidden>
+							<font>
+								<size>9</size>
+								<style>normal</style>
+								<weight>normal</weight>
+								<underlined>0</underlined>
+								<family>swiss</family>
+								<face>Calibri</face>
+							</font>
+							<minsize>580,300</minsize>
+							<style>wxTE_MULTILINE|wxTE_READONLY|wxTE_LEFT</style>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+					</object>
+					<object class="spacer">
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticLine" name="ID_STATICLINE2" variable="StaticLine2" member="yes">
+					<size>10,-1</size>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<border>5</border>
+			</object>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer3" member="no">
+					<object class="spacer">
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="wxID_OK" variable="Button1" member="yes">
+							<label>Ok</label>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+					</object>
+				</object>
+				<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
+				<border>5</border>
+			</object>
+		</object>
+		<object class="wxTimer" name="ID_TIMER1" variable="m_timer" member="yes">
+			<handler function="OnTimer1Trigger" entry="EVT_TIMER" />
+		</object>
+	</object>
+</wxsmith>
