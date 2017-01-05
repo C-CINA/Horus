@@ -380,12 +380,31 @@ bool HorusDatabasePool::_rotateCassette()
             //wxLogStatus(updateStatement.GetSQL());
             //wxLogStatus(wxT("CassetteFunerals Updated: ") + wxString::Format(wxT("%d"), ret));
 
+            // Remote last event
+            {
+                int idx = backupDB.ExecuteScalar("SELECT COUNT(*) FROM events;");
+
+                state = 3;
+
+                // event log is non empty
+                if (idx)
+                {
+                    wxString delcmd = wxString(wxT("DELETE FROM events WHERE idx=?;"));
+                    wxSQLite3Statement updateStatement = backupDB.PrepareStatement(delcmd);
+
+                    updateStatement.Bind(1, idx - 1);
+
+                    updateStatement.ExecuteUpdate();
+                }
+
+            }
+
             backupDB.Close();
 
             _sendBackupEvent(m_dbBackupPath + wxFILE_SEP_PATH + backupName);
         }
 
-        state = 3;
+        state = 4;
 
         //
         // Change dockTS in cassette database (reset to 0), will be changed further.
@@ -403,7 +422,7 @@ bool HorusDatabasePool::_rotateCassette()
             //wxLogStatus(wxT("CassetteDockTS Updated: ") + wxString::Format(wxT("%d"), ret));
         }
 
-        state = 4;
+        state = 5;
 
         //
         // Flush events in cassette database, except last event (and change its index to 0)
@@ -426,7 +445,7 @@ bool HorusDatabasePool::_rotateCassette()
 
                 wxSQLite3ResultSet q = stmt.ExecuteQuery();
 
-                state = 5;
+                state = 6;
 
                 if (! q.NextRow())
                 {
@@ -447,7 +466,7 @@ bool HorusDatabasePool::_rotateCassette()
             updateStatement.ExecuteUpdate();
         }
 
-        state = 6;
+        state = 7;
 
         //
         // add last event, 0 indexed
@@ -463,7 +482,7 @@ bool HorusDatabasePool::_rotateCassette()
             int ret = insertStatement.ExecuteUpdate();
         }
 
-        state = 7;
+        state = 8;
 
         // Vacuum cassette database
         {
@@ -484,18 +503,21 @@ bool HorusDatabasePool::_rotateCassette()
             msg = wxString(wxT("Error while closing the Cassette backup coffin.\n"));
 
         if (state == 3)
-            msg = wxString(wxT("Error while Cassette database reborn.\n"));
+            msg = wxString(wxT("Error while deleting last event in Cassette backup database.\n"));
 
         if (state == 4)
-            msg = wxString(wxT("Error while getting last event in Cassette database.\n"));
+            msg = wxString(wxT("Error while Cassette database reborn.\n"));
 
         if (state == 5)
-            msg = wxString(wxT("Error while deleting all event in Cassette database.\n"));
+            msg = wxString(wxT("Error while getting last event in Cassette database.\n"));
 
         if (state == 6)
-            msg = wxString(wxT("Error while adding first event in Cassette database.\n"));
+            msg = wxString(wxT("Error while deleting all event in Cassette database.\n"));
 
         if (state == 7)
+            msg = wxString(wxT("Error while adding first event in Cassette database.\n"));
+
+        if (state == 8)
             msg = wxString(wxT("Error while Vacuum in Cassette database.\n"));
 
         msg << e.GetMessage();

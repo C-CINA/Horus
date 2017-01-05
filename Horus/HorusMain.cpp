@@ -245,9 +245,9 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     BoxSizer20 = new wxBoxSizer(wxVERTICAL);
     BoxSizer21 = new wxBoxSizer(wxHORIZONTAL);
     SplitterWindow1 = new wxSplitterWindow(m_wbrowserPanel, ID_SPLITTERWINDOW1, wxDefaultPosition, wxDefaultSize, wxSP_3D, _T("ID_SPLITTERWINDOW1"));
-    SplitterWindow1->SetMinSize(wxSize(250,250));
-    SplitterWindow1->SetMinimumPaneSize(250);
-    SplitterWindow1->SetSashGravity(0);
+    SplitterWindow1->SetMinSize(wxSize(300,300));
+    SplitterWindow1->SetMinimumPaneSize(300);
+    SplitterWindow1->SetSashGravity(0.1);
     Panel1 = new wxPanel(SplitterWindow1, ID_PANEL3, wxPoint(133,10), wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL3"));
     BoxSizer22 = new wxBoxSizer(wxVERTICAL);
     BoxSizer27 = new wxBoxSizer(wxHORIZONTAL);
@@ -304,7 +304,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     BoxSizer23->Fit(Panel2);
     BoxSizer23->SetSizeHints(Panel2);
     SplitterWindow1->SplitVertically(Panel1, Panel2);
-    SplitterWindow1->SetSashPosition(250);
+    SplitterWindow1->SetSashPosition(50);
     BoxSizer21->Add(SplitterWindow1, 1, wxALL|wxEXPAND, 5);
     BoxSizer20->Add(BoxSizer21, 1, wxALL|wxEXPAND, 5);
     m_wbrowserPanel->SetSizer(BoxSizer20);
@@ -369,7 +369,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     Fit();
     Layout();
 
-    wxSize s(1300, 900);
+    wxSize s(1300, 1000);
     SetSize(s);
     SetMinSize(s);
 
