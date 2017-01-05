@@ -87,6 +87,8 @@ const long HorusFrame::idMenuAbout = wxNewId();
 const long HorusFrame::ID_STATUSBAR1 = wxNewId();
 //*)
 
+const int HorusFrame::MAX_SASH_POSITION = 500;
+
 BEGIN_EVENT_TABLE(HorusFrame,wxFrame)
     //(*EventTable(HorusFrame)
     //*)
@@ -245,10 +247,9 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     BoxSizer20 = new wxBoxSizer(wxVERTICAL);
     BoxSizer21 = new wxBoxSizer(wxHORIZONTAL);
     SplitterWindow1 = new wxSplitterWindow(m_wbrowserPanel, ID_SPLITTERWINDOW1, wxDefaultPosition, wxDefaultSize, wxSP_3D, _T("ID_SPLITTERWINDOW1"));
-    SplitterWindow1->SetMinSize(wxSize(300,300));
     SplitterWindow1->SetMinimumPaneSize(300);
-    SplitterWindow1->SetSashGravity(0.1);
-    Panel1 = new wxPanel(SplitterWindow1, ID_PANEL3, wxPoint(133,10), wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL3"));
+    SplitterWindow1->SetSashGravity(0);
+    Panel1 = new wxPanel(SplitterWindow1, ID_PANEL3, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL3"));
     BoxSizer22 = new wxBoxSizer(wxVERTICAL);
     BoxSizer27 = new wxBoxSizer(wxHORIZONTAL);
     BoxSizer27->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -304,7 +305,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     BoxSizer23->Fit(Panel2);
     BoxSizer23->SetSizeHints(Panel2);
     SplitterWindow1->SplitVertically(Panel1, Panel2);
-    SplitterWindow1->SetSashPosition(50);
+    SplitterWindow1->SetSashPosition(300);
     BoxSizer21->Add(SplitterWindow1, 1, wxALL|wxEXPAND, 5);
     BoxSizer20->Add(BoxSizer21, 1, wxALL|wxEXPAND, 5);
     m_wbrowserPanel->SetSizer(BoxSizer20);
@@ -346,10 +347,13 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     Connect(ID_BUTTON8,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::Onm_wtreeCollapseAllClick);
     Connect(ID_TREECTRL1,wxEVT_COMMAND_TREE_SEL_CHANGED,(wxObjectEventFunction)&HorusFrame::OnCassettesSelectionChanged);
     m_wbrowserGrid->Connect(wxEVT_SIZE,(wxObjectEventFunction)&HorusFrame::OnBrowserGridResize,0,this);
+    Connect(ID_SPLITTERWINDOW1,wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING,(wxObjectEventFunction)&HorusFrame::OnSplitterWindow1SashPosChanging);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&HorusFrame::OnQuit);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&HorusFrame::OnAbout);
     Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&HorusFrame::OnClose);
     //*)
+
+    //Panel1->SetMaxSize(wxSize(400, -1));
 
     wxSplashScreen* splash = new wxSplashScreen(*hUtils::CreateBitmapFromPNGResource(wxT("SPLASH")), wxSPLASH_CENTRE_ON_SCREEN/*|wxSPLASH_TIMEOUT*/,
                                                 0/*6000*/, NULL, -1, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxSTAY_ON_TOP);
@@ -1520,14 +1524,6 @@ void HorusFrame::OnBrowserGridResize(wxSizeEvent& event)
     event.Skip();
 }
 
-void HorusFrame::OnSplitterWindow1SashPosChanged(wxSplitterEvent& event)
-{
-    wxSize sz = m_wbrowserGrid->GetSize();
-    m_wbrowserGrid->SetColSize(0, sz.GetWidth() - m_wbrowserGrid->GetRowLabelSize() - 1);
-
-    event.Skip();
-}
-
 void HorusFrame::Onm_wtreeExpandAllClick(wxCommandEvent& event)
 {
     m_wtreeCassettes->ExpandAll();
@@ -1542,5 +1538,15 @@ void HorusFrame::Onm_wtreeCollapseAllClick(wxCommandEvent& event)
     event.Skip();
 }
 
+void HorusFrame::OnSplitterWindow1SashPosChanging(wxSplitterEvent& event)
+{
+    // Limit Sash position
+    if (event.GetSashPosition() > MAX_SASH_POSITION)
+        event.SetSashPosition(MAX_SASH_POSITION);
+
+    event.Skip();
+}
+
 } // namespace
+
 

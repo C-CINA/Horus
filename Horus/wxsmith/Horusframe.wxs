@@ -307,13 +307,12 @@
 											<object class="wxBoxSizer" variable="BoxSizer21" member="no">
 												<object class="sizeritem">
 													<object class="wxSplitterWindow" name="ID_SPLITTERWINDOW1" variable="SplitterWindow1" member="yes">
-														<sashpos>250</sashpos>
+														<sashpos>300</sashpos>
 														<sashgravity>0.000000</sashgravity>
-														<minsize>250</minsize>
+														<minsize>300</minsize>
 														<orientation>vertical</orientation>
-														<minsize>250,250</minsize>
+														<handler function="OnSplitterWindow1SashPosChanging" entry="EVT_SPLITTER_SASH_POS_CHANGING" />
 														<object class="wxPanel" name="ID_PANEL3" variable="Panel1" member="yes">
-															<pos>133,10</pos>
 															<object class="wxBoxSizer" variable="BoxSizer22" member="no">
 																<orient>wxVERTICAL</orient>
 																<object class="sizeritem">

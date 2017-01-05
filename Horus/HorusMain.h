@@ -109,10 +109,10 @@ class HorusFrame: public wxFrame, HorusDatabaseEventRestore
         void Onm_keepOnStageClick(wxCommandEvent& event);
         void Onm_wredockCassetteClick(wxCommandEvent& event);
         void OnCassettesSelectionChanged(wxTreeEvent& event);
-        void OnSplitterWindow1SashPosChanged(wxSplitterEvent& event);
         void OnBrowserGridResize(wxSizeEvent& event);
         void Onm_wtreeExpandAllClick(wxCommandEvent& event);
         void Onm_wtreeCollapseAllClick(wxCommandEvent& event);
+        void OnSplitterWindow1SashPosChanging(wxSplitterEvent& event);
         //*)
 
         void OnCassetteEvent(wxCommandEvent &);
@@ -164,6 +164,8 @@ class HorusFrame: public wxFrame, HorusDatabaseEventRestore
         static const long idMenuAbout;
         static const long ID_STATUSBAR1;
         //*)
+
+        static const int MAX_SASH_POSITION;
 
         //(*Declarations(HorusFrame)
         wxScrolledWindow* m_wscrolledStage;
