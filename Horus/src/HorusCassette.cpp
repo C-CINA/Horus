@@ -58,8 +58,10 @@ HorusCartridge::HorusCartridge(HorusCassette *cassette, wxWindow *parent, size_t
 
     m_panelLabel = new wxPanel(this, wxNewId(), wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER|wxTAB_TRAVERSAL);
     m_panelLabel->SetBackgroundColour(wxColour(255,255,128));
+
     wxBoxSizer *boxSizer6 = new wxBoxSizer(wxHORIZONTAL);
     m_label = new wxStaticText(m_panelLabel, wxNewId(), wxString::Format(wxT("%zu"), counter), wxDefaultPosition, wxSize(80, -1), wxALIGN_CENTRE);
+    m_label->SetToolTip(wxT("Cartridge #") + wxString::Format(wxT("%zu"), counter));
 
     // Bold label
     wxFont StaticTextFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
@@ -78,12 +80,14 @@ HorusCartridge::HorusCartridge(HorusCassette *cassette, wxWindow *parent, size_t
 
     staticBoxSizer1->Add(boxSizer2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     m_text = new wxTextCtrl(this, wxNewId(), wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator);
+    m_text->SetToolTip(wxT("Grid description."));
     m_text->SetMaxLength(80);
     staticBoxSizer1->Add(m_text, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     wxBoxSizer *boxSizer3 = new wxBoxSizer(wxHORIZONTAL);
     wxStaticBoxSizer *staticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, wxEmptyString);
 
     m_loadToggle = new wxBitmapToggleButton(this, wxNewId(), *hUtils::CreateBitmapFromPNGResource(wxT("TOGGLE_OUT")), wxDefaultPosition, wxDefaultSize, wxNO_BORDER, wxDefaultValidator);
+    m_loadToggle->SetToolTip(wxT("Cartridge insertion/ejection."));
     staticBoxSizer2->Add(m_loadToggle, 0, wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     m_loadToggle->SetBitmapDisabled(*hUtils::CreateBitmapFromPNGResource(wxT("TOGGLE_OUT_DISABLED")));
     m_loadToggle->SetBitmapPressed(*hUtils::CreateBitmapFromPNGResource(wxT("TOGGLE_IN")));
@@ -94,9 +98,11 @@ HorusCartridge::HorusCartridge(HorusCassette *cassette, wxWindow *parent, size_t
     wxBoxSizer *boxSizer4 = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer *boxSizer5 = new wxBoxSizer(wxVERTICAL);
     m_keepIt = new wxCheckBox(this, wxNewId(), _("Keep It"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator);
+    m_keepIt->SetToolTip(wxT("Keep the cartridge on next docking."));
     m_keepIt->SetValue(false);
     boxSizer5->Add(m_keepIt, 0, wxALL|wxEXPAND, 5);
     m_empty = new wxCheckBox(this, wxNewId(), _("Empty"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator);
+    m_empty->SetToolTip(wxT("Set cartridge emptiness state."));
     m_empty->SetValue(true);
     boxSizer5->Add(m_empty, 0, wxALL|wxEXPAND, 5);
     boxSizer4->Add(boxSizer5, 1, wxALL|wxEXPAND, 5);

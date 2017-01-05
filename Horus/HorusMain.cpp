@@ -185,16 +185,20 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     BoxSizer8 = new wxBoxSizer(wxHORIZONTAL);
     BoxSizer13 = new wxBoxSizer(wxHORIZONTAL);
     m_wdockCassette = new wxButton(m_wloggerPanel, ID_BUTTON1, _("Dock"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
+    m_wdockCassette->SetToolTip(_("Dock the cassette."));
     BoxSizer13->Add(m_wdockCassette, 1, wxLEFT|wxRIGHT, 5);
     m_wredockCassette = new wxButton(m_wloggerPanel, ID_BUTTON3, _("Redock"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON3"));
+    m_wredockCassette->SetToolTip(_("Dock the cassette again."));
     BoxSizer13->Add(m_wredockCassette, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     m_wundockCassette = new wxButton(m_wloggerPanel, ID_BUTTON6, _("Undock"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON6"));
+    m_wundockCassette->SetToolTip(_("Undock the cassette."));
     BoxSizer13->Add(m_wundockCassette, 1, wxLEFT|wxRIGHT, 5);
     BoxSizer8->Add(BoxSizer13, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer8->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticBoxSizer1 = new wxStaticBoxSizer(wxHORIZONTAL, m_wloggerPanel, _("  Docked On  "));
     StaticBoxSizer1->Add(-1,-1,0, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     m_wdockedLabel = new wxStaticText(m_wloggerPanel, ID_STATICTEXT3, _("< ----/--/-- --:--:-- >"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT3"));
+    m_wdockedLabel->SetToolTip(_("Docking time stamp."));
     StaticBoxSizer1->Add(m_wdockedLabel, 1, wxLEFT|wxRIGHT|wxEXPAND, 5);
     StaticBoxSizer1->Add(-1,-1,0, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer8->Add(StaticBoxSizer1, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -219,6 +223,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     StaticText1 = new wxStaticText(m_wloggerPanel, ID_STATICTEXT1, _("Loaded Cartridge: "), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT, _T("ID_STATICTEXT1"));
     BoxSizer7->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     m_wcartridgeNum = new wxStaticText(m_wloggerPanel, ID_STATICTEXT2, _("<NONE>"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
+    m_wcartridgeNum->SetToolTip(_("Cartridge loaded on the stage."));
     BoxSizer7->Add(m_wcartridgeNum, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     m_wstageSizer->Add(BoxSizer7, 0, wxALL|wxEXPAND, 5);
     BoxSizer17 = new wxBoxSizer(wxHORIZONTAL);
@@ -228,9 +233,11 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     m_wkeepOnStage = new wxCheckBox(m_wscrolledStage, ID_CHECKBOX1, _("Keep On Stage"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX1"));
     m_wkeepOnStage->SetValue(false);
     m_wkeepOnStage->Disable();
+    m_wkeepOnStage->SetToolTip(_("Keep the cartridge on the stage on undocking."));
     BoxSizer19->Add(m_wkeepOnStage, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     m_wunloadStage = new wxButton(m_wscrolledStage, ID_BUTTON2, _("Unload"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
     m_wunloadStage->Disable();
+    m_wunloadStage->SetToolTip(_("Unload the cartridge."));
     BoxSizer19->Add(m_wunloadStage, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer18->Add(BoxSizer19, 1, wxALL|wxEXPAND, 5);
     m_wscrolledStage->SetSizer(BoxSizer18);
@@ -243,14 +250,15 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     BoxSizer10 = new wxBoxSizer(wxVERTICAL);
     BoxSizer11 = new wxBoxSizer(wxHORIZONTAL);
     m_woperatorChoice = new wxChoice(m_wloggerPanel, ID_CHOICE1, wxDefaultPosition, wxDefaultSize, 0, 0, 0, wxDefaultValidator, _T("ID_CHOICE1"));
+    m_woperatorChoice->SetToolTip(_("Select an operator."));
     BoxSizer11->Add(m_woperatorChoice, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer12 = new wxBoxSizer(wxVERTICAL);
     m_waddOperator = new wxButton(m_wloggerPanel, ID_BUTTON4, _("+"), wxDefaultPosition, wxSize(20,20), 0, wxDefaultValidator, _T("ID_BUTTON4"));
-    m_waddOperator->SetToolTip(_("Add an Operator"));
+    m_waddOperator->SetToolTip(_("Add an operator"));
     BoxSizer12->Add(m_waddOperator, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     m_wdeleteOperator = new wxButton(m_wloggerPanel, ID_BUTTON5, _("-"), wxDefaultPosition, wxSize(20,20), 0, wxDefaultValidator, _T("ID_BUTTON5"));
     m_wdeleteOperator->Disable();
-    m_wdeleteOperator->SetToolTip(_("Delete Selected Operator"));
+    m_wdeleteOperator->SetToolTip(_("Delete selected operator."));
     BoxSizer12->Add(m_wdeleteOperator, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer11->Add(BoxSizer12, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer10->Add(BoxSizer11, 0, wxALL|wxEXPAND, 5);
@@ -264,6 +272,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     rchtxtAttr_1.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_FACE|wxTEXT_ATTR_FONT_SIZE|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_FONT_ITALIC|wxTEXT_ATTR_FONT_UNDERLINE|wxTEXT_ATTR_FONT|wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT);
     rchtxtAttr_1.SetBulletStyle(wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT);
     m_wtextLogger->SetBasicStyle(rchtxtAttr_1);
+    m_wtextLogger->SetToolTip(_("Event logger."));
     BoxSizer9->Add(m_wtextLogger, 1, wxALL|wxEXPAND, 5);
     BoxSizer3->Add(BoxSizer9, 1, wxEXPAND, 5);
     m_wloggerPanel->SetSizer(BoxSizer3);
@@ -288,6 +297,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     BoxSizer27->Add(m_wtreeCollapseAll, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer22->Add(BoxSizer27, 0, wxTOP|wxLEFT|wxRIGHT|wxEXPAND, 5);
     m_wtreeCassettes = new wxTreeCtrl(Panel1, ID_TREECTRL1, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE, wxDefaultValidator, _T("ID_TREECTRL1"));
+    m_wtreeCassettes->SetToolTip(_("Cassettes log tree."));
     BoxSizer22->Add(m_wtreeCassettes, 1, wxALL|wxEXPAND, 5);
     Panel1->SetSizer(BoxSizer22);
     BoxSizer22->Fit(Panel1);
@@ -298,14 +308,17 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     BoxSizer24 = new wxBoxSizer(wxHORIZONTAL);
     StaticBoxSizer6 = new wxStaticBoxSizer(wxHORIZONTAL, Panel2, _("  Operator  "));
     m_wbrowserOperator = new wxStaticText(Panel2, ID_STATICTEXT6, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
+    m_wbrowserOperator->SetToolTip(_("Cassette operator."));
     StaticBoxSizer6->Add(m_wbrowserOperator, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer24->Add(StaticBoxSizer6, 1, wxALL, 5);
     StaticBoxSizer4 = new wxStaticBoxSizer(wxHORIZONTAL, Panel2, _("  Docked On  "));
     m_wbrowserDocked = new wxStaticText(Panel2, ID_STATICTEXT4, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
+    m_wbrowserDocked->SetToolTip(_("Docking time stamp."));
     StaticBoxSizer4->Add(m_wbrowserDocked, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer24->Add(StaticBoxSizer4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticBoxSizer5 = new wxStaticBoxSizer(wxHORIZONTAL, Panel2, _("  Funeral On  "));
     m_wbrowserFuneral = new wxStaticText(Panel2, ID_STATICTEXT5, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
+    m_wbrowserFuneral->SetToolTip(_("Ejection time stamp."));
     StaticBoxSizer5->Add(m_wbrowserFuneral, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer24->Add(StaticBoxSizer5, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticBoxSizer3->Add(BoxSizer24, 0, wxEXPAND, 5);
@@ -325,6 +338,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     rchtxtAttr_2.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_FACE|wxTEXT_ATTR_FONT_SIZE|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_FONT_ITALIC|wxTEXT_ATTR_FONT_UNDERLINE|wxTEXT_ATTR_FONT|wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT);
     rchtxtAttr_2.SetBulletStyle(wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT);
     m_wbrowserText->SetBasicStyle(rchtxtAttr_2);
+    m_wbrowserText->SetToolTip(_("Event logger."));
     BoxSizer26->Add(m_wbrowserText, 1, wxEXPAND, 5);
     StaticBoxSizer3->Add(BoxSizer26, 1, wxLEFT|wxRIGHT|wxEXPAND, 5);
     BoxSizer23->Add(StaticBoxSizer3, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5);
@@ -939,14 +953,22 @@ void HorusFrame::_dockCassette(bool dock, bool redock)
 
 void HorusFrame::Onm_dockCassetteClick(wxCommandEvent& event)
 {
-    _dockCassette(true);
+    if (wxMessageBox(wxT("Do you really want to dock the cassette ?"), wxT("Question"), wxYES_NO|wxNO_DEFAULT|wxICON_QUESTION) == wxYES)
+        _dockCassette(true);
 
     event.Skip();
 }
 
+void HorusFrame::Onm_wredockCassetteClick(wxCommandEvent& event)
+{
+    if (wxMessageBox(wxT("Do you really want to redock the cassette ?"), wxT("Question"), wxYES_NO|wxNO_DEFAULT|wxICON_QUESTION) == wxYES)
+        _dockCassette(true, true);
+}
+
 void HorusFrame::Onm_undockCassetteClick(wxCommandEvent& event)
 {
-    _dockCassette(false);
+    if (wxMessageBox(wxT("Do you really want to undock the cassette ?"), wxT("Question"), wxYES_NO|wxNO_DEFAULT|wxICON_QUESTION) == wxYES)
+        _dockCassette(false);
 
     event.Skip();
 }
@@ -1179,12 +1201,6 @@ void HorusFrame::Onm_keepOnStageClick(wxCommandEvent& event)
 {
     m_databases->SetKeepOnStage(m_wkeepOnStage->GetValue());
 }
-
-void HorusFrame::Onm_wredockCassetteClick(wxCommandEvent& event)
-{
-    _dockCassette(true, true);
-}
-
 
 wxTreeItemId HorusFrame::_getItemID(wxTreeItemId parent, const wxString &name)
 {
