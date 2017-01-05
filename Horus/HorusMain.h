@@ -1,11 +1,34 @@
-/***************************************************************
- * Name:      HorusMain.h
- * Purpose:   Defines Application Frame
- * Author:    Daniel Caujolle-Bert (daniel.caujolle-bert@unibas.ch)
- * Created:   2016-12-16
- * Copyright: Daniel Caujolle-Bert (https://c-cina.unibas.ch/bioem/)
- * License:
- **************************************************************/
+/// -----------------------------------------------------------------------------
+///
+/// \file HorusMain.h
+///
+/// \copyright Copyright (c) 2016-2017 Daniel Caujolle-Bert <daniel.caujolle-bert@unibas.ch>
+/// \brief Horus, a Cassette Logger
+/// \author Daniel Caujolle-Bert <daniel.caujolle-bert@unibas.ch>
+///
+/// \license
+/// All rights reserved. This program and the accompanying materials
+/// are made available under the terms of the GNU Public License v2.0
+/// which accompanies this distribution, and is available at
+/// http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+///
+/// This file is part of Horus Logger.
+///
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+///
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License along
+/// with this program; if not, write to the Free Software Foundation, Inc.,
+/// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///
+///
 
 #ifndef HORUSMAIN_H
 #define HORUSMAIN_H
@@ -91,7 +114,7 @@ class hTreeItemData: public wxTreeItemData
 class HorusFrame: public wxFrame, HorusDatabaseEventRestore
 {
     public:
-        HorusFrame(wxWindow* parent,wxWindowID id = -1);
+        HorusFrame(wxWindow *, wxWindowID = wxID_ANY);
         virtual ~HorusFrame();
 
     private:
@@ -115,21 +138,21 @@ class HorusFrame: public wxFrame, HorusDatabaseEventRestore
         void OnSplitterWindow1SashPosChanging(wxSplitterEvent& event);
         //*)
 
-        void OnCassetteEvent(wxCommandEvent &);
-        void OnDatabasePoolEvent(wxCommandEvent &);
+        void                            OnCassetteEvent(wxCommandEvent &);
+        void                            OnDatabasePoolEvent(wxCommandEvent &);
 
-        void HorusEventRestore(time_t, const wxString &, const wxString &);
+        void                            HorusEventRestore(time_t, const wxString &, const wxString &);
 
-        void _updateOperatorChoice();
-        void _logEvent(wxRichTextCtrl *, time_t, const wxString &, const wxString &, bool, bool = true);
-        void _dockCassette(bool, bool = false);
+        void                            _updateOperatorChoice();
+        void                            _logEvent(wxRichTextCtrl *, time_t, const wxString &, const wxString &, bool, bool = true);
+        void                            _dockCassette(bool, bool = false);
 
-        wxTreeItemId _getItemID(wxTreeItemId, const wxString &);
-        wxString const _getOperatorFromUUID(const wxString &);
-        void _addCassetteToTree(time_t, const wxString &, const wxString &);
-        bool _extractCassetteFromDatabase(const wxString &dbName);
-        void _initBrowser();
-        void _displayCassetteInfos(const wxString &, const wxString &);
+        wxTreeItemId                    _getItemID(wxTreeItemId, const wxString &);
+        wxString const                  _getOperatorFromUUID(const wxString &);
+        void                            _addCassetteToTree(time_t, const wxString &, const wxString &);
+        bool                            _extractCassetteFromDatabase(const wxString &);
+        void                            _initBrowser();
+        void                            _displayCassetteInfos(const wxString &, const wxString &);
 
         //(*Identifiers(HorusFrame)
         static const long ID_BUTTON1;

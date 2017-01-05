@@ -3,7 +3,7 @@
 /// \file HorusAboutMain.h
 ///
 /// \copyright Copyright (c) 2016-2017 Daniel Caujolle-Bert <daniel.caujolle-bert@unibas.ch>
-/// \brief Horus Logger
+/// \brief Horus, a Cassette Logger
 /// \author Daniel Caujolle-Bert <daniel.caujolle-bert@unibas.ch>
 ///
 /// \license
@@ -12,7 +12,7 @@
 /// which accompanies this distribution, and is available at
 /// http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ///
-/// This file is part of Horus.
+/// This file is part of Horus Logger.
 ///
 /// This program is free software; you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by

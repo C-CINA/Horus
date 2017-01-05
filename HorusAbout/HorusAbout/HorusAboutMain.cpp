@@ -3,7 +3,7 @@
 /// \file HorusAboutMain.cpp
 ///
 /// \copyright Copyright (c) 2016-2017 Daniel Caujolle-Bert <daniel.caujolle-bert@unibas.ch>
-/// \brief Horus Logger
+/// \brief Horus, a Cassette Logger
 /// \author Daniel Caujolle-Bert <daniel.caujolle-bert@unibas.ch>
 ///
 /// \license
@@ -12,7 +12,7 @@
 /// which accompanies this distribution, and is available at
 /// http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ///
-/// This file is part of Horus.
+/// This file is part of Horus Logger.
 ///
 /// This program is free software; you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -39,34 +39,6 @@
 #include <wx/intl.h>
 #include <wx/string.h>
 //*)
-
-#ifndef HORUSAPP_BUILD
-//helper functions
-enum wxbuildinfoformat {
-    short_f, long_f };
-
-wxString wxbuildinfo(wxbuildinfoformat format)
-{
-    wxString wxbuild(wxVERSION_STRING);
-
-    if (format == long_f )
-    {
-#if defined(__WXMSW__)
-        wxbuild << _T("-Windows");
-#elif defined(__UNIX__)
-        wxbuild << _T("-Linux");
-#endif
-
-#if wxUSE_UNICODE
-        wxbuild << _T("-Unicode build");
-#else
-        wxbuild << _T("-ANSI build");
-#endif // wxUSE_UNICODE
-    }
-
-    return wxbuild;
-}
-#endif // 0
 
 //(*IdInit(HorusAboutDialog)
 const long HorusAboutDialog::ID_STATICBITMAP4 = wxNewId();

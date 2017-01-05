@@ -1,11 +1,34 @@
-/***************************************************************
- * Name:      HorusMain.cpp
- * Purpose:   Code for Application Frame
- * Author:    Daniel Caujolle-Bert (daniel.caujolle-bert@unibas.ch)
- * Created:   2016-12-16
- * Copyright: Daniel Caujolle-Bert (https://c-cina.unibas.ch/bioem/)
- * License:
- **************************************************************/
+/// -----------------------------------------------------------------------------
+///
+/// \file HorusMain.cpp
+///
+/// \copyright Copyright (c) 2016-2017 Daniel Caujolle-Bert <daniel.caujolle-bert@unibas.ch>
+/// \brief Horus, a Cassette Logger
+/// \author Daniel Caujolle-Bert <daniel.caujolle-bert@unibas.ch>
+///
+/// \license
+/// All rights reserved. This program and the accompanying materials
+/// are made available under the terms of the GNU Public License v2.0
+/// which accompanies this distribution, and is available at
+/// http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+///
+/// This file is part of Horus Logger.
+///
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+///
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License along
+/// with this program; if not, write to the Free Software Foundation, Inc.,
+/// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///
+///
 
 #ifdef __WXDEBUG__
 #define DEBUG
@@ -22,10 +45,11 @@
 namespace Horus
 {
 
-const wxString   PROGRAM_AUTHOR_NAME    = wxT("Daniel Caujolle-Bert");
-const wxString   PROGRAM_AUTHOR_ADDRESS = wxT("daniel.caujolle-bert@unibas.ch");
-const wxString   PROGRAM_COMPANY        = wxT("BioEM Lab");
-const wxString   PROGRAM_COMPANY_URL    = wxT("https://c-cina.unibas.ch/bioem");
+static const wxString   PROGRAM_AUTHOR_NAME    = wxT("Daniel Caujolle-Bert");
+static const wxString   PROGRAM_AUTHOR_ADDRESS = wxT("daniel.caujolle-bert@unibas.ch");
+static const wxString   PROGRAM_COMPANY        = wxT("BioEM Lab");
+static const wxString   PROGRAM_COMPANY_URL    = wxT("https://c-cina.unibas.ch/bioem");
+
 
 //helper functions
 enum wxbuildinfoformat {
@@ -105,6 +129,8 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
 #else
     wxLogNull noLog;
 #endif
+
+    // Hide the main window (a splashscreen will popup)
     Hide();
 
     //(*Initialize(HorusFrame)
@@ -233,7 +259,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     BoxSizer4->Add(BoxSizer5, 0, wxTOP|wxRIGHT|wxEXPAND, 5);
     BoxSizer3->Add(BoxSizer4, 1, wxEXPAND, 5);
     BoxSizer9 = new wxBoxSizer(wxHORIZONTAL);
-    m_wtextLogger = new wxRichTextCtrl(m_wloggerPanel, ID_RICHTEXTCTRL1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRE_MULTILINE|wxRE_READONLY|wxSIMPLE_BORDER, wxDefaultValidator, _T("ID_RICHTEXTCTRL1"));
+    m_wtextLogger = new wxRichTextCtrl(m_wloggerPanel, ID_RICHTEXTCTRL1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRE_MULTILINE|wxRE_READONLY|wxSUNKEN_BORDER, wxDefaultValidator, _T("ID_RICHTEXTCTRL1"));
     wxRichTextAttr rchtxtAttr_1;
     rchtxtAttr_1.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_FACE|wxTEXT_ATTR_FONT_SIZE|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_FONT_ITALIC|wxTEXT_ATTR_FONT_UNDERLINE|wxTEXT_ATTR_FONT|wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT);
     rchtxtAttr_1.SetBulletStyle(wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT);
@@ -250,7 +276,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     SplitterWindow1->SetMinSize(wxSize(300,300));
     SplitterWindow1->SetMinimumPaneSize(300);
     SplitterWindow1->SetSashGravity(0);
-    Panel1 = new wxPanel(SplitterWindow1, ID_PANEL3, wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER|wxTAB_TRAVERSAL, _T("ID_PANEL3"));
+    Panel1 = new wxPanel(SplitterWindow1, ID_PANEL3, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL, _T("ID_PANEL3"));
     BoxSizer22 = new wxBoxSizer(wxVERTICAL);
     BoxSizer27 = new wxBoxSizer(wxHORIZONTAL);
     BoxSizer27->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -266,7 +292,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     Panel1->SetSizer(BoxSizer22);
     BoxSizer22->Fit(Panel1);
     BoxSizer22->SetSizeHints(Panel1);
-    Panel2 = new wxPanel(SplitterWindow1, ID_PANEL4, wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER|wxTAB_TRAVERSAL, _T("ID_PANEL4"));
+    Panel2 = new wxPanel(SplitterWindow1, ID_PANEL4, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL, _T("ID_PANEL4"));
     BoxSizer23 = new wxBoxSizer(wxVERTICAL);
     StaticBoxSizer3 = new wxStaticBoxSizer(wxVERTICAL, Panel2, _("  Cassette  "));
     BoxSizer24 = new wxBoxSizer(wxHORIZONTAL);
@@ -285,7 +311,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     StaticBoxSizer3->Add(BoxSizer24, 0, wxEXPAND, 5);
     BoxSizer25 = new wxBoxSizer(wxHORIZONTAL);
     m_wbrowserGrid = new wxGrid(Panel2, ID_GRID1, wxDefaultPosition, wxDefaultSize, wxSTATIC_BORDER, _T("ID_GRID1"));
-    m_wbrowserGrid->CreateGrid(6,1);
+    m_wbrowserGrid->CreateGrid(0,1);
     m_wbrowserGrid->EnableEditing(false);
     m_wbrowserGrid->EnableGridLines(true);
     m_wbrowserGrid->SetColLabelValue(0, _("Cartridges"));
@@ -354,40 +380,53 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&HorusFrame::OnClose);
     //*)
 
-    //Panel1->SetMaxSize(wxSize(400, -1));
+    // Add needed rows.
+    m_wbrowserGrid->InsertRows(0, MAX_CARTRIDGE_SLOTS);
 
+    // Show the splashscreen, usefull when the log is "huge"
     wxSplashScreen* splash = new wxSplashScreen(*hUtils::CreateBitmapFromPNGResource(wxT("SPLASH")), wxSPLASH_CENTRE_ON_SCREEN/*|wxSPLASH_TIMEOUT*/,
                                                 0/*6000*/, NULL, -1, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxSTAY_ON_TOP);
     wxYield();
 
+    // Create the cassette object, which handles cartridges and stage
     m_cassette = new HorusCassette(m_wscrolledCartridges, m_wslotSizer);
     m_wscrolledCartridges->Fit();
     wxSize ws = m_wscrolledCartridges->GetSize();
     m_wscrolledCartridges->SetMinSize(wxSize(-1, ws.GetHeight()));
     m_wscrolledCartridges->SetMaxSize(wxSize(-1, ws.GetHeight()));
 
+    // Define App icon and Title
     SetIcon(wxICON(MAINICON));
     SetTitle(wxGetApp().GetAppName() + wxT(" ")
              + wxString::FromAscii(AutoVersion::FULLVERSION_STRING)
              + wxString::FromAscii(AutoVersion::STATUS_SHORT));
 
+    // UI update
     Fit();
     Layout();
 
+    // Size is hardcoded
     wxSize s(1300, 1000);
     SetSize(s);
     SetMinSize(s);
 
+    // Don't let the cartridges sending events now.
     m_cassette->SetSilent(true);
+
+    // Don't log events into database yet.
     m_eventLoggerLockout = true;
 
+    // Create database pool object
     m_databases = new HorusDatabasePool(this);
 
+    // Initialize the database pool
     if (m_databases->Initialize(m_cassette))
     {
+        // Reload previous cassette and operators list
         if (! m_databases->ReloadData(m_operators, this))
             Close();
 
+        // Update the UI if a cartridge is on the stage.
         if (! m_cassette->IsStageEmpty())
         {
             HorusCartridge *slot = m_cassette->GetLoadedCartridge();
@@ -397,31 +436,39 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
         }
     }
 
+    // Update Keep On Stage UI checkbox
     m_wkeepOnStage->SetValue(m_databases->GetKeepOnStage());
 
+    // Dock the cassette, if any
     _dockCassette(m_databases->GetCassetteDocked());
 
+    // If a cassette is docked, update the docking timestamp in the UI
     if (m_databases->GetCassetteDocked())
     {
         time_t ts;
+
         if (m_databases->GetCassetteDockTimeStamp(ts))
-        {
             m_wdockedLabel->SetLabel(hUtils::GetTimeStampString(ts, false));
-        }
     }
 
+    // Update the Keep On Stage checkbox
     if (! m_cassette->IsStageEmpty() && ! m_wkeepOnStage->IsEnabled())
         m_wkeepOnStage->Enable(true);
 
+    // Accept events now
     m_eventLoggerLockout = false;
     m_cassette->SetSilent(false);
 
+    // Update the operator list widget
     _updateOperatorChoice();
 
+    // Get cassette's operator UUID
     wxString opUUID = m_databases->GetCassetteOperator();
 
+    // Update Operator, if defined
     if (opUUID != wxEmptyString && opUUID != wxT("-1"))
     {
+        // Looking for matching Operator name
         for (size_t i = 0; i < m_operators.GetCount(); i++)
         {
             if (m_operators.Item(i).UUID.Cmp(opUUID) == 0)
@@ -433,14 +480,18 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     }
     else
     {
+        // No operator is defines, assign current one as cassette's operator
         if (m_operators.GetCount())
             m_databases->SetCassetteOperator(m_operators.Item(static_cast<size_t>(m_woperatorChoice->GetSelection())).UUID);
     }
 
+    // Init cassettes browser tab.
     _initBrowser();
 
+    // Delete splashscreen
     delete splash;
 
+    // Show the main window
     Show();
 }
 
@@ -896,18 +947,22 @@ void HorusFrame::_dockCassette(bool dock, bool redock)
 void HorusFrame::Onm_dockCassetteClick(wxCommandEvent& event)
 {
     _dockCassette(true);
+
+    event.Skip();
 }
 
 void HorusFrame::Onm_undockCassetteClick(wxCommandEvent& event)
 {
     _dockCassette(false);
+
+    event.Skip();
 }
 
 void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
 {
     HorusEventCassetteData *data = (HorusEventCassetteData *)event.GetClientData();
 
-    //if (! m_eventLock)
+    if (data)
     {
         switch (event.GetInt())
         {
@@ -964,10 +1019,11 @@ void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
                     time_t ts;
 
                     if (m_databases->GetCassetteDockTimeStamp(ts))
-                    {
                         m_wdockedLabel->SetLabel(hUtils::GetTimeStampString(ts, false));
-                        //Panel1->Layout();
-                    }
+
+                    // Update all cartridges informations into database
+                    for (size_t i = 0; i < MAX_CARTRIDGE_SLOTS; i++)
+                        m_databases->UpdateCartridge(m_cassette->GetCartridge(i));
 
                     _logEvent(m_wtextLogger, data->TimeStamp, m_woperatorChoice->GetString(m_woperatorChoice->GetSelection()),
                               wxT("Cassette Docked."), true, false);
@@ -984,16 +1040,11 @@ void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
                     _logEvent(m_wtextLogger, data->TimeStamp, m_woperatorChoice->GetString(m_woperatorChoice->GetSelection()),
                               wxT("Cassette Redocked."), true);
 
-                    //m_wtextLogger->Clear();
-
                     m_databases->SetCassetteRedocked();
 
                     time_t ts;
                     if (m_databases->GetCassetteDockTimeStamp(ts))
-                    {
                         m_wdockedLabel->SetLabel(hUtils::GetTimeStampString(ts, false));
-                        //Panel1->Layout();
-                    }
                 }
                 break;
 
@@ -1004,14 +1055,11 @@ void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
                           wxT("Cassette Undocked."), true);
                 m_databases->SetCassetteDocked(false);
                 m_wdockedLabel->SetLabel(wxT("< ----/--/-- --:--:-- >"));
-                //m_wdockedOnSizer->La
-                //Panel1->Layout();
                 break;
         }
-    }
 
-    if (data)
         delete data;
+    }
 
     event.Skip();
 }
@@ -1037,7 +1085,6 @@ void HorusFrame::OnDatabasePoolEvent(wxCommandEvent &event)
 void HorusFrame::HorusEventRestore(time_t ts, const wxString &op, const wxString &msg)
 {
     _logEvent(m_wtextLogger, ts, op, msg, false, false);
-    //wxYield();
 }
 
 void HorusFrame::Onm_unloadStageClick(wxCommandEvent& event)
@@ -1426,7 +1473,7 @@ void HorusFrame::_displayCassetteInfos(const wxString &opName, const wxString &d
                 selcmd = wxString(wxT("SELECT e.idx, e.timestamp, e.operator, e.text FROM events e ORDER BY e.idx;"));
                 stmt = db.PrepareStatement(selcmd);
                 q = stmt.ExecuteQuery();
-#if 1
+
                 m_wbrowserText->Freeze();
 
                 while (q.NextRow())
@@ -1435,45 +1482,11 @@ void HorusFrame::_displayCassetteInfos(const wxString &opName, const wxString &d
                     wxString op     = q.GetString(2);
                     wxString msg    = q.GetString(3);
 
-                    //logger->cbiCallbackFunction(ts, op, msg);
-
-                    //wxString str = wxT("Restore message ") + wxString::Format(wxT("%llu"), ts) + wxT(" [") + op + wxT("] ") + msg;
-                    //wxLogStatus(str);
-
                     _logEvent(m_wbrowserText, ts, op, msg, false, false);
-#if 0
-                    wxDateTime dt(ts);
-                    wxString timestamp = dt.Format(wxT("%a %b %d %Y %H:%M:%S "));
-
-
-                    m_wbrowserText->SetInsertionPointEnd();
-
-                    m_wbrowserText->BeginFontSize(10);
-
-                    // Timestamp in bold
-                    m_wbrowserText->BeginBold();
-                    m_wbrowserText->WriteText(timestamp + wxT("[ "));
-
-                    // Operator
-                    m_wbrowserText->BeginTextColour(*wxBLUE);//wxColor(0, 0, 255));
-                    m_wbrowserText->WriteText(op != wxEmptyString ? op : wxT("<UNKNOWN>"));
-                    m_wbrowserText->EndTextColour();
-
-                    m_wbrowserText->WriteText(wxT(" ] :: "));
-                    m_wbrowserText->EndBold();
-
-                    // Then text
-                    m_wbrowserText->WriteText(msg + wxT("\n"));
-
-
-                    // Move to the end of the text
-                    m_wbrowserText->ScrollIntoView(m_wbrowserText->GetLastPosition(), /* WXK_PAGEDOWN */ WXK_END);
-#endif
                 }
 
                 m_wbrowserText->ScrollIntoView(m_wbrowserText->GetLastPosition(), /* WXK_PAGEDOWN */ WXK_END);
                 m_wbrowserText->Thaw();
-#endif
             }
 
         }
@@ -1550,6 +1563,6 @@ void HorusFrame::OnSplitterWindow1SashPosChanging(wxSplitterEvent& event)
     event.Skip();
 }
 
-} // namespace
+} // namespace Horus
 
 

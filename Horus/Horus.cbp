@@ -85,6 +85,7 @@
 			<Add library="Rpcrt4" />
 		</Linker>
 		<Unit filename="../HorusAbout/HorusAbout/HorusAboutMain.cpp" />
+		<Unit filename="../HorusAbout/HorusAbout/HorusAboutMain.h" />
 		<Unit filename="HorusApp.cpp" />
 		<Unit filename="HorusApp.h" />
 		<Unit filename="HorusMain.cpp" />

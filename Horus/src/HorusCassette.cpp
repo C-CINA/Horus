@@ -1,3 +1,35 @@
+/// -----------------------------------------------------------------------------
+///
+/// \file HorusCassette.cpp
+///
+/// \copyright Copyright (c) 2016-2017 Daniel Caujolle-Bert <daniel.caujolle-bert@unibas.ch>
+/// \brief Horus, a Cassette Logger
+/// \author Daniel Caujolle-Bert <daniel.caujolle-bert@unibas.ch>
+///
+/// \license
+/// All rights reserved. This program and the accompanying materials
+/// are made available under the terms of the GNU Public License v2.0
+/// which accompanies this distribution, and is available at
+/// http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+///
+/// This file is part of Horus Logger.
+///
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+///
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License along
+/// with this program; if not, write to the Free Software Foundation, Inc.,
+/// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///
+///
+
 #include "../HorusMain.h"
 
 namespace Horus
@@ -89,15 +121,6 @@ HorusCartridge::~HorusCartridge()
 
 }
 
-void HorusCartridge::Clear()
-{
-    if (! m_keepIt->GetValue() && ! m_loadToggle->GetValue())
-    {
-        m_text->SetValue(wxEmptyString);
-        m_empty->SetValue(true);
-    }
-}
-
 bool HorusCartridge::Load(bool load, bool force)
 {
 
@@ -130,6 +153,74 @@ bool HorusCartridge::Unload()
     return Load(false);
 }
 
+void HorusCartridge::Clear()
+{
+    if (! m_keepIt->GetValue() && ! m_loadToggle->GetValue())
+    {
+        m_text->SetValue(wxEmptyString);
+        m_empty->SetValue(true);
+    }
+}
+
+size_t HorusCartridge::GetNumber()
+{
+    return m_counter;
+}
+
+bool HorusCartridge::SetText(const wxString &str)
+{
+    m_text->ChangeValue(str);
+    _changeText(str);
+    return true;
+}
+
+wxString HorusCartridge::GetText() const
+{
+    return m_text->GetValue();
+}
+
+bool HorusCartridge::SetKeepItFlag(bool v)
+{
+    m_keepIt->SetValue(v);
+    return true;
+}
+
+bool HorusCartridge::GetKeepItFlag()
+{
+    return m_keepIt->GetValue();
+}
+
+bool HorusCartridge::SetEmptyFlag(bool v)
+{
+    m_empty->SetValue(v);
+    return true;
+}
+
+bool HorusCartridge::GetEmptyFlag()
+{
+    return m_empty->GetValue();
+}
+
+bool HorusCartridge::SetLoaded(bool v)
+{
+    return Load(v, true);
+}
+
+bool HorusCartridge::GetLoaded()
+{
+    return (m_state == CARTRIDGE_STATE_LOADED);
+}
+
+void HorusCartridge::SetSilent(bool silent)
+{
+    m_silent = silent;
+}
+
+bool HorusCartridge::IsSilent()
+{
+    return m_silent;
+}
+
 #if 0
 void HorusCartridge::OnContextMenu(wxContextMenuEvent &event)
 {
@@ -145,18 +236,6 @@ void HorusCartridge::OnContextMenu(wxContextMenuEvent &event)
     PopupMenu(&menu);
 }
 #endif // 0
-
-void HorusCartridge::_changeText(const wxString &str)
-{
-    if (str != wxEmptyString && str.Len())
-    {
-        m_empty->SetValue(false);
-        _setState(CARTRIDGE_STATE_OCCUPIED);
-        _sendEvent(HORUS_EVENT_CARTRIDGE_UPDATE);
-    }
-    else
-        _setState(CARTRIDGE_STATE_EMPTY);
-}
 
 void HorusCartridge::OnText(wxCommandEvent &event)
 {
@@ -186,12 +265,23 @@ void HorusCartridge::OnKeepIt(wxCommandEvent &event)
     event.Skip();
 }
 
-
 void HorusCartridge::OnToggleLoad(wxCommandEvent &event)
 {
     Load(m_loadToggle->GetValue());
 
     event.Skip();
+}
+
+void HorusCartridge::_changeText(const wxString &str)
+{
+    if (str != wxEmptyString && str.Len())
+    {
+        m_empty->SetValue(false);
+        _setState(CARTRIDGE_STATE_OCCUPIED);
+        _sendEvent(HORUS_EVENT_CARTRIDGE_UPDATE);
+    }
+    else
+        _setState(CARTRIDGE_STATE_EMPTY);
 }
 
 void HorusCartridge::_setState(HorusCartridgeState state)
@@ -248,54 +338,6 @@ void HorusCartridge::_setState(HorusCartridgeState state)
     }
 
     m_panelLabel->Refresh();
-
-#ifdef DEBUG
-    wxString s = wxT(">>> State: ");
-
-    switch (m_state)
-    {
-        case CARTRIDGE_STATE_EMPTY:
-            s += wxT("EMPTY");
-            break;
-
-        case CARTRIDGE_STATE_OCCUPIED:
-            s += wxT("OCCUPIED");
-            break;
-
-        case CARTRIDGE_STATE_LOADED:
-            s += wxT("LOADED");
-           break;
-
-        case CARTRIDGE_STATE_UNKNOWN:
-            s += wxT("UNKNOWN");
-            break;
-    }
-
-    wxLogStatus(s);
-
-    s = wxT(">>> Previous State: ");
-
-    switch (m_stateUnloaded)
-    {
-        case CARTRIDGE_STATE_EMPTY:
-            s += wxT("EMPTY");
-            break;
-
-        case CARTRIDGE_STATE_OCCUPIED:
-            s += wxT("OCCUPIED");
-            break;
-
-        case CARTRIDGE_STATE_LOADED:
-            s += wxT("LOADED");
-           break;
-
-        case CARTRIDGE_STATE_UNKNOWN:
-            s += wxT("UNKNOWN");
-            break;
-    }
-
-    wxLogStatus(s);
-#endif
 }
 
 void HorusCartridge::_sendEvent(HorusCassetteEvent eventID)
@@ -341,6 +383,20 @@ bool HorusStage::Load(HorusCartridge *cartridge)
     return true;
 }
 
+bool HorusStage::Unload()
+{
+    if (m_cartridge)
+    {
+        HorusCartridge *pCartridge = m_cartridge;
+
+        m_cartridge = NULL;
+
+        return pCartridge->Load(false, true);
+    }
+
+    return false;
+}
+
 bool HorusStage::IsEmpty()
 {
     return (m_cartridge == NULL);
@@ -349,6 +405,15 @@ bool HorusStage::IsEmpty()
 HorusCartridge *HorusStage::GetLoadedCartridge() const
 {
     return m_cartridge;
+}
+
+bool HorusStage::_loaded(HorusCartridge *cartridge)
+{
+    if (m_cartridge)
+        return false;
+
+    m_cartridge = cartridge;
+    return true;
 }
 
 
@@ -377,23 +442,9 @@ HorusCassette::~HorusCassette()
 
 }
 
-bool HorusCassette::_dock(bool redock)
+bool HorusCassette::DockCassette()
 {
-    if (m_docked)
-        return false;
-
-    m_docked = true;
-
-    // Send DOCK event
-    _sendEvent(redock ? HORUS_EVENT_CASSETTE_REDOCKED : HORUS_EVENT_CASSETTE_DOCKED);
-
-    if (! redock)
-    {
-        for (size_t i = 0; i < MAX_CARTRIDGE_SLOTS; i++)
-            m_cartridges[i]->Clear();
-    }
-
-    return true;
+    return _dock(false);
 }
 
 bool HorusCassette::RedockCassette()
@@ -401,10 +452,6 @@ bool HorusCassette::RedockCassette()
     return _dock(true);
 }
 
-bool HorusCassette::DockCassette()
-{
-    return _dock(false);
-}
 
 bool HorusCassette::UndockCassette()
 {
@@ -418,5 +465,89 @@ bool HorusCassette::UndockCassette()
 
     return true;
 }
+
+bool HorusCassette::IsCassetteDocked()
+{
+    return m_docked;
+}
+
+bool HorusCassette::IsStageEmpty()
+{
+    return m_stage->IsEmpty();
+}
+
+bool HorusCassette::UnloadStage()
+{
+    return m_stage->Unload();
+}
+
+bool HorusCassette::CartridgeLoaded(HorusCartridge *cartridge)
+{
+    return m_stage->_loaded(cartridge);
+}
+
+HorusCartridge *HorusCassette::GetCartridge(size_t offset) const
+{
+    if (offset >= 0 && offset < MAX_CARTRIDGE_SLOTS)
+        return m_cartridges[offset];
+
+    return NULL;
+}
+
+HorusCartridge *HorusCassette::GetLoadedCartridge() const
+{
+    return m_stage->GetLoadedCartridge();
+}
+
+void HorusCassette::SetSilent(bool silent)
+{
+    for (size_t i = 0; i < MAX_CARTRIDGE_SLOTS; i++)
+        m_cartridges[i]->SetSilent(silent);
+}
+
+bool HorusCassette::IsSilent(size_t offset)
+{
+    if (offset >= 0 && offset < MAX_CARTRIDGE_SLOTS)
+        return m_cartridges[offset]->IsSilent();
+
+    return false;
+}
+
+void HorusCassette::SetCassetteDocked(bool docked)
+{
+    m_docked = docked;
+}
+
+void HorusCassette::_sendEvent(HorusCassetteEvent eventID)
+{
+    HorusEventCassetteData *data = new HorusEventCassetteData(NULL);
+    wxCommandEvent          event(wxEVT_HORUS_CASSETTE, wxID_ANY);
+
+    event.SetInt(eventID);
+
+    event.SetClientData((void *)data);
+
+    wxPostEvent((wxEvtHandler *)m_parent, event);
+}
+
+bool HorusCassette::_dock(bool redock)
+{
+    if (m_docked)
+        return false;
+
+    m_docked = true;
+
+    if (! redock)
+    {
+        for (size_t i = 0; i < MAX_CARTRIDGE_SLOTS; i++)
+            m_cartridges[i]->Clear();
+    }
+
+    // Send DOCK event
+    _sendEvent(redock ? HORUS_EVENT_CASSETTE_REDOCKED : HORUS_EVENT_CASSETTE_DOCKED);
+
+    return true;
+}
+
 
 }

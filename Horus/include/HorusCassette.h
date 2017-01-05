@@ -1,3 +1,35 @@
+/// -----------------------------------------------------------------------------
+///
+/// \file HorusCassette.h
+///
+/// \copyright Copyright (c) 2016-2017 Daniel Caujolle-Bert <daniel.caujolle-bert@unibas.ch>
+/// \brief Horus, a Cassette Logger
+/// \author Daniel Caujolle-Bert <daniel.caujolle-bert@unibas.ch>
+///
+/// \license
+/// All rights reserved. This program and the accompanying materials
+/// are made available under the terms of the GNU Public License v2.0
+/// which accompanies this distribution, and is available at
+/// http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+///
+/// This file is part of Horus Logger.
+///
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+///
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License along
+/// with this program; if not, write to the Free Software Foundation, Inc.,
+/// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///
+///
+
 #ifndef HORUSCASSETTE_H
 #define HORUSCASSETTE_H
 
@@ -38,83 +70,36 @@ class HorusCartridge: public wxPanel
     friend HorusEventCassetteData;
 
     public:
-        HorusCartridge(HorusCassette *cassette, wxWindow *parent, size_t counter, wxWindowID id = wxID_ANY);
+        HorusCartridge(HorusCassette *, wxWindow *, size_t, wxWindowID = wxID_ANY);
         ~HorusCartridge();
 
-        void Clear();
+        bool                            Load(bool = true, bool = false);
+        bool                            Unload();
+        void                            Clear();
 
-        bool Unload();
-        bool Load(bool = true, bool = false);
 
-        size_t GetNumber()
-        {
-            return m_counter;
-        }
-
-        bool SetText(const wxString &str)
-        {
-            m_text->ChangeValue(str);
-            _changeText(str);
-            return true;
-        }
-
-        wxString GetText() const
-        {
-            return m_text->GetValue();
-        }
-
-        bool SetKeepItFlag(bool v = true)
-        {
-            m_keepIt->SetValue(v);
-            return true;
-        }
-
-        bool GetKeepItFlag()
-        {
-            return m_keepIt->GetValue();
-        }
-
-        bool SetEmptyFlag(bool v)
-        {
-            m_empty->SetValue(v);
-            return true;
-        }
-
-        bool GetEmptyFlag()
-        {
-            return m_empty->GetValue();
-        }
-
-        bool SetLoaded(bool v)
-        {
-            return Load(v, true);
-        }
-
-        bool GetLoaded()
-        {
-            return (m_state == CARTRIDGE_STATE_LOADED);
-        }
-
-        void SetSilent(bool silent)
-        {
-            m_silent = silent;
-        }
-
-        bool IsSilent()
-        {
-            return m_silent;
-        }
+        size_t                          GetNumber();
+        bool                            SetText(const wxString &);
+        wxString                        GetText() const;
+        bool                            SetKeepItFlag(bool = true);
+        bool                            GetKeepItFlag();
+        bool                            SetEmptyFlag(bool);
+        bool                            GetEmptyFlag();
+        bool                            SetLoaded(bool);
+        bool                            GetLoaded();
+        void                            SetSilent(bool);
+        bool                            IsSilent();
 
     private:
-        void _changeText(const wxString &);
-        //void OnContextMenu(wxContextMenuEvent &);
-        void OnText(wxCommandEvent &);
-        void OnEmpty(wxCommandEvent &);
-        void OnKeepIt(wxCommandEvent &);
-        void OnToggleLoad(wxCommandEvent &);
+        //void                            OnContextMenu(wxContextMenuEvent &);
+        void                            OnText(wxCommandEvent &);
+        void                            OnEmpty(wxCommandEvent &);
+        void                            OnKeepIt(wxCommandEvent &);
+        void                            OnToggleLoad(wxCommandEvent &);
 
-        void _setState(HorusCartridgeState);
-        void _sendEvent(HorusCassetteEvent);
+        void                            _changeText(const wxString &);
+        void                            _setState(HorusCartridgeState);
+        void                            _sendEvent(HorusCassetteEvent);
 
     private:
         HorusCassette                  *m_cassette;
@@ -129,7 +114,6 @@ class HorusCartridge: public wxPanel
         HorusCartridgeState             m_state;
         HorusCartridgeState             m_stateUnloaded;
         bool                            m_silent;
-
 };
 
 struct HorusEventCassetteData
@@ -141,13 +125,11 @@ struct HorusEventCassetteData
 
     ~HorusEventCassetteData()
     {
-
     }
 
     time_t                              TimeStamp;
     HorusCartridge                     *Cartridge;
 };
-
 
 
 class HorusStage
@@ -158,34 +140,13 @@ class HorusStage
         HorusStage();
         ~HorusStage();
 
-        bool Load(HorusCartridge *cartridge);
-
-        bool Unload()
-        {
-            if (m_cartridge)
-            {
-                HorusCartridge *pCartridge = m_cartridge;
-
-                m_cartridge = NULL;
-
-                return pCartridge->Load(false, true);
-            }
-
-            return false;
-        }
-
-        bool IsEmpty();
-        HorusCartridge *GetLoadedCartridge() const;
+        bool                            Load(HorusCartridge *);
+        bool                            Unload();
+        bool                            IsEmpty();
+        HorusCartridge                 *GetLoadedCartridge() const;
 
     private:
-        bool _loaded(HorusCartridge *cartridge)
-        {
-            if (m_cartridge)
-                return false;
-
-            m_cartridge = cartridge;
-            return true;
-        }
+        bool                            _loaded(HorusCartridge *);
 
     private:
         HorusCartridge                 *m_cartridge;
@@ -195,78 +156,25 @@ class HorusStage
 class HorusCassette
 {
     public:
-        HorusCassette(wxWindow *parent, wxBoxSizer *sizer);
+        HorusCassette(wxWindow *, wxBoxSizer *);
         ~HorusCassette();
 
-        bool DockCassette();
-        bool RedockCassette();
-        bool UndockCassette();
-        bool IsCassetteDocked()
-        {
-            return m_docked;
-        }
-
-        bool IsStageEmpty()
-        {
-            return m_stage->IsEmpty();
-        }
-
-        bool UnloadStage()
-        {
-            return m_stage->Unload();
-        }
-
-        bool CartridgeLoaded(HorusCartridge *cartridge)
-        {
-            return m_stage->_loaded(cartridge);
-        }
-
-        HorusCartridge *GetCartridge(size_t offset) const
-        {
-            if (offset >= 0 && offset < MAX_CARTRIDGE_SLOTS)
-                return m_cartridges[offset];
-
-            return NULL;
-        }
-
-        HorusCartridge *GetLoadedCartridge() const
-        {
-            return m_stage->GetLoadedCartridge();
-        }
-
-        void SetSilent(bool silent)
-        {
-            for (size_t i = 0; i < MAX_CARTRIDGE_SLOTS; i++)
-                m_cartridges[i]->SetSilent(silent);
-        }
-
-        bool IsSilent(size_t offset)
-        {
-            if (offset >= 0 && offset < MAX_CARTRIDGE_SLOTS)
-                return m_cartridges[offset]->IsSilent();
-
-            return false;
-        }
-
-        void SetCassetteDocked(bool docked)
-        {
-            m_docked = docked;
-        }
+        bool                            DockCassette();
+        bool                            RedockCassette();
+        bool                            UndockCassette();
+        bool                            IsCassetteDocked();
+        bool                            IsStageEmpty();
+        bool                            UnloadStage();
+        bool                            CartridgeLoaded(HorusCartridge *);
+        HorusCartridge                 *GetCartridge(size_t) const;
+        HorusCartridge                 *GetLoadedCartridge() const;
+        void                            SetSilent(bool);
+        bool                            IsSilent(size_t);
+        void                            SetCassetteDocked(bool);
 
     private:
-        void _sendEvent(HorusCassetteEvent eventID)
-        {
-            HorusEventCassetteData *data = new HorusEventCassetteData(NULL);
-            wxCommandEvent          event(wxEVT_HORUS_CASSETTE, wxID_ANY);
-
-            event.SetInt(eventID);
-
-            event.SetClientData((void *)data);
-
-            wxPostEvent((wxEvtHandler *)m_parent, event);
-        }
-
-        bool _dock(bool);
+        void                            _sendEvent(HorusCassetteEvent);
+        bool                            _dock(bool);
 
     private:
         wxWindow                       *m_parent;

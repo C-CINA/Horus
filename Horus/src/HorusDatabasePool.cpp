@@ -1,3 +1,35 @@
+/// -----------------------------------------------------------------------------
+///
+/// \file HorusDatabasePool.cpp
+///
+/// \copyright Copyright (c) 2016-2017 Daniel Caujolle-Bert <daniel.caujolle-bert@unibas.ch>
+/// \brief Horus, a Cassette Logger
+/// \author Daniel Caujolle-Bert <daniel.caujolle-bert@unibas.ch>
+///
+/// \license
+/// All rights reserved. This program and the accompanying materials
+/// are made available under the terms of the GNU Public License v2.0
+/// which accompanies this distribution, and is available at
+/// http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+///
+/// This file is part of Horus Logger.
+///
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+///
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License along
+/// with this program; if not, write to the Free Software Foundation, Inc.,
+/// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///
+///
+
 #include "../HorusMain.h"
 
 namespace Horus
@@ -7,8 +39,6 @@ DEFINE_EVENT_TYPE(wxEVT_HORUS_CASSETTE); ///< Event that receiver may handle
 DEFINE_EVENT_TYPE(wxEVT_HORUS_DATABASEPOOL); ///< Event that receiver may handle
 
 
-/// \brief
-///
 HorusDatabasePool::HorusDatabasePool(wxWindow *parent) : m_parent(parent), m_id(wxNewId()), m_initialized(false), m_cassette(NULL)
 {
     //ctor
@@ -23,13 +53,9 @@ HorusDatabasePool::HorusDatabasePool(wxWindow *parent) : m_parent(parent), m_id(
         wxFileName::Mkdir(m_dbBackupPath, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
 }
 
-/// \brief
-///
 HorusDatabasePool::~HorusDatabasePool()
 {
     //dtor
-    //_saveDB();
-
     if (m_dbCassette.IsOpen())
         m_dbCassette.Close();
 
@@ -39,22 +65,11 @@ HorusDatabasePool::~HorusDatabasePool()
     wxSQLite3Database::ShutdownSQLite();
 }
 
-/// \brief
-///
-/// \return bool
-///
-///
 bool HorusDatabasePool::IsOK()
 {
     return m_initialized;
 }
 
-/// \brief
-///
-/// \param cassette HorusCassette*
-/// \return bool
-///
-///
 bool HorusDatabasePool::Initialize(HorusCassette *cassette)
 {
     if (m_initialized)
@@ -69,13 +84,16 @@ bool HorusDatabasePool::Initialize(HorusCassette *cassette)
     return m_initialized;
 }
 
-/// \brief
-///
-/// \param operators wxArrayOperator&
-/// \param receiver HorusDatabaseEventRestore*
-/// \return bool
-///
-///
+wxString const HorusDatabasePool::GetBackupPath()
+{
+    return m_dbBackupPath;
+}
+
+wxWindowID HorusDatabasePool::GetId()
+{
+    return m_id;
+}
+
 bool HorusDatabasePool::ReloadData(wxArrayOperator &operators, HorusDatabaseEventRestore *receiver)
 {
     if (!m_initialized)
@@ -84,12 +102,6 @@ bool HorusDatabasePool::ReloadData(wxArrayOperator &operators, HorusDatabaseEven
     return _reloadCassette() && _reloadOperators(operators) && _reloadEvents(receiver);
 }
 
-/// \brief
-///
-/// \param cartridge HorusCartridge*
-/// \return bool
-///
-///
 bool HorusDatabasePool::UpdateCartridge(HorusCartridge *cartridge)
 {
     if (! m_initialized)
@@ -98,13 +110,6 @@ bool HorusDatabasePool::UpdateCartridge(HorusCartridge *cartridge)
     return _updateCartridgeData(cartridge);
 }
 
-/// \brief
-///
-/// \param name const wxString&
-/// \param uuid const wxString&
-/// \return bool
-///
-///
 bool HorusDatabasePool::AddOperator(const wxString &name, const wxString &uuid)
 {
     if (! m_initialized)
@@ -113,13 +118,6 @@ bool HorusDatabasePool::AddOperator(const wxString &name, const wxString &uuid)
     return _insertOperator(name, uuid);
 }
 
-/// \brief
-///
-/// \param name const wxString&
-/// \param uuid const wxString&
-/// \return bool
-///
-///
 bool HorusDatabasePool::UpdateOperator(const wxString &name, const wxString &uuid)
 {
     if (! m_initialized)
@@ -128,12 +126,6 @@ bool HorusDatabasePool::UpdateOperator(const wxString &name, const wxString &uui
     return _updateOperator(name, uuid);
 }
 
-/// \brief
-///
-/// \param uuid const wxString&
-/// \return bool
-///
-///
 bool HorusDatabasePool::DeleteOperator(const wxString &uuid)
 {
     if (! m_initialized)
@@ -142,12 +134,6 @@ bool HorusDatabasePool::DeleteOperator(const wxString &uuid)
     return _deleteOperator(uuid);
 }
 
-/// \brief
-///
-/// \param uuid const wxString&
-/// \return bool
-///
-///
 bool HorusDatabasePool::SetCassetteOperator(const wxString &uuid)
 {
     if (! m_initialized)
@@ -156,11 +142,6 @@ bool HorusDatabasePool::SetCassetteOperator(const wxString &uuid)
     return _updateCassetteOperator(uuid);
 }
 
-/// \brief
-///
-/// \return wxString const
-///
-///
 wxString const HorusDatabasePool::GetCassetteOperator()
 {
     if (! m_initialized)
@@ -169,14 +150,6 @@ wxString const HorusDatabasePool::GetCassetteOperator()
     return _getCassetteOperator();
 }
 
-/// \brief
-///
-/// \param ts time_t
-/// \param op const wxString&
-/// \param message const wxString&
-/// \return bool
-///
-///
 bool HorusDatabasePool::LogCassetteEvent(time_t ts, const wxString &op, const wxString &message)
 {
     if (! m_initialized)
@@ -185,13 +158,6 @@ bool HorusDatabasePool::LogCassetteEvent(time_t ts, const wxString &op, const wx
     return _logCassetteEvent(ts, op, message);
 }
 
-
-/// \brief
-///
-/// \param docked bool
-/// \return bool
-///
-///
 bool HorusDatabasePool::SetCassetteDocked(bool docked)
 {
     if (! m_initialized)
@@ -200,12 +166,6 @@ bool HorusDatabasePool::SetCassetteDocked(bool docked)
     return _setCassetteDocked(docked);
 }
 
-/// \brief
-///
-/// \param docked bool
-/// \return bool
-///
-///
 bool HorusDatabasePool::SetCassetteRedocked()
 {
     if (! m_initialized)
@@ -214,11 +174,6 @@ bool HorusDatabasePool::SetCassetteRedocked()
     return _setCassetteRedocked();
 }
 
-/// \brief
-///
-/// \return bool
-///
-///
 bool HorusDatabasePool::GetCassetteDocked()
 {
     if (! m_initialized)
@@ -227,12 +182,6 @@ bool HorusDatabasePool::GetCassetteDocked()
     return _getCassetteDocked();
 }
 
-/// \brief
-///
-/// \param ts time_t&
-/// \return bool
-///
-///
 bool HorusDatabasePool::GetCassetteDockTimeStamp(time_t &ts)
 {
     if (! m_initialized)
@@ -241,12 +190,6 @@ bool HorusDatabasePool::GetCassetteDockTimeStamp(time_t &ts)
     return _getCassetteDockTimeStamp(ts);
 }
 
-/// \brief
-///
-/// \param keep bool
-/// \return bool
-///
-///
 bool HorusDatabasePool::SetKeepOnStage(bool keep)
 {
     if (! m_initialized)
@@ -255,11 +198,6 @@ bool HorusDatabasePool::SetKeepOnStage(bool keep)
     return _setKeepOnStage(keep);
 }
 
-/// \brief
-///
-/// \return bool
-///
-///
 bool HorusDatabasePool::GetKeepOnStage()
 {
     if (! m_initialized)
@@ -268,12 +206,6 @@ bool HorusDatabasePool::GetKeepOnStage()
     return _getKeepOnStage();
 }
 
-/// \brief
-///
-/// \param keep bool
-/// \return bool
-///
-///
 bool HorusDatabasePool::_setKeepOnStage(bool keep)
 {
     bool        ok = true;
@@ -305,11 +237,6 @@ bool HorusDatabasePool::_setKeepOnStage(bool keep)
     return ok;
 }
 
-/// \brief
-///
-/// \return bool
-///
-///
 bool HorusDatabasePool::_getKeepOnStage()
 {
     bool        keep = false;
@@ -333,11 +260,6 @@ bool HorusDatabasePool::_getKeepOnStage()
     return keep;
 }
 
-/// \brief
-///
-/// \return bool
-///
-///
 bool HorusDatabasePool::_rotateCassette()
 {
     bool                ok = true;
@@ -530,12 +452,6 @@ bool HorusDatabasePool::_rotateCassette()
     return ok;
 }
 
-/// \brief
-///
-/// \param docked bool
-/// \return bool
-///
-///
 bool HorusDatabasePool::_setCassetteDocked(bool docked, bool self)
 {
     bool        hasBeenDocked = false;
@@ -588,11 +504,6 @@ bool HorusDatabasePool::_setCassetteDocked(bool docked, bool self)
     return ok;
 }
 
-/// \brief
-///
-/// \return bool
-///
-///
 bool HorusDatabasePool::_setCassetteRedocked()
 {
     bool        ok = true;
@@ -625,11 +536,6 @@ bool HorusDatabasePool::_setCassetteRedocked()
     return ok;
 }
 
-/// \brief
-///
-/// \return bool
-///
-///
 bool HorusDatabasePool::_getCassetteDocked()
 {
     bool        docked = false;
@@ -653,12 +559,6 @@ bool HorusDatabasePool::_getCassetteDocked()
     return docked;
 }
 
-/// \brief
-///
-/// \param ts time_t&
-/// \return bool
-///
-///
 bool HorusDatabasePool::_getCassetteDockTimeStamp(time_t &ts)
 {
     bool        ok = true;
@@ -683,14 +583,6 @@ bool HorusDatabasePool::_getCassetteDockTimeStamp(time_t &ts)
     return ok;
 }
 
-/// \brief
-///
-/// \param ts time_t
-/// \param op const wxString&
-/// \param message const wxString&
-/// \return bool
-///
-///
 bool HorusDatabasePool::_logCassetteEvent(time_t ts, const wxString &op, const wxString &message)
 {
     bool        ok = true;
@@ -727,12 +619,6 @@ bool HorusDatabasePool::_logCassetteEvent(time_t ts, const wxString &op, const w
     return ok;
 }
 
-/// \brief
-///
-/// \param uuid const wxString&
-/// \return bool
-///
-///
 bool HorusDatabasePool::_updateCassetteOperator(const wxString &uuid)
 {
     bool        ok = true;
@@ -766,11 +652,6 @@ bool HorusDatabasePool::_updateCassetteOperator(const wxString &uuid)
     return ok;
 }
 
-/// \brief
-///
-/// \return wxString const
-///
-///
 wxString const HorusDatabasePool::_getCassetteOperator()
 {
     wxString    uuid = wxEmptyString;
@@ -794,11 +675,6 @@ wxString const HorusDatabasePool::_getCassetteOperator()
     return uuid;
 }
 
-/// \brief
-///
-/// \return bool
-///
-///
 bool HorusDatabasePool::_reloadCassette()
 {
     // Restore data from DB
@@ -892,12 +768,6 @@ bool HorusDatabasePool::_reloadCassette()
     return ok;
 }
 
-/// \brief
-///
-/// \param operators wxArrayOperator&
-/// \return bool
-///
-///
 bool HorusDatabasePool::_reloadOperators(wxArrayOperator &operators)
 {
     bool    ok = true;
@@ -946,12 +816,6 @@ bool HorusDatabasePool::_reloadOperators(wxArrayOperator &operators)
     return ok;
 }
 
-/// \brief
-///
-/// \param logger HorusEventLoggerCallbackInterface*
-/// \return bool
-///
-///
 bool HorusDatabasePool::_reloadEvents(HorusDatabaseEventRestore *receiver)
 {
     bool    ok = true;
@@ -1027,11 +891,6 @@ void _clearDB(wxSQLite3Database* db)
 
 #endif // 0
 
-/// \brief
-///
-/// \return bool
-///
-///
 bool HorusDatabasePool::_initializeDatabases()
 {
     //wxSQLite3Database db;
@@ -1042,11 +901,6 @@ bool HorusDatabasePool::_initializeDatabases()
     return _initializeCassetteDatabase() && _initializeOperatorsDatabase();
 }
 
-/// \brief
-///
-/// \return bool
-///
-///
 bool HorusDatabasePool::_initializeCassetteDatabase()
 {
     bool        ok = true;
@@ -1139,11 +993,6 @@ bool HorusDatabasePool::_initializeCassetteDatabase()
     return ok;
 }
 
-/// \brief
-///
-/// \return bool
-///
-///
 bool HorusDatabasePool::_initializeOperatorsDatabase()
 {
     bool        ok = true;
@@ -1194,12 +1043,6 @@ bool HorusDatabasePool::_initializeOperatorsDatabase()
     return ok;
 }
 
-/// \brief
-///
-/// \param slot HorusCartridge*
-/// \return bool
-///
-///
 bool HorusDatabasePool::_updateCartridgeData(HorusCartridge *slot)
 {
     bool ok = true;
@@ -1246,13 +1089,6 @@ bool HorusDatabasePool::_updateCartridgeData(HorusCartridge *slot)
     return ok;
 }
 
-/// \brief
-///
-/// \param name const wxString&
-/// \param uuid const wxString&
-/// \return bool
-///
-///
 bool HorusDatabasePool::_insertOperator(const wxString &name, const wxString &uuid)
 {
     bool        ok = true;
@@ -1287,13 +1123,6 @@ bool HorusDatabasePool::_insertOperator(const wxString &name, const wxString &uu
     return ok;
 }
 
-/// \brief
-///
-/// \param name const wxString&
-/// \param uuid const wxString&
-/// \return bool
-///
-///
 bool HorusDatabasePool::_updateOperator(const wxString &name, const wxString &uuid)
 {
     bool        ok = true;
@@ -1328,12 +1157,6 @@ bool HorusDatabasePool::_updateOperator(const wxString &name, const wxString &uu
     return ok;
 }
 
-/// \brief
-///
-/// \param uuid const wxString&
-/// \return bool
-///
-///
 bool HorusDatabasePool::_deleteOperator(const wxString &uuid)
 {
     bool        ok = true;
@@ -1368,11 +1191,6 @@ bool HorusDatabasePool::_deleteOperator(const wxString &uuid)
 }
 
 #if 0
-/// \brief
-///
-/// \return bool
-///
-///
 bool HorusDatabasePool::_saveDB()
 {
     bool ok = true;
@@ -1444,12 +1262,6 @@ void HorusDatabasePool::_sendBackupEvent(const wxString &dbName)
     wxPostEvent((wxEvtHandler *)m_parent, event);
 }
 
-
-/// \brief
-///
-/// \return bool
-///
-///
 bool HorusDatabasePool::_fillCartridgesData()
 {
     bool ok = true;
