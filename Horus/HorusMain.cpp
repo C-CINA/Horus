@@ -167,11 +167,11 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     BoxSizer8->Add(BoxSizer13, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer8->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticBoxSizer1 = new wxStaticBoxSizer(wxHORIZONTAL, m_wloggerPanel, _("  Docked On  "));
-    StaticBoxSizer1->Add(-1,-1,0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticBoxSizer1->Add(-1,-1,0, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     m_wdockedLabel = new wxStaticText(m_wloggerPanel, ID_STATICTEXT3, _("< ----/--/-- --:--:-- >"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT3"));
-    StaticBoxSizer1->Add(m_wdockedLabel, 1, wxALL|wxEXPAND, 5);
-    StaticBoxSizer1->Add(-1,-1,0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    BoxSizer8->Add(StaticBoxSizer1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticBoxSizer1->Add(m_wdockedLabel, 1, wxLEFT|wxRIGHT|wxEXPAND, 5);
+    StaticBoxSizer1->Add(-1,-1,0, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    BoxSizer8->Add(StaticBoxSizer1, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     m_wcassetteSizer->Add(BoxSizer8, 0, wxLEFT|wxRIGHT|wxEXPAND, 5);
     BoxSizer14 = new wxBoxSizer(wxVERTICAL);
     BoxSizer15 = new wxBoxSizer(wxHORIZONTAL);
@@ -233,7 +233,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     BoxSizer4->Add(BoxSizer5, 0, wxTOP|wxRIGHT|wxEXPAND, 5);
     BoxSizer3->Add(BoxSizer4, 1, wxEXPAND, 5);
     BoxSizer9 = new wxBoxSizer(wxHORIZONTAL);
-    m_wtextLogger = new wxRichTextCtrl(m_wloggerPanel, ID_RICHTEXTCTRL1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRE_MULTILINE|wxRE_READONLY, wxDefaultValidator, _T("ID_RICHTEXTCTRL1"));
+    m_wtextLogger = new wxRichTextCtrl(m_wloggerPanel, ID_RICHTEXTCTRL1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRE_MULTILINE|wxRE_READONLY|wxSIMPLE_BORDER, wxDefaultValidator, _T("ID_RICHTEXTCTRL1"));
     wxRichTextAttr rchtxtAttr_1;
     rchtxtAttr_1.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_FACE|wxTEXT_ATTR_FONT_SIZE|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_FONT_ITALIC|wxTEXT_ATTR_FONT_UNDERLINE|wxTEXT_ATTR_FONT|wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT);
     rchtxtAttr_1.SetBulletStyle(wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT);
@@ -247,9 +247,10 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     BoxSizer20 = new wxBoxSizer(wxVERTICAL);
     BoxSizer21 = new wxBoxSizer(wxHORIZONTAL);
     SplitterWindow1 = new wxSplitterWindow(m_wbrowserPanel, ID_SPLITTERWINDOW1, wxDefaultPosition, wxDefaultSize, wxSP_3D, _T("ID_SPLITTERWINDOW1"));
+    SplitterWindow1->SetMinSize(wxSize(300,300));
     SplitterWindow1->SetMinimumPaneSize(300);
     SplitterWindow1->SetSashGravity(0);
-    Panel1 = new wxPanel(SplitterWindow1, ID_PANEL3, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL3"));
+    Panel1 = new wxPanel(SplitterWindow1, ID_PANEL3, wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER|wxTAB_TRAVERSAL, _T("ID_PANEL3"));
     BoxSizer22 = new wxBoxSizer(wxVERTICAL);
     BoxSizer27 = new wxBoxSizer(wxHORIZONTAL);
     BoxSizer27->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -259,13 +260,13 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     m_wtreeCollapseAll = new wxButton(Panel1, ID_BUTTON8, _("-"), wxDefaultPosition, wxSize(20,20), 0, wxDefaultValidator, _T("ID_BUTTON8"));
     m_wtreeCollapseAll->SetToolTip(_("Collapse All"));
     BoxSizer27->Add(m_wtreeCollapseAll, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    BoxSizer22->Add(BoxSizer27, 0, wxALL|wxEXPAND, 5);
+    BoxSizer22->Add(BoxSizer27, 0, wxTOP|wxLEFT|wxRIGHT|wxEXPAND, 5);
     m_wtreeCassettes = new wxTreeCtrl(Panel1, ID_TREECTRL1, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE, wxDefaultValidator, _T("ID_TREECTRL1"));
-    BoxSizer22->Add(m_wtreeCassettes, 1, wxALL|wxEXPAND, 10);
+    BoxSizer22->Add(m_wtreeCassettes, 1, wxALL|wxEXPAND, 5);
     Panel1->SetSizer(BoxSizer22);
     BoxSizer22->Fit(Panel1);
     BoxSizer22->SetSizeHints(Panel1);
-    Panel2 = new wxPanel(SplitterWindow1, ID_PANEL4, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL4"));
+    Panel2 = new wxPanel(SplitterWindow1, ID_PANEL4, wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER|wxTAB_TRAVERSAL, _T("ID_PANEL4"));
     BoxSizer23 = new wxBoxSizer(wxVERTICAL);
     StaticBoxSizer3 = new wxStaticBoxSizer(wxVERTICAL, Panel2, _("  Cassette  "));
     BoxSizer24 = new wxBoxSizer(wxHORIZONTAL);
@@ -281,7 +282,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     m_wbrowserFuneral = new wxStaticText(Panel2, ID_STATICTEXT5, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
     StaticBoxSizer5->Add(m_wbrowserFuneral, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer24->Add(StaticBoxSizer5, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    StaticBoxSizer3->Add(BoxSizer24, 0, wxALL|wxEXPAND, 5);
+    StaticBoxSizer3->Add(BoxSizer24, 0, wxEXPAND, 5);
     BoxSizer25 = new wxBoxSizer(wxHORIZONTAL);
     m_wbrowserGrid = new wxGrid(Panel2, ID_GRID1, wxDefaultPosition, wxDefaultSize, wxSTATIC_BORDER, _T("ID_GRID1"));
     m_wbrowserGrid->CreateGrid(6,1);
@@ -290,7 +291,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     m_wbrowserGrid->SetColLabelValue(0, _("Cartridges"));
     m_wbrowserGrid->SetDefaultCellFont( m_wbrowserGrid->GetFont() );
     m_wbrowserGrid->SetDefaultCellTextColour( m_wbrowserGrid->GetForegroundColour() );
-    BoxSizer25->Add(m_wbrowserGrid, 1, wxALL, 5);
+    BoxSizer25->Add(m_wbrowserGrid, 1, wxALIGN_LEFT, 5);
     StaticBoxSizer3->Add(BoxSizer25, 0, wxALL|wxEXPAND, 5);
     BoxSizer26 = new wxBoxSizer(wxHORIZONTAL);
     m_wbrowserText = new wxRichTextCtrl(Panel2, ID_RICHTEXTCTRL2, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRE_MULTILINE|wxRE_READONLY, wxDefaultValidator, _T("ID_RICHTEXTCTRL2"));
@@ -298,9 +299,9 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     rchtxtAttr_2.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_FACE|wxTEXT_ATTR_FONT_SIZE|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_FONT_ITALIC|wxTEXT_ATTR_FONT_UNDERLINE|wxTEXT_ATTR_FONT|wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT);
     rchtxtAttr_2.SetBulletStyle(wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT);
     m_wbrowserText->SetBasicStyle(rchtxtAttr_2);
-    BoxSizer26->Add(m_wbrowserText, 1, wxALL|wxEXPAND, 5);
-    StaticBoxSizer3->Add(BoxSizer26, 1, wxALL|wxEXPAND, 5);
-    BoxSizer23->Add(StaticBoxSizer3, 1, wxBOTTOM|wxEXPAND, 10);
+    BoxSizer26->Add(m_wbrowserText, 1, wxEXPAND, 5);
+    StaticBoxSizer3->Add(BoxSizer26, 1, wxLEFT|wxRIGHT|wxEXPAND, 5);
+    BoxSizer23->Add(StaticBoxSizer3, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5);
     Panel2->SetSizer(BoxSizer23);
     BoxSizer23->Fit(Panel2);
     BoxSizer23->SetSizeHints(Panel2);
@@ -1349,7 +1350,7 @@ void HorusFrame::_initBrowser()
         }
     }
 
-    m_wtreeCassettes->ExpandAll();
+    m_wtreeCassettes->Expand(m_wtreeCassettes->GetRootItem());
 }
 
 void HorusFrame::_displayCassetteInfos(const wxString &opName, const wxString &dbName)
@@ -1376,7 +1377,9 @@ void HorusFrame::_displayCassetteInfos(const wxString &opName, const wxString &d
         int                 step = 0;
         wxSQLite3Database   db;
 
-        m_wbrowserOperator->SetLabel(opName);
+        wxString op = opName;
+        op.Replace(wxT("&"), wxT("&&"), true);
+        m_wbrowserOperator->SetLabel(op);
 
 
         try
