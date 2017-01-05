@@ -134,13 +134,13 @@ bool HorusDatabasePool::DeleteOperator(const wxString &uuid)
     return _deleteOperator(uuid);
 }
 
-bool HorusDatabasePool::SetCassetteOperator(const wxString &uuid)
-{
-    if (! m_initialized)
-        return false;
-
-    return _updateCassetteOperator(uuid);
-}
+//bool HorusDatabasePool::SetCassetteOperator(const wxString &uuid)
+//{
+//    if (! m_initialized)
+//        return false;
+//
+//    return _updateCassetteOperator(uuid);
+//}
 
 wxString const HorusDatabasePool::GetCassetteOperator()
 {
@@ -158,12 +158,12 @@ bool HorusDatabasePool::LogCassetteEvent(time_t ts, const wxString &op, const wx
     return _logCassetteEvent(ts, op, message);
 }
 
-bool HorusDatabasePool::SetCassetteDocked(bool docked)
+bool HorusDatabasePool::SetCassetteDocked(bool docked, const wxString &uuid)
 {
     if (! m_initialized)
         return false;
 
-    return _setCassetteDocked(docked);
+    return _setCassetteDocked(docked, uuid);
 }
 
 bool HorusDatabasePool::SetCassetteRedocked()
@@ -260,7 +260,7 @@ bool HorusDatabasePool::_getKeepOnStage()
     return keep;
 }
 
-bool HorusDatabasePool::_rotateCassette()
+bool HorusDatabasePool::_rotateCassette(const wxString &uuid)
 {
     bool                ok = true;
     int                 state = 0;
@@ -291,11 +291,12 @@ bool HorusDatabasePool::_rotateCassette()
         // Define funeral date and unset docked flag in backup database
         //
         {
-            wxString  sqlUpdate = wxString(wxT("UPDATE informations SET funeral=?, docked=?;"));
+            wxString  sqlUpdate = wxString(wxT("UPDATE informations SET operatorUUID=?, funeral=?, docked=?;"));
             wxSQLite3Statement updateStatement = backupDB.PrepareStatement(sqlUpdate);
 
-            updateStatement.Bind(1, static_cast<int>(dt.GetTicks()));
-            updateStatement.BindBool(2, false);
+            updateStatement.Bind(1, uuid);
+            updateStatement.Bind(2, static_cast<int>(dt.GetTicks()));
+            updateStatement.BindBool(3, false);
 
             int ret = updateStatement.ExecuteUpdate();
 
@@ -452,17 +453,18 @@ bool HorusDatabasePool::_rotateCassette()
     return ok;
 }
 
-bool HorusDatabasePool::_setCassetteDocked(bool docked, bool self)
+bool HorusDatabasePool::_setCassetteDocked(bool docked, const wxString &uuid, bool self)
 {
     bool        hasBeenDocked = false;
     time_t      dts = 0;
     bool        ok = true;
+    wxString    prevOp = docked ? _getCassetteOperator() : wxString(wxEmptyString);
 
     // Check if this cassette has already been docked
     if (docked && _getCassetteDockTimeStamp(dts))
         hasBeenDocked = (dts != time_t(0));
 
-    wxString    dockTS = (docked && ! hasBeenDocked) ? wxT(", dockTS=?") : wxEmptyString;
+    wxString    dockTS = (docked && ! hasBeenDocked) ? wxT(", operatorUUID=?, dockTS=?") : wxEmptyString;
     wxString    sqlUpdate = wxString(wxT("UPDATE informations SET docked=?")) + dockTS + wxString(wxT(";"));
 
     try
@@ -474,7 +476,8 @@ bool HorusDatabasePool::_setCassetteDocked(bool docked, bool self)
         // Update dockTS only on {Docking && Never docked} conditions
         if (docked && ! hasBeenDocked)
         {
-            updateStatement.Bind(2, static_cast<int>(wxDateTime::Now().GetTicks()));
+            updateStatement.Bind(2, uuid);
+            updateStatement.Bind(3, static_cast<int>(wxDateTime::Now().GetTicks()));
         }
 
         int ret = updateStatement.ExecuteUpdate();
@@ -497,8 +500,8 @@ bool HorusDatabasePool::_setCassetteDocked(bool docked, bool self)
 
     if ((docked && hasBeenDocked) && ! self)
     {
-        _rotateCassette();
-        _setCassetteDocked(docked, true);
+        _rotateCassette(prevOp);
+        _setCassetteDocked(docked, uuid, true);
     }
 
     return ok;

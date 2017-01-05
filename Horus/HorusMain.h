@@ -125,7 +125,6 @@ class HorusFrame: public wxFrame, HorusDatabaseEventRestore
         void OnClose(wxCloseEvent& event);
         void Onm_addOperatorClick(wxCommandEvent& event);
         void Onm_deleteOperatorClick(wxCommandEvent& event);
-        void Onm_operatorChoiceSelect(wxCommandEvent& event);
         void Onm_dockCassetteClick(wxCommandEvent& event);
         void Onm_unloadStageClick(wxCommandEvent& event);
         void Onm_undockCassetteClick(wxCommandEvent& event);
@@ -230,7 +229,6 @@ class HorusFrame: public wxFrame, HorusDatabaseEventRestore
         HorusDatabasePool              *m_databases;
         wxArrayOperator                 m_operators;
         bool                            m_eventLoggerLockout;
-
 
         DECLARE_EVENT_TABLE()
 };

@@ -72,10 +72,10 @@ class HorusDatabasePool
         bool                            AddOperator(const wxString &, const wxString &);
         bool                            UpdateOperator(const wxString &, const wxString &);
         bool                            DeleteOperator(const wxString &);
-        bool                            SetCassetteOperator(const wxString &);
+//        bool                            SetCassetteOperator(const wxString &);
         wxString const                  GetCassetteOperator();
         bool                            LogCassetteEvent(time_t, const wxString &, const wxString &);
-        bool                            SetCassetteDocked(bool);
+        bool                            SetCassetteDocked(bool, const wxString &);
         bool                            SetCassetteRedocked();
         bool                            GetCassetteDocked();
         bool                            GetCassetteDockTimeStamp(time_t &);
@@ -86,8 +86,8 @@ class HorusDatabasePool
     private:
         bool                            _setKeepOnStage(bool);
         bool                            _getKeepOnStage();
-        bool                            _rotateCassette();
-        bool                            _setCassetteDocked(bool, bool = false);
+        bool                            _rotateCassette(const wxString &);
+        bool                            _setCassetteDocked(bool, const wxString &, bool = false);
         bool                            _setCassetteRedocked();
         bool                            _getCassetteDocked();
         bool                            _getCassetteDockTimeStamp(time_t &);

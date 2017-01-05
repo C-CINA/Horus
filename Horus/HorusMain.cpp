@@ -367,7 +367,6 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     Connect(ID_BUTTON6,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::Onm_undockCassetteClick);
     Connect(ID_CHECKBOX1,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&HorusFrame::Onm_keepOnStageClick);
     Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::Onm_unloadStageClick);
-    Connect(ID_CHOICE1,wxEVT_COMMAND_CHOICE_SELECTED,(wxObjectEventFunction)&HorusFrame::Onm_operatorChoiceSelect);
     Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::Onm_addOperatorClick);
     Connect(ID_BUTTON5,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::Onm_deleteOperatorClick);
     Connect(ID_BUTTON7,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&HorusFrame::Onm_wtreeExpandAllClick);
@@ -477,12 +476,6 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
                 break;
             }
         }
-    }
-    else
-    {
-        // No operator is defines, assign current one as cassette's operator
-        if (m_operators.GetCount())
-            m_databases->SetCassetteOperator(m_operators.Item(static_cast<size_t>(m_woperatorChoice->GetSelection())).UUID);
     }
 
     // Init cassettes browser tab.
@@ -1014,7 +1007,9 @@ void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
 
                     m_wtextLogger->Clear();
 
-                    m_databases->SetCassetteDocked(true);
+                    m_databases->SetCassetteDocked(true, m_operators.GetCount()
+                                                           ? m_operators.Item(static_cast<size_t>(m_woperatorChoice->GetSelection())).UUID
+                                                            : wxT("-1"));
 
                     time_t ts;
 
@@ -1053,7 +1048,7 @@ void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
 
                 _logEvent(m_wtextLogger, data->TimeStamp, m_woperatorChoice->GetString(m_woperatorChoice->GetSelection()),
                           wxT("Cassette Undocked."), true);
-                m_databases->SetCassetteDocked(false);
+                m_databases->SetCassetteDocked(false, wxEmptyString);
                 m_wdockedLabel->SetLabel(wxT("< ----/--/-- --:--:-- >"));
                 break;
         }
@@ -1116,7 +1111,7 @@ void HorusFrame::Onm_addOperatorClick(wxCommandEvent& event)
 
         if ((name == wxEmptyString) || (name.Len() == 0))
         {
-            wxMessageBox(wxT("You have entered an incorrect session name."), wxT("Error"), wxOK|wxICON_ERROR);
+            wxMessageBox(wxT("You have entered an empty or an incorrect operator name."), wxT("Error"), wxOK|wxICON_ERROR);
             continue;
         }
 
@@ -1152,11 +1147,6 @@ void HorusFrame::Onm_addOperatorClick(wxCommandEvent& event)
             m_operators.Sort(&hUtils::CompareOperators);
 
             _updateOperatorChoice();
-
-            // First user added to the operator list
-            // Set it as cassette operator
-            if (m_operators.GetCount() == 1)
-                m_databases->SetCassetteOperator(m_operators.Item(0).UUID);
         }
 
     }
@@ -1180,16 +1170,6 @@ void HorusFrame::Onm_deleteOperatorClick(wxCommandEvent& event)
             _updateOperatorChoice();
         }
 
-    }
-
-    event.Skip();
-}
-
-void HorusFrame::Onm_operatorChoiceSelect(wxCommandEvent& event)
-{
-    if (! m_databases->SetCassetteOperator(m_operators.Item(static_cast<size_t>(m_woperatorChoice->GetSelection())).UUID))
-    {
-        wxMessageBox(wxT("Unable to update cassette's operator"), wxT("Error"), wxOK|wxICON_ERROR);
     }
 
     event.Skip();
