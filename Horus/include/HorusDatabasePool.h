@@ -52,34 +52,165 @@ class HorusDatabaseEventRestore
 
 class HorusEventDatabaseEventData;
 
+/// \brief Database event(s)
+///
 enum HorusDatabaseEvent
 {
-    HORUS_EVENT_DATABASEPOOL_BACKUP
+    HORUS_EVENT_DATABASEPOOL_BACKUP ///< A backup has been performed, filename will be available in event's data
 };
 
 class HorusDatabasePool
 {
     public:
+        /// \brief Constructor
+        ///
+        /// \param parent wxWindow* parent window
+        ///
+        ///
         HorusDatabasePool(wxWindow *parent);
+
+        /// \brief Destructor
+        ///
+        /// \return virtual
+        ///
+        ///
         virtual ~HorusDatabasePool();
 
+        /// \brief Get pool state
+        ///
+        /// \return bool true if initialized.
+        ///
+        ///
         bool                            IsOK();
+
+        /// \brief Initialize the pool, extract cartridges informations form cassette argument (and store cassette pointer)
+        ///
+        /// \param  HorusCassette* cassette to attach to.
+        /// \return bool true on success
+        ///
+        ///
         bool                            Initialize(HorusCassette *);
+
+        /// \brief Returns the database backup pathname.
+        ///
+        /// \return wxString const database backup pathname
+        ///
+        ///
         wxString const                  GetBackupPath();
+
+        /// \brief Returns pool ID
+        ///
+        /// \return wxWindowID ID
+        ///
+        ///
         wxWindowID                      GetId();
+
+        /// \brief Reload pool information, fill the operator array and use HorusDatabaseEventRestore::HorusEventRestore()
+        ///         while reloading cassette events.
+        ///
+        /// \param  wxArrayOperator& destination operators array
+        /// \param  HorusDatabaseEventRestore* destination class for cassette events
+        /// \return bool true on success
+        ///
+        ///
         bool                            ReloadData(wxArrayOperator &, HorusDatabaseEventRestore *);
+
+        /// \brief Update database values of given cartridge.
+        ///
+        /// \param  HorusCartridge* source cartridge
+        /// \return bool true on success
+        ///
+        ///
         bool                            UpdateCartridge(HorusCartridge *);
+
+        /// \brief Add an operator in the pool
+        ///
+        /// \param  const wxString& operator name
+        /// \param  const wxString& operator UUID
+        /// \return bool true on success
+        ///
+        ///
         bool                            AddOperator(const wxString &, const wxString &);
+
+        /// \brief Update operator name, identification defined by UUID
+        ///
+        /// \param  const wxString& operator name
+        /// \param  const wxString& operator UUID
+        /// \return bool
+        ///
+        ///
         bool                            UpdateOperator(const wxString &, const wxString &);
+
+        /// \brief Delete an operator from the database
+        ///
+        /// \param  const wxString& operator UUID
+        /// \return bool true on success
+        ///
+        ///
         bool                            DeleteOperator(const wxString &);
-//        bool                            SetCassetteOperator(const wxString &);
+
+        /// \brief Returns cassette operator UUID
+        ///
+        /// \return wxString const non wxEmptyString on success.
+        ///
+        ///
         wxString const                  GetCassetteOperator();
+
+        /// \brief Log an event in cassette database
+        ///
+        /// \param time_t event timestamp
+        /// \param  const wxString& event operator
+        /// \param  const wxString& event text
+        /// \return bool true on success
+        ///
+        ///
         bool                            LogCassetteEvent(time_t, const wxString &, const wxString &);
+
+        /// \brief Define the docking cassette state, made by given operator. This member also handle backup of
+        ///         previously docked cassette, and send a BACKUP event, if any.
+        ///
+        /// \param bool docking state
+        /// \param  const wxString& operator UUID
+        /// \return bool true on success
+        ///
+        ///
         bool                            SetCassetteDocked(bool, const wxString &);
+
+        /// \brief Redock a previously docked cassette.
+        ///
+        /// \return bool true on success
+        ///
+        ///
         bool                            SetCassetteRedocked();
+
+        /// \brief Returns cassette docking state
+        ///
+        /// \return bool true if docked, otherwise false.
+        ///
+        ///
         bool                            GetCassetteDocked();
+
+        /// \brief Get cassette docking timestamp
+        ///
+        /// \param  time_t& destination timestamp.
+        /// \return bool true on success
+        ///
+        ///
         bool                            GetCassetteDockTimeStamp(time_t &);
+
+        /// \brief Define "Keep On Stage" state flag
+        ///
+        /// \param bool flag state
+        /// \return bool true on success
+        ///
+        ///
         bool                            SetKeepOnStage(bool);
+
+        /// \brief Get "Keep On Stage" state flag
+        ///
+        /// \return bool true if "Keep On Stage" is defined
+        ///
+        ///
         bool                            GetKeepOnStage();
 
 
@@ -107,22 +238,19 @@ class HorusDatabasePool
         bool                            _deleteOperator(const wxString &);
         bool                            _fillCartridgesData();
 
-        //bool                            _saveDB();
-
         void                            _sendEvent(HorusDatabaseEvent);
         void                            _sendBackupEvent(const wxString &dbName);
 
     private:
-        wxWindow                       *m_parent;
-        wxWindowID                      m_id;
-        bool                            m_initialized;
-        wxString                        m_dbPath;
-        wxString                        m_dbBackupPath;
-        HorusCassette                  *m_cassette;
+        wxWindow                       *m_parent; ///< Parent window
+        wxWindowID                      m_id; ///< Pool ID
+        bool                            m_initialized; ///< Initialization flag
+        wxString                        m_dbPath; ///< Database pathname
+        wxString                        m_dbBackupPath; ///< Database backup pathname
+        HorusCassette                  *m_cassette; ///< Cassette pointer
 
-        wxSQLite3Database               m_dbCassette;
-        wxSQLite3Database               m_dbOperators;
-
+        wxSQLite3Database               m_dbCassette; ///< Cassette database
+        wxSQLite3Database               m_dbOperators; ///< Operators database
 };
 
 

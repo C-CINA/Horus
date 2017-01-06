@@ -62,8 +62,8 @@ enum HorusCassetteEvent
 };
 
 
-class HorusCassette; ///< Opaque
-struct HorusEventCassetteData; ///< Opaque
+class HorusCassette; // Opaque
+struct HorusEventCassetteData; // Opaque
 
 class HorusCartridge: public wxPanel
 {

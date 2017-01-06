@@ -1378,7 +1378,8 @@ bool HorusFrame::_extractCassetteFromDatabase(const wxString &dbName)
         _addCassetteToTree(ts, op, dbName);
     }
 
-    db.Close();
+    if (db.IsOpen())
+        db.Close();
 
     return ok;
 }
@@ -1529,7 +1530,8 @@ void HorusFrame::_displayCassetteInfos(const wxString &opName, const wxString &d
             wxMessageBox(msg, wxT("Database Error"), wxOK|wxICON_ERROR);
         }
 
-        db.Close();
+        if (db.IsOpen())
+            db.Close();
     }
 }
 

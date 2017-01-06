@@ -88,33 +88,65 @@
 namespace Horus
 {
 
+/// \brief Horus item tree ID class
+///
 class hTreeItemData: public wxTreeItemData
 {
     public:
+
+        /// \brief Constructor
+        ///
+        /// \param op const wxString& operator name
+        /// \param dbFilename const wxString& database filename
+        ///
+        ///
         hTreeItemData(const wxString &op, const wxString &dbFilename) : wxTreeItemData(), m_operator(op), m_dbFilename(dbFilename)
         {
         }
 
+        /// \brief Returns operator name
+        ///
+        /// \return wxString const
+        ///
+        ///
         wxString const GetOperatorName()
         {
             return m_operator;
         }
 
+        /// \brief Returns database filename
+        ///
+        /// \return wxString const
+        ///
+        ///
         wxString const GetDatabaseFilename()
         {
             return m_dbFilename;
         }
 
     private:
-        wxString                        m_operator;
-        wxString                        m_dbFilename;
+        wxString                        m_operator; ///< Operator name
+        wxString                        m_dbFilename; ///< Database filename
 
 };
 
 class HorusFrame: public wxFrame, HorusDatabaseEventRestore
 {
     public:
-        HorusFrame(wxWindow *, wxWindowID = wxID_ANY);
+
+        /// \brief Constructor
+        ///
+        /// \param parent wxWindow* parent window
+        /// \param id wxWindowID window ID
+        ///
+        ///
+        HorusFrame(wxWindow *parent, wxWindowID id = wxID_ANY);
+
+        /// \brief Destructor
+        ///
+        /// \return virtual
+        ///
+        ///
         virtual ~HorusFrame();
 
     private:
@@ -137,20 +169,110 @@ class HorusFrame: public wxFrame, HorusDatabaseEventRestore
         void OnSplitterWindow1SashPosChanging(wxSplitterEvent& event);
         //*)
 
+        /// \brief Cassette event receiver
+        ///
+        /// \param  wxCommandEvent& cassette event
+        /// \return void
+        ///
+        ///
         void                            OnCassetteEvent(wxCommandEvent &);
+
+        /// \brief Database event receiver
+        ///
+        /// \param  wxCommandEvent& database event
+        /// \return void
+        ///
+        ///
         void                            OnDatabasePoolEvent(wxCommandEvent &);
 
+        /// \brief Callback used by database pool on startup, when restoring events
+        ///
+        /// \param time_t event timestamp
+        /// \param  const wxString& event operator
+        /// \param  const wxString& event text
+        /// \return void
+        ///
+        ///
         void                            HorusEventRestore(time_t, const wxString &, const wxString &);
 
+        /// \brief Update the operator choice list widget
+        ///
+        /// \return void
+        ///
+        ///
         void                            _updateOperatorChoice();
+
+        /// \brief Display the formatted event in the given RichText ctrl. Could save this event into the database
+        ///
+        /// \param  wxRichTextCtrl* destination widget
+        /// \param time_t event timestamp
+        /// \param  const wxString& event operator
+        /// \param  const wxString& event text
+        /// \param bool freeze the RichText widget
+        /// \param true bool = save to the database
+        /// \return void
+        ///
+        ///
         void                            _logEvent(wxRichTextCtrl *, time_t, const wxString &, const wxString &, bool, bool = true);
+
+        /// \brief Cassette docking
+        ///
+        /// \param bool dock state
+        /// \param false bool = redock flag
+        /// \return void
+        ///
+        ///
         void                            _dockCassette(bool, bool = false);
 
+        /// \brief Search for an item ID matching the text string, from parent ID
+        ///
+        /// \param wxTreeItemId parent ID
+        /// \param  const wxString& text string to find
+        /// \return wxTreeItemId found ID, ::IsOk() == true if found.
+        ///
+        ///
         wxTreeItemId                    _getItemID(wxTreeItemId, const wxString &);
+
+        /// \brief Get operator name from given UUID
+        ///
+        /// \param  const wxString& UUID to search for
+        /// \return wxString const operator name, wxEmptyString if not found.
+        ///
+        ///
         wxString const                  _getOperatorFromUUID(const wxString &);
+
+        /// \brief Add cassette entry in the right place of the tree
+        ///
+        /// \param time_t timestamp or the cassette entry
+        /// \param  const wxString& cassette operator UUID
+        /// \param  const wxString& cassette database filename.
+        /// \return void
+        ///
+        ///
         void                            _addCassetteToTree(time_t, const wxString &, const wxString &);
+
+        /// \brief Extract information from the given database, add it to the tree
+        ///
+        /// \param  const wxString& database filename
+        /// \return bool true on success.
+        ///
+        ///
         bool                            _extractCassetteFromDatabase(const wxString &);
+
+        /// \brief Initialize the cassettes browser tab
+        ///
+        /// \return void
+        ///
+        ///
         void                            _initBrowser();
+
+        /// \brief Display given cassette database information into browser tab
+        ///
+        /// \param  const wxString& operator name
+        /// \param  const wxString& database filename
+        /// \return void
+        ///
+        ///
         void                            _displayCassetteInfos(const wxString &, const wxString &);
 
         //(*Identifiers(HorusFrame)
@@ -187,7 +309,7 @@ class HorusFrame: public wxFrame, HorusDatabaseEventRestore
         static const long ID_STATUSBAR1;
         //*)
 
-        static const int MAX_SASH_POSITION;
+        static const int MAX_SASH_POSITION; ///< Max Sash width
 
         //(*Declarations(HorusFrame)
         wxScrolledWindow* m_wscrolledStage;
@@ -225,10 +347,10 @@ class HorusFrame: public wxFrame, HorusDatabaseEventRestore
         wxTreeCtrl* m_wtreeCassettes;
         //*)
 
-        HorusCassette                  *m_cassette;
-        HorusDatabasePool              *m_databases;
-        wxArrayOperator                 m_operators;
-        bool                            m_eventLoggerLockout;
+        HorusCassette                  *m_cassette; ///< Cassette object
+        HorusDatabasePool              *m_databases; ///< Database pool object
+        wxArrayOperator                 m_operators; ///< Operators list
+        bool                            m_eventLoggerLockout; ///< lockout events from database, used on database reload.
 
         DECLARE_EVENT_TABLE()
 };

@@ -134,14 +134,6 @@ bool HorusDatabasePool::DeleteOperator(const wxString &uuid)
     return _deleteOperator(uuid);
 }
 
-//bool HorusDatabasePool::SetCassetteOperator(const wxString &uuid)
-//{
-//    if (! m_initialized)
-//        return false;
-//
-//    return _updateCassetteOperator(uuid);
-//}
-
 wxString const HorusDatabasePool::GetCassetteOperator()
 {
     if (! m_initialized)
