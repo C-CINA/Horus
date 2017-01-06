@@ -895,7 +895,10 @@ void HorusFrame::OnAbout(wxCommandEvent& event)
                          END OF TERMS AND CONDITIONS\
 ");
 
-    wxString buildstr = wxbuildinfo(long_f) + wxT("\n");
+    wxSQLite3Database   db;
+    wxString            buildstr = wxbuildinfo(long_f) + wxT("\n");
+
+    buildstr << wxSQLite3Database::GetWrapperVersion() << wxT(", SQLite3 ") << db.GetVersion() << wxT("\n");
 #ifdef __GNUG__
     buildstr << wxT("GNU C++ Compiler: ") << __GNUC__ << wxT(".") << __GNUC_MINOR__ << wxT(".") << __GNUC_PATCHLEVEL__ << wxT("\n");
 #endif
