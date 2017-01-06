@@ -297,7 +297,6 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     BoxSizer27->Add(m_wtreeCollapseAll, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer22->Add(BoxSizer27, 0, wxTOP|wxLEFT|wxRIGHT|wxEXPAND, 5);
     m_wtreeCassettes = new wxTreeCtrl(Panel1, ID_TREECTRL1, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE, wxDefaultValidator, _T("ID_TREECTRL1"));
-    m_wtreeCassettes->SetToolTip(_("Cassettes log tree."));
     BoxSizer22->Add(m_wtreeCassettes, 1, wxALL|wxEXPAND, 5);
     Panel1->SetSizer(BoxSizer22);
     BoxSizer22->Fit(Panel1);
@@ -1286,7 +1285,8 @@ void HorusFrame::_addCassetteToTree(time_t ts, const wxString &uuid, const wxStr
     }
 
     // Get Month or create entry
-    wxString        monthStr = wxString::Format(wxT("%02d"), timestamp.GetMonth() + 1);
+    static const char *months[] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+    wxString        monthStr = months[timestamp.GetMonth() % 12];////wxString::Format(wxT("%02d"), timestamp.GetMonth() + 1);
     wxTreeItemId    monthID = _getItemID(yearID, monthStr);
 
     if (! monthID.IsOk())

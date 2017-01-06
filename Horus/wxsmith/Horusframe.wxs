@@ -367,7 +367,6 @@
 																			<item2>m_wtreeCassettes</item2>
 																			<item2>&lt;none&gt;</item2>
 																		</items_text>
-																		<tooltip>Cassettes log tree.</tooltip>
 																		<handler function="OnCassettesSelectionChanged" entry="EVT_TREE_SEL_CHANGED" />
 																	</object>
 																	<flag>wxALL|wxEXPAND</flag>
