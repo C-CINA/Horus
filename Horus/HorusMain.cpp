@@ -510,13 +510,17 @@ HorusFrame::~HorusFrame()
 
 void HorusFrame::_updateOperatorChoice()
 {
+    // Clear operator choice widget list
     m_woperatorChoice->Clear();
 
+    // Refill the choice widget list with operator names
     for (size_t i = 0; i < m_operators.GetCount(); i++)
         m_woperatorChoice->Append(m_operators.Item(i).Name);
 
+    // Some operators defined
     if (m_operators.GetCount())
     {
+        // Set selection to first entry and update the UI layout (accordingly to largest width name)
         m_woperatorChoice->SetSelection(0);
         m_wdeleteOperator->Enable(true);
         m_woperatorChoice->Fit();
@@ -526,6 +530,7 @@ void HorusFrame::_updateOperatorChoice()
     }
     else
     {
+        // Operator list is empty, disable delete button
         m_wdeleteOperator->Enable(false);
     }
 }
@@ -535,9 +540,11 @@ inline void HorusFrame::_logEvent(wxRichTextCtrl *ctrl, time_t ts, const wxStrin
     wxDateTime dt(ts);
     wxString timestamp = dt.Format(wxT("%a %b %d %Y %H:%M:%S "));
 
+    // Freeze the RitchText widget (like ::BeginBatch())
     if (frozen)
         ctrl->Freeze();
 
+    // Move cursor to the end of text
     ctrl->SetInsertionPointEnd();
 
     ctrl->BeginFontSize(10);
@@ -546,25 +553,28 @@ inline void HorusFrame::_logEvent(wxRichTextCtrl *ctrl, time_t ts, const wxStrin
     ctrl->BeginBold();
     ctrl->WriteText(timestamp + wxT("[ "));
 
-    // Operator
-    ctrl->BeginTextColour(*wxBLUE);//wxColor(0, 0, 255));
+    // Operator name
+    ctrl->BeginTextColour(*wxBLUE);
     ctrl->WriteText(op != wxEmptyString ? op : wxT("<UNKNOWN>"));
     ctrl->EndTextColour();
 
     ctrl->WriteText(wxT(" ] :: "));
     ctrl->EndBold();
 
-    // Then text
+    // Then message
     ctrl->WriteText(message + wxT("\n"));
 
-    // Move to the end of the text
-
+    // Widget is frozen
     if (frozen)
     {
+        // Move to the end of the text
         ctrl->ScrollIntoView(ctrl->GetLastPosition(), /* WXK_PAGEDOWN */ WXK_END);
+
+        // "Unfreeze"
         ctrl->Thaw();
     }
 
+    // Do we need to store the current informations to the database ?
     if (saveToDatabase && m_eventLoggerLockout == false)
     {
         if (! m_databases->LogCassetteEvent(ts, op != wxEmptyString ? op : wxT("-1"), message))
@@ -575,11 +585,12 @@ inline void HorusFrame::_logEvent(wxRichTextCtrl *ctrl, time_t ts, const wxStrin
 
 void HorusFrame::OnClose(wxCloseEvent& event)
 {
-    //_saveDB();
+    if (wxMessageBox(wxT("Do you really want to quit ?"), wxT("Confirm..."), wxYES_NO|wxNO_DEFAULT|wxICON_QUESTION) == wxYES)
+    {
+        delete m_databases;
 
-    delete m_databases;
-
-    event.Skip();
+        event.Skip();
+    }
 }
 
 void HorusFrame::OnQuit(wxCommandEvent& event)
@@ -923,6 +934,7 @@ void HorusFrame::_dockCassette(bool dock, bool redock)
 {
     switch (dock)
     {
+        // Dock or redock the cassette
         case true:
             if (redock)
                 m_cassette->RedockCassette();
@@ -936,6 +948,7 @@ void HorusFrame::_dockCassette(bool dock, bool redock)
             m_wscrolledStage->Enable(true);
             break;
 
+        // Undock the cassette
         case false:
             if (! m_wkeepOnStage->GetValue())
                 m_cassette->UnloadStage();
@@ -975,6 +988,7 @@ void HorusFrame::Onm_undockCassetteClick(wxCommandEvent& event)
 
 void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
 {
+    // It's up to us to delete the data, if any.
     HorusEventCassetteData *data = (HorusEventCassetteData *)event.GetClientData();
 
     if (data)
@@ -1083,10 +1097,12 @@ void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
 
 void HorusFrame::OnDatabasePoolEvent(wxCommandEvent &event)
 {
+    // It's up to us to delete de data, if any.
     HorusEventDatabaseData *data = (HorusEventDatabaseData *)event.GetClientData();
 
     switch (event.GetInt())
     {
+        // A backup has been made, add the new backup entry in the cassettes browser
         case HORUS_EVENT_DATABASEPOOL_BACKUP:
             if (data)
                 _extractCassetteFromDatabase(data->BackupFile);
@@ -1116,8 +1132,8 @@ void HorusFrame::Onm_unloadStageClick(wxCommandEvent& event)
 
 void HorusFrame::Onm_addOperatorClick(wxCommandEvent& event)
 {
-    wxTextEntryDialog dial(this, wxT("Please enter a name for the new operator"), wxT("New Operator"));
-    bool valid = false;
+    wxTextEntryDialog   dial(this, wxT("Please enter a name for the new operator"), wxT("New Operator"));
+    bool                valid = false;
 
     dial.SetMaxLength(32); ///< Operator max name length
 
@@ -1131,6 +1147,7 @@ void HorusFrame::Onm_addOperatorClick(wxCommandEvent& event)
         name.Trim();
         name.Trim(false);
 
+        // Empty operator name is not allowed, redo.
         if ((name == wxEmptyString) || (name.Len() == 0))
         {
             wxMessageBox(wxT("You have entered an empty or an incorrect operator name."), wxT("Error"), wxOK|wxICON_ERROR);
@@ -1155,7 +1172,7 @@ void HorusFrame::Onm_addOperatorClick(wxCommandEvent& event)
         if (! valid)
             return;
 
-        // New operator
+        // New operator UUID
         wxString uuid = hUtils::CreateGUID();
 
         // First check if everything is fine with the operators database
@@ -1184,7 +1201,8 @@ void HorusFrame::Onm_deleteOperatorClick(wxCommandEvent& event)
                      + m_operators.Item(selected).Name + wxT(" ?."),
                      wxT("Delete Operator"), wxYES_NO|wxNO_DEFAULT|wxICON_QUESTION) == wxYES)
     {
-        if (!m_databases->DeleteOperator(m_operators.Item(selected).UUID))
+        // Delete operator, abort deletion on database error
+        if (! m_databases->DeleteOperator(m_operators.Item(selected).UUID))
             wxMessageBox(wxT("Unable to delete operator ") + m_operators.Item(selected).Name, wxT("Error"), wxOK|wxICON_ERROR);
         else
         {
@@ -1212,11 +1230,13 @@ wxTreeItemId HorusFrame::_getItemID(wxTreeItemId parent, const wxString &name)
     {
         if (id.IsOk())
         {
+            // The item text matches name argument
             if (m_wtreeCassettes->GetItemText(id).Cmp(name) == 0)
                 return id;
         }
     } while ((id = m_wtreeCassettes->GetNextChild(parent, cookie)) && id.IsOk());
 
+    // This ID !::IsOk()
     return retID;
 }
 
@@ -1224,6 +1244,7 @@ wxString const HorusFrame::_getOperatorFromUUID(const wxString &uuid)
 {
     for (size_t i = 0; i < m_operators.GetCount(); i++)
     {
+        // The operator UUID matches the argument.
         if (m_operators.Item(i).UUID.Cmp(uuid) == 0)
         {
             return m_woperatorChoice->GetString(i);
@@ -1251,12 +1272,12 @@ void HorusFrame::_addCassetteToTree(time_t ts, const wxString &uuid, const wxStr
     //                       |
     //                       ...
 
-    wxDateTime timestamp(ts);
+    wxDateTime      timestamp(ts);
     // Get Root
-    wxTreeItemId rootID = m_wtreeCassettes->GetRootItem();
+    wxTreeItemId    rootID = m_wtreeCassettes->GetRootItem();
     // Get Year or create entry
-    wxString yearStr = wxString::Format(wxT("%d"), timestamp.GetYear());
-    wxTreeItemId yearID = _getItemID(rootID, yearStr);
+    wxString        yearStr = wxString::Format(wxT("%d"), timestamp.GetYear());
+    wxTreeItemId    yearID = _getItemID(rootID, yearStr);
 
     if (! yearID.IsOk())
     {
@@ -1264,8 +1285,8 @@ void HorusFrame::_addCassetteToTree(time_t ts, const wxString &uuid, const wxStr
     }
 
     // Get Month or create entry
-    wxString monthStr = wxString::Format(wxT("%02d"), timestamp.GetMonth() + 1);
-    wxTreeItemId monthID = _getItemID(yearID, monthStr);
+    wxString        monthStr = wxString::Format(wxT("%02d"), timestamp.GetMonth() + 1);
+    wxTreeItemId    monthID = _getItemID(yearID, monthStr);
 
     if (! monthID.IsOk())
     {
@@ -1273,8 +1294,8 @@ void HorusFrame::_addCassetteToTree(time_t ts, const wxString &uuid, const wxStr
     }
 
     // Get Day or create entry
-    wxString dayStr = wxString::Format(wxT("%02d"), timestamp.GetDay());
-    wxTreeItemId dayID = _getItemID(monthID, dayStr);
+    wxString        dayStr = wxString::Format(wxT("%02d"), timestamp.GetDay());
+    wxTreeItemId    dayID = _getItemID(monthID, dayStr);
 
     if (! dayID.IsOk())
     {
@@ -1283,10 +1304,10 @@ void HorusFrame::_addCassetteToTree(time_t ts, const wxString &uuid, const wxStr
 
     // Add new entry based on hh:mm:ss uuid
     // Get op name from UUID (<UNKNOWN> if not found)
-    wxString op = _getOperatorFromUUID(uuid);
-    wxString entryStr = wxString::Format(wxT("%02d:%02d:%02d %s"),
-                                         timestamp.GetHour(), timestamp.GetMinute(), timestamp.GetSecond(), op);
-    wxTreeItemId entryID = m_wtreeCassettes->AppendItem(dayID, entryStr);
+    wxString        op = _getOperatorFromUUID(uuid);
+    wxString        entryStr = wxString::Format(wxT("%02d:%02d:%02d %s"),
+                                                timestamp.GetHour(), timestamp.GetMinute(), timestamp.GetSecond(), op);
+    wxTreeItemId    entryID = m_wtreeCassettes->AppendItem(dayID, entryStr);
 
     if (entryID.IsOk())
     {
@@ -1310,11 +1331,11 @@ bool HorusFrame::_extractCassetteFromDatabase(const wxString &dbName)
     */
 
     // First extract timestamp;
-    bool ok = true;
-    int step = 0;
-    time_t ts = 0;
-    wxString op = wxEmptyString;
-    wxSQLite3Database db;
+    bool                ok = true;
+    int                 step = 0;
+    time_t              ts = 0;
+    wxString            op = wxEmptyString;
+    wxSQLite3Database   db;
 
     try
     {
@@ -1365,10 +1386,11 @@ bool HorusFrame::_extractCassetteFromDatabase(const wxString &dbName)
 // Cassettes Browser
 void HorusFrame::_initBrowser()
 {
+    // Clear the tree
     m_wtreeCassettes->DeleteAllItems();
     m_wtreeCassettes->AddRoot(wxT("Cassettes"));
 
-    // Tweak wxGrid
+    // Tweak wxGrid, no resizing allowed
     m_wbrowserGrid->DisableDragCell();
     m_wbrowserGrid->DisableDragColSize();
     m_wbrowserGrid->DisableDragColMove();
@@ -1393,6 +1415,7 @@ void HorusFrame::_initBrowser()
         }
     }
 
+    // Expand root only (years)
     m_wtreeCassettes->Expand(m_wtreeCassettes->GetRootItem());
 }
 
@@ -1407,6 +1430,7 @@ void HorusFrame::_displayCassetteInfos(const wxString &opName, const wxString &d
         - list of events
     */
 
+    // Clear fields
     if (dbName == wxEmptyString)
     {
         m_wbrowserOperator->SetLabel(wxEmptyString);
@@ -1421,6 +1445,7 @@ void HorusFrame::_displayCassetteInfos(const wxString &opName, const wxString &d
         wxSQLite3Database   db;
 
         wxString op = opName;
+        // Make statictext label happy (single '&' is wrong).
         op.Replace(wxT("&"), wxT("&&"), true);
         m_wbrowserOperator->SetLabel(op);
 
@@ -1510,12 +1535,14 @@ void HorusFrame::_displayCassetteInfos(const wxString &opName, const wxString &d
 
 void HorusFrame::OnCassettesSelectionChanged(wxTreeEvent& event)
 {
-    wxTreeItemId id = event.GetItem();
-    wxTreeCtrl *tree = wxDynamicCast(event.GetEventObject(), wxTreeCtrl);
-    hTreeItemData *data = (hTreeItemData *)tree->GetItemData(id);
-    wxString dbName = wxEmptyString;
-    wxString opName = wxEmptyString;
+    // Extract tree and selected ID from event
+    wxTreeItemId    id = event.GetItem();
+    wxTreeCtrl     *tree = wxDynamicCast(event.GetEventObject(), wxTreeCtrl);
+    hTreeItemData  *data = (hTreeItemData *)tree->GetItemData(id);
+    wxString        dbName = wxEmptyString;
+    wxString        opName = wxEmptyString;
 
+    // Data is non NULL (a cassette entry has been clicked).
     if (data)
     {
         opName = data->GetOperatorName();
@@ -1523,6 +1550,7 @@ void HorusFrame::OnCassettesSelectionChanged(wxTreeEvent& event)
     }
 
     wxBusyCursor busy;
+
     _displayCassetteInfos(opName, dbName);
 
     event.Skip();
@@ -1531,6 +1559,8 @@ void HorusFrame::OnCassettesSelectionChanged(wxTreeEvent& event)
 void HorusFrame::OnBrowserGridResize(wxSizeEvent& event)
 {
     wxSize sz = m_wbrowserGrid->GetClientSize();
+
+    // Resize the column 0 to fill the whole widget width
     m_wbrowserGrid->SetColSize(0, sz.GetWidth() - m_wbrowserGrid->GetRowLabelSize());
 
     event.Skip();
@@ -1552,7 +1582,7 @@ void HorusFrame::Onm_wtreeCollapseAllClick(wxCommandEvent& event)
 
 void HorusFrame::OnSplitterWindow1SashPosChanging(wxSplitterEvent& event)
 {
-    // Limit Sash position
+    // Limit the Sash position
     if (event.GetSashPosition() > MAX_SASH_POSITION)
         event.SetSashPosition(MAX_SASH_POSITION);
 
