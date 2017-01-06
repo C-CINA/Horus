@@ -419,7 +419,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     Layout();
 
     // Size is hardcoded
-    wxSize s(1300, 1000);
+    wxSize s(1300, 950);
     SetSize(s);
     SetMinSize(s);
 
@@ -499,6 +499,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     delete splash;
 
     // Show the main window
+    CenterOnScreen();
     Show();
 }
 

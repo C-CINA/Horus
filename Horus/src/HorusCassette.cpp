@@ -86,16 +86,17 @@ HorusCartridge::HorusCartridge(HorusCassette *cassette, wxWindow *parent, size_t
     m_text->SetMaxLength(80);
     staticBoxSizer1->Add(m_text, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     wxBoxSizer *boxSizer3 = new wxBoxSizer(wxHORIZONTAL);
-    wxStaticBoxSizer *staticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, wxEmptyString);
+    //wxStaticBoxSizer *staticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, wxEmptyString);
 
     m_loadToggle = new wxBitmapToggleButton(this, wxNewId(), *hUtils::CreateBitmapFromPNGResource(wxT("TOGGLE_OUT")), wxDefaultPosition, wxDefaultSize, wxNO_BORDER, wxDefaultValidator);
     m_loadToggle->SetToolTip(wxT("Cartridge insertion/ejection."));
-    staticBoxSizer2->Add(m_loadToggle, 0, wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    //staticBoxSizer2->Add(m_loadToggle, 0, wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     m_loadToggle->SetBitmapDisabled(*hUtils::CreateBitmapFromPNGResource(wxT("TOGGLE_OUT_DISABLED")));
     m_loadToggle->SetBitmapPressed(*hUtils::CreateBitmapFromPNGResource(wxT("TOGGLE_IN")));
     m_loadToggle->Enable(false);
 
-    boxSizer3->Add(staticBoxSizer2, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    //boxSizer3->Add(staticBoxSizer2, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    boxSizer3->Add(m_loadToggle, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     staticBoxSizer1->Add(boxSizer3, 0, wxLEFT|wxRIGHT|wxEXPAND, 5);
     wxBoxSizer *boxSizer4 = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer *boxSizer5 = new wxBoxSizer(wxVERTICAL);
@@ -542,14 +543,15 @@ bool HorusCassette::_dock(bool redock)
 
     m_docked = true;
 
+    // Send DOCK event
+    _sendEvent(redock ? HORUS_EVENT_CASSETTE_REDOCKED : HORUS_EVENT_CASSETTE_DOCKED);
+
     if (! redock)
     {
         for (size_t i = 0; i < MAX_CARTRIDGE_SLOTS; i++)
             m_cartridges[i]->Clear();
     }
 
-    // Send DOCK event
-    _sendEvent(redock ? HORUS_EVENT_CASSETTE_REDOCKED : HORUS_EVENT_CASSETTE_DOCKED);
 
     return true;
 }
