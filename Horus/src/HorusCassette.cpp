@@ -280,14 +280,9 @@ void HorusCartridge::OnToggleLoad(wxCommandEvent &event)
 
 void HorusCartridge::_changeText(const wxString &str)
 {
-    if (str != wxEmptyString && str.Len())
-    {
-        m_empty->SetValue(false);
-        _setState(CARTRIDGE_STATE_OCCUPIED);
-        _sendEvent(HORUS_EVENT_CARTRIDGE_UPDATE);
-    }
-    else
-        _setState(CARTRIDGE_STATE_EMPTY);
+    _setState(((str != wxEmptyString) && str.Len()) ? CARTRIDGE_STATE_OCCUPIED : CARTRIDGE_STATE_EMPTY);
+
+    _sendEvent(HORUS_EVENT_CARTRIDGE_UPDATE);
 }
 
 void HorusCartridge::_setState(HorusCartridgeState state)
@@ -302,6 +297,7 @@ void HorusCartridge::_setState(HorusCartridgeState state)
         case CARTRIDGE_STATE_EMPTY:
             m_label->SetForegroundColour(wxColour(0, 0, 0));
             m_panelLabel->SetBackgroundColour(wxColour(255, 255, 128));
+            m_empty->SetValue(true);
             m_empty->Enable(true);
             m_loadToggle->Enable(false);
             break;
@@ -309,6 +305,7 @@ void HorusCartridge::_setState(HorusCartridgeState state)
         case CARTRIDGE_STATE_OCCUPIED:
             m_label->SetForegroundColour(wxColour(255, 255, 255));
             m_panelLabel->SetBackgroundColour(wxColour(40, 40, 255));
+            m_empty->SetValue(false);
             m_empty->Enable(true);
             m_loadToggle->Enable(true);
             break;
