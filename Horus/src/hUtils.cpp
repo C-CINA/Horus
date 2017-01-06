@@ -42,14 +42,6 @@ hUtils::~hUtils()
     //dtor
 }
 
-/// \brief Load data from ressource file
-///
-/// \param &t_data char* pointer to ressource
-/// \param t_dataSize DWORD& size of ressource
-/// \param t_name const wxString& ressource name
-/// \return bool operation completion status
-///
-///
 bool hUtils::LoadDataFromResource(char * &t_data, DWORD &t_dataSize, const wxString &t_name)
 {
     bool     r_result    = false;
@@ -73,13 +65,6 @@ bool hUtils::LoadDataFromResource(char * &t_data, DWORD &t_dataSize, const wxStr
     return r_result;
 }
 
-/// \brief Get bitmap from ressource file, streamed
-///
-/// \param t_data const char* pointer to ressource
-/// \param t_size const DWORD ressource size
-/// \return wxBitmap* bitmap
-///
-///
 wxBitmap* hUtils::GetBitmapFromMemory(const char *t_data, const DWORD t_size)
 {
     wxMemoryInputStream a_is(t_data, t_size);
@@ -87,12 +72,6 @@ wxBitmap* hUtils::GetBitmapFromMemory(const char *t_data, const DWORD t_size)
     return new wxBitmap(wxImage(a_is, wxBITMAP_TYPE_PNG, -1), -1);
 }
 
-/// \brief Create a wxBitmap from ressource file
-///
-/// \param t_name const wxString& ressource name
-/// \return wxBitmap* bitmap
-///
-///
 wxBitmap* hUtils::CreateBitmapFromPNGResource(const wxString &t_name)
 {
     wxBitmap   *r_bitmapPtr = 0;
@@ -116,12 +95,6 @@ wxBitmap* hUtils::CreateBitmapFromPNGResource(const wxString &t_name)
     return r_bitmapPtr;
 }
 
-/// \brief Create a UUID
-///
-/// \param nSize int lenth
-/// \return wxString UUID
-///
-///
 wxString const hUtils::CreateGUID(int nSize)
 {
     if (nSize < 0 || nSize > 32)
@@ -153,13 +126,6 @@ wxString const hUtils::CreateGUID(int nSize)
     return wxT("Error-from-CreateGUID");
 }
 
-/// \brief Get a timestamp formatted string, possibily filesystem friendly.
-///
-/// \param now wxDateTime Date/Time to put in the timestamp
-/// \param fsfriendly bool Make it filesystem friendly.
-/// \return wxString const Returns a formatted string.
-///
-///
 wxString const hUtils::GetTimeStampString(wxDateTime now, bool fsfriendly)
 {
     return ((wxString::Format(wxT("%d%c%02d%c%02d%c%02d%c%02d%c%02d"),
@@ -168,13 +134,6 @@ wxString const hUtils::GetTimeStampString(wxDateTime now, bool fsfriendly)
 
 }
 
-/// \brief Get a timestamp formatted string, possibily filesystem friendly.
-///
-/// \param now time_t ticks to put in the timestamp
-/// \param fsfriendly bool Make it filesystem friendly.
-/// \return wxString const Returns a formatted string.
-///
-///
 wxString const hUtils::GetTimeStampString(time_t now, bool fsfriendly)
 {
     wxDateTime dt(now);
@@ -183,21 +142,14 @@ wxString const hUtils::GetTimeStampString(time_t now, bool fsfriendly)
 }
 
 
-/// \brief Sort function used for Operator array
-///
-/// \param l Operator** first operator
-/// \param h Operator** second operator
-/// \return int string compare result
-///
-///
 wxCMPFUNC_CONV hUtils::CompareOperators(Operator **l, Operator **h)
 {
     return (*l)->Name.CmpNoCase((*h)->Name);
 }
 
 
-/// \brief Magic of Operator dynamic array is just below
-///
+// Magic of Operator dynamic array is just below
+//
 #include <wx/arrimpl.cpp>
 WX_DEFINE_OBJARRAY(wxArrayOperator);
 

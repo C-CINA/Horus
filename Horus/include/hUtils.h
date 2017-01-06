@@ -67,15 +67,66 @@ class hUtils
         hUtils();
         virtual ~hUtils();
 
-        static bool                     LoadDataFromResource(char * &, DWORD &, const wxString  &);
-        static wxBitmap*                GetBitmapFromMemory(const char *, const DWORD);
-        static wxBitmap*                CreateBitmapFromPNGResource(const wxString &);
+        /// \brief Load data from ressource file
+        ///
+        /// \param &t_data char* pointer to ressource
+        /// \param t_dataSize DWORD& size of ressource
+        /// \param t_name const wxString& ressource name
+        /// \return bool operation completion status
+        ///
+        ///
+        static bool                     LoadDataFromResource(char * &t_data, DWORD &t_dataSize, const wxString &t_name);
 
-        static wxString const           CreateGUID(int = 32);
+        /// \brief Get bitmap from ressource file, streamed
+        ///
+        /// \param t_data const char* pointer to ressource
+        /// \param t_size const DWORD ressource size
+        /// \return wxBitmap* bitmap
+        ///
+        ///
+        static wxBitmap*                GetBitmapFromMemory(const char *t_data, const DWORD t_size);
 
-        static wxString const           GetTimeStampString(wxDateTime, bool);
-        static wxString const           GetTimeStampString(time_t, bool);
+        /// \brief Create a wxBitmap from ressource file
+        ///
+        /// \param t_name const wxString& ressource name
+        /// \return wxBitmap* bitmap
+        ///
+        ///
+        static wxBitmap*                CreateBitmapFromPNGResource(const wxString &t_name);
 
+        /// \brief Returns a valid UUID
+        ///
+        /// \param nSize int max length of created UUID
+        /// \return wxString const newly created UUID
+        ///
+        ///
+        static wxString const           CreateGUID(int nSize = 32);
+
+        /// \brief Returns a formated timestamp, filesystem friendly if fsfriendly is true.
+        ///
+        /// \param now wxDateTime timestamp source date/time
+        /// \param fsfriendly bool filesystem friendly flag
+        /// \return wxString const formatted timestamp
+        ///
+        ///
+        static wxString const           GetTimeStampString(wxDateTime now, bool fsfriendly);
+
+        /// \brief Returns a formated timestamp, filesystem friendly if fsfriendly is true.
+        ///
+        /// \param ts time_t timestamp source date/time
+        /// \param fsfriendly bool filesystem friendly flag
+        /// \return wxString const formatted timestamp
+        ///
+        ///
+        static wxString const           GetTimeStampString(time_t ts, bool fsfriendly);
+
+        /// \brief Comparator callback function, used by wxArrayOperator::Sort()
+        ///
+        /// \param l Operator** first operator
+        /// \param h Operator** second operator
+        /// \return wxCMPFUNC_CONV compare result
+        ///
+        ///
         static wxCMPFUNC_CONV           CompareOperators(Operator **l, Operator **h);
 };
 

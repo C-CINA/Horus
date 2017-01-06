@@ -35,6 +35,8 @@
 namespace Horus
 {
 
+DEFINE_EVENT_TYPE(wxEVT_HORUS_CASSETTE); ///< Event that receiver may handle
+
 //
 // ///////////////////////////////////////////////////////////////////////
 //

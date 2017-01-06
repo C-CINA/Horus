@@ -1115,9 +1115,9 @@ void HorusFrame::OnDatabasePoolEvent(wxCommandEvent &event)
     event.Skip();
 }
 
-void HorusFrame::HorusEventRestore(time_t ts, const wxString &op, const wxString &msg)
+void HorusFrame::HorusEventRestore(time_t ts, const wxString &op, const wxString &message)
 {
-    _logEvent(m_wtextLogger, ts, op, msg, false, false);
+    _logEvent(m_wtextLogger, ts, op, message, false, false);
 }
 
 void HorusFrame::Onm_unloadStageClick(wxCommandEvent& event)

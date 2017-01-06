@@ -40,14 +40,24 @@ namespace Horus
 {
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_LOCAL_EVENT_TYPE(wxEVT_HORUS_DATABASEPOOL, wxNewEventType()) ///<
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_HORUS_DATABASEPOOL, wxNewEventType())
 END_DECLARE_EVENT_TYPES()
 
 
+/// \brief Class that database pool client should inherit from.
+///
 class HorusDatabaseEventRestore
 {
     public:
-        virtual void HorusEventRestore(time_t, const wxString &, const wxString &) = 0;
+        /// \brief Member function used by database pool on reload, to restore events
+        ///
+        /// \param ts time_t event timestamp
+        /// \param op const wxString& event operator
+        /// \param message const wxString& event message
+        /// \return virtual void
+        ///
+        ///
+        virtual void HorusEventRestore(time_t ts, const wxString &op, const wxString &message) = 0;
 };
 
 class HorusEventDatabaseEventData;
@@ -85,11 +95,11 @@ class HorusDatabasePool
 
         /// \brief Initialize the pool, extract cartridges informations form cassette argument (and store cassette pointer)
         ///
-        /// \param  HorusCassette* cassette to attach to.
+        /// \param cassette HorusCassette* cassette to attach to.
         /// \return bool true on success
         ///
         ///
-        bool                            Initialize(HorusCassette *);
+        bool                            Initialize(HorusCassette *cassette);
 
         /// \brief Returns the database backup pathname.
         ///
@@ -108,46 +118,46 @@ class HorusDatabasePool
         /// \brief Reload pool information, fill the operator array and use HorusDatabaseEventRestore::HorusEventRestore()
         ///         while reloading cassette events.
         ///
-        /// \param  wxArrayOperator& destination operators array
-        /// \param  HorusDatabaseEventRestore* destination class for cassette events
+        /// \param operators wxArrayOperator& destination operators array
+        /// \param receiver HorusDatabaseEventRestore* destination class for cassette events
         /// \return bool true on success
         ///
         ///
-        bool                            ReloadData(wxArrayOperator &, HorusDatabaseEventRestore *);
+        bool                            ReloadData(wxArrayOperator &operators, HorusDatabaseEventRestore *receiver);
 
         /// \brief Update database values of given cartridge.
         ///
-        /// \param  HorusCartridge* source cartridge
+        /// \param cartridge HorusCartridge* source cartridge
         /// \return bool true on success
         ///
         ///
-        bool                            UpdateCartridge(HorusCartridge *);
+        bool                            UpdateCartridge(HorusCartridge *cartridge);
 
         /// \brief Add an operator in the pool
         ///
-        /// \param  const wxString& operator name
-        /// \param  const wxString& operator UUID
+        /// \param name const wxString& operator name
+        /// \param uuid const wxString& operator UUID
         /// \return bool true on success
         ///
         ///
-        bool                            AddOperator(const wxString &, const wxString &);
+        bool                            AddOperator(const wxString &name, const wxString &uuid);
 
         /// \brief Update operator name, identification defined by UUID
         ///
-        /// \param  const wxString& operator name
-        /// \param  const wxString& operator UUID
+        /// \param name const wxString& operator name
+        /// \param uuid const wxString& operator UUID
         /// \return bool
         ///
         ///
-        bool                            UpdateOperator(const wxString &, const wxString &);
+        bool                            UpdateOperator(const wxString &name, const wxString &uuid);
 
         /// \brief Delete an operator from the database
         ///
-        /// \param  const wxString& operator UUID
+        /// \param uuid const wxString& operator UUID
         /// \return bool true on success
         ///
         ///
-        bool                            DeleteOperator(const wxString &);
+        bool                            DeleteOperator(const wxString &uuid);
 
         /// \brief Returns cassette operator UUID
         ///
@@ -158,23 +168,23 @@ class HorusDatabasePool
 
         /// \brief Log an event in cassette database
         ///
-        /// \param time_t event timestamp
-        /// \param  const wxString& event operator
-        /// \param  const wxString& event text
+        /// \param ts time_t event timestamp
+        /// \param op const wxString& event operator
+        /// \param message const wxString& event text
         /// \return bool true on success
         ///
         ///
-        bool                            LogCassetteEvent(time_t, const wxString &, const wxString &);
+        bool                            LogCassetteEvent(time_t ts, const wxString &op, const wxString &message);
 
         /// \brief Define the docking cassette state, made by given operator. This member also handle backup of
         ///         previously docked cassette, and send a BACKUP event, if any.
         ///
-        /// \param bool docking state
-        /// \param  const wxString& operator UUID
+        /// \param docked bool docking state
+        /// \param uuid const wxString& operator UUID
         /// \return bool true on success
         ///
         ///
-        bool                            SetCassetteDocked(bool, const wxString &);
+        bool                            SetCassetteDocked(bool docked, const wxString &uuid);
 
         /// \brief Redock a previously docked cassette.
         ///
@@ -192,19 +202,19 @@ class HorusDatabasePool
 
         /// \brief Get cassette docking timestamp
         ///
-        /// \param  time_t& destination timestamp.
+        /// \param ts time_t& destination timestamp.
         /// \return bool true on success
         ///
         ///
-        bool                            GetCassetteDockTimeStamp(time_t &);
+        bool                            GetCassetteDockTimeStamp(time_t &ts);
 
         /// \brief Define "Keep On Stage" state flag
         ///
-        /// \param bool flag state
+        /// \param keep bool flag state
         /// \return bool true on success
         ///
         ///
-        bool                            SetKeepOnStage(bool);
+        bool                            SetKeepOnStage(bool keep);
 
         /// \brief Get "Keep On Stage" state flag
         ///

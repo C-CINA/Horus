@@ -82,9 +82,24 @@ class HorusAboutDialog: public wxDialog
 {
     public:
 
-        HorusAboutDialog(wxWindow* parent,wxWindowID id = -1);
+        /// \brief Constructor
+        ///
+        /// \param parent wxWindow* Parent window
+        /// \param id wxWindowID ID for this dialog
+        ///
+        ///
+        HorusAboutDialog(wxWindow* parent, wxWindowID id = wxID_ANY);
+
+        /// \brief Destructor
+        ///
         virtual ~HorusAboutDialog();
 
+        /// \brief Set window informations
+        ///
+        /// \param infos const HorusAboutInformations& Information structure filled by caller
+        /// \return void
+        ///
+        ///
         void                            SetInformations(const HorusAboutInformations &);
 
     private:

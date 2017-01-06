@@ -38,7 +38,7 @@ PROJECT_NAME           = Horus
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = 0.99.6.0
+PROJECT_NUMBER         = 0.99.8.0
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
@@ -790,7 +790,9 @@ INPUT                  = ../HorusApp.cpp \
                          ../src/hUtils.cpp \
                          ../include/HorusCassette.h \
                          ../include/HorusDatabasePool.h \
-                         ../include/hUtils.h
+                         ../include/hUtils.h \
+                         ../../HorusAbout/HorusAbout/HorusAboutMain.cpp \
+                         ../../HorusAbout/HorusAbout/HorusAboutMain.h
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses

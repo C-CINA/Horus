@@ -79,12 +79,6 @@ BEGIN_EVENT_TABLE(HorusAboutDialog,wxDialog)
     //*)
 END_EVENT_TABLE()
 
-/// \brief Constructor
-///
-/// \param parent wxWindow* Parent window
-/// \param id wxWindowID ID for this dialog
-///
-///
 HorusAboutDialog::HorusAboutDialog(wxWindow* parent, wxWindowID id)
 {
     //(*Initialize(HorusAboutDialog)
@@ -333,20 +327,12 @@ HorusAboutDialog::HorusAboutDialog(wxWindow* parent, wxWindowID id)
     SetInformations(info);
 }
 
-/// \brief Destructor
-///
 HorusAboutDialog::~HorusAboutDialog()
 {
     //(*Destroy(HorusAboutDialog)
     //*)
 }
 
-/// \brief Set window informations
-///
-/// \param infos const HorusAboutInformations& Information structure filled by caller
-/// \return void
-///
-///
 void HorusAboutDialog::SetInformations(const HorusAboutInformations &infos)
 {
     m_wtextProgramName->SetLabel(infos.Program.Name);
