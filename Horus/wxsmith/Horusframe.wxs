@@ -161,7 +161,7 @@
 																		<object class="sizeritem">
 																			<object class="wxBoxSizer" variable="BoxSizer28" member="no">
 																				<object class="sizeritem">
-																					<object class="wxPanel" name="ID_PANEL5" variable="Panel3" member="yes">
+																					<object class="wxPanel" name="ID_PANEL5" variable="m_wcartridgeNumPanel" member="yes">
 																						<bg>#FFFF80</bg>
 																						<style>wxSIMPLE_BORDER|wxTAB_TRAVERSAL</style>
 																						<object class="wxBoxSizer" variable="BoxSizer29" member="no">
@@ -176,7 +176,8 @@
 																									<tooltip>Cartridge loaded on the stage.</tooltip>
 																									<style>wxALIGN_CENTRE</style>
 																								</object>
-																								<flag>wxALIGN_LEFT</flag>
+																								<flag>wxTOP|wxBOTTOM|wxEXPAND</flag>
+																								<border>6</border>
 																							</object>
 																						</object>
 																					</object>
@@ -312,7 +313,6 @@
 												<object class="sizeritem">
 													<object class="wxRichTextCtrl" name="ID_RICHTEXTCTRL1" variable="m_wtextLogger" member="yes">
 														<attributes>wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_FACE|wxTEXT_ATTR_FONT_SIZE|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_FONT_ITALIC|wxTEXT_ATTR_FONT_UNDERLINE|wxTEXT_ATTR_FONT|wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT</attributes>
-														<tooltip>Event logger.</tooltip>
 														<style>wxRE_MULTILINE|wxRE_READONLY|wxSUNKEN_BORDER</style>
 													</object>
 													<flag>wxALL|wxEXPAND</flag>
@@ -486,7 +486,6 @@
 																				<object class="sizeritem">
 																					<object class="wxRichTextCtrl" name="ID_RICHTEXTCTRL2" variable="m_wbrowserText" member="yes">
 																						<attributes>wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_FACE|wxTEXT_ATTR_FONT_SIZE|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_FONT_ITALIC|wxTEXT_ATTR_FONT_UNDERLINE|wxTEXT_ATTR_FONT|wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT</attributes>
-																						<tooltip>Event logger.</tooltip>
 																						<style>wxRE_MULTILINE|wxRE_READONLY</style>
 																					</object>
 																					<flag>wxEXPAND</flag>
