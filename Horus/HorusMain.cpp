@@ -290,7 +290,6 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     rchtxtAttr_1.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_FACE|wxTEXT_ATTR_FONT_SIZE|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_FONT_ITALIC|wxTEXT_ATTR_FONT_UNDERLINE|wxTEXT_ATTR_FONT|wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT);
     rchtxtAttr_1.SetBulletStyle(wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT);
     m_wtextLogger->SetBasicStyle(rchtxtAttr_1);
-    m_wtextLogger->SetToolTip(_("Event logger."));
     BoxSizer9->Add(m_wtextLogger, 1, wxALL|wxEXPAND, 5);
     BoxSizer3->Add(BoxSizer9, 1, wxEXPAND, 5);
     m_wloggerPanel->SetSizer(BoxSizer3);
@@ -355,7 +354,6 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     rchtxtAttr_2.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_FACE|wxTEXT_ATTR_FONT_SIZE|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_FONT_ITALIC|wxTEXT_ATTR_FONT_UNDERLINE|wxTEXT_ATTR_FONT|wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT);
     rchtxtAttr_2.SetBulletStyle(wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT);
     m_wbrowserText->SetBasicStyle(rchtxtAttr_2);
-    m_wbrowserText->SetToolTip(_("Event logger."));
     BoxSizer26->Add(m_wbrowserText, 1, wxEXPAND, 5);
     StaticBoxSizer3->Add(BoxSizer26, 1, wxLEFT|wxRIGHT|wxEXPAND, 5);
     BoxSizer23->Add(StaticBoxSizer3, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5);
@@ -449,6 +447,9 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     // Create database pool object
     m_databases = new HorusDatabasePool(this);
 
+    // Freeze the RitchText logger
+    m_wtextLogger->Freeze();
+
     // Initialize the database pool
     if (m_databases->Initialize(m_cassette))
     {
@@ -517,6 +518,11 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
 
     // Delete splashscreen
     delete splash;
+
+    // Resume the RitchText logger
+    m_wtextLogger->SetInsertionPointEnd();
+    m_wtextLogger->Thaw();
+    m_wtextLogger->ScrollIntoView(m_wtextLogger->GetLastPosition(), /* WXK_PAGEDOWN */ WXK_END);
 
     // Show the main window
     CenterOnScreen();
@@ -588,11 +594,11 @@ inline void HorusFrame::_logEvent(wxRichTextCtrl *ctrl, time_t ts, const wxStrin
     // Widget is frozen
     if (frozen)
     {
-        // Move to the end of the text
-        ctrl->ScrollIntoView(ctrl->GetLastPosition(), /* WXK_PAGEDOWN */ WXK_END);
-
         // "Unfreeze"
         ctrl->Thaw();
+
+        // Move to the end of the text
+        ctrl->ScrollIntoView(ctrl->GetLastPosition(), /* WXK_PAGEDOWN */ WXK_END);
     }
 
     // Do we need to store the current informations to the database ?
