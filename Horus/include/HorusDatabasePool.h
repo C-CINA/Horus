@@ -123,7 +123,7 @@ class HorusDatabasePool
         /// \return bool true on success
         ///
         ///
-        bool                            ReloadData(wxArrayOperator &operators, HorusDatabaseEventRestore *receiver);
+        bool                            ReloadData(wxHorusArrayOperator &operators, HorusDatabaseEventRestore *receiver);
 
         /// \brief Update database values of given cartridge.
         ///
@@ -236,7 +236,7 @@ class HorusDatabasePool
         bool                            _updateCassetteOperator(const wxString &);
         wxString const                  _getCassetteOperator();
         bool                            _reloadCassette();
-        bool                            _reloadOperators(wxArrayOperator &);
+        bool                            _reloadOperators(wxHorusArrayOperator &);
         bool                            _reloadEvents(HorusDatabaseEventRestore *);
 
         bool                            _initializeDatabases();

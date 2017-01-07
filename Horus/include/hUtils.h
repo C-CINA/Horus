@@ -41,25 +41,56 @@
 class Operator
 {
     public:
-        Operator() : Name(wxEmptyString), UUID(wxEmptyString)
-        {
-        }
-
+        /// \brief Constructor
+        ///
+        /// \param name const wxString& operator name
+        /// \param uuid const wxString& operator uuid
+        ///
+        ///
         Operator(const wxString &name, const wxString &uuid) : Name(name), UUID(uuid)
         {
         }
 
+        /// \brief Destructor
+        ///
+        ///
+        ///
         ~Operator()
         {
         }
 
-        wxString Name;
-        wxString UUID;
+        wxString Name; ///< Operator name
+        wxString UUID; ///< Operator UUID
 };
 
-/// \brief Declaration of Operator dynamic array
+/// \class wxArrayOperator
+/// \inherit wxObjArray
+/// \brief Declaration of Operator dynamic array class, (see wxWidget::wxObjArray class)
 ///
 WX_DECLARE_OBJARRAY(Operator, wxArrayOperator);
+
+/// \brief Class wxHorusArrayOperator, extends wxArrayOperator class with embedded sorting feature
+///
+class wxHorusArrayOperator : public wxArrayOperator
+{
+    public:
+        /// \brief Sort operators alphabetically
+        ///
+        /// \return void
+        ///
+        ///
+        void                                SortOperators();
+
+    private:
+        /// \brief Sorting function, ignoring case.
+        ///
+        /// \param l Operator** first operator to compare to
+        /// \param h Operator** second operator to compare to
+        /// \return wxCMPFUNC_CONV compare result (see wxString::CmpNoCase());
+        ///
+        ///
+        static wxCMPFUNC_CONV               _compareOperators(Operator **l, Operator **h);
+};
 
 class hUtils
 {
@@ -119,15 +150,6 @@ class hUtils
         ///
         ///
         static wxString const           GetTimeStampString(time_t ts, bool fsfriendly);
-
-        /// \brief Comparator callback function, used by wxArrayOperator::Sort()
-        ///
-        /// \param l Operator** first operator
-        /// \param h Operator** second operator
-        /// \return wxCMPFUNC_CONV compare result
-        ///
-        ///
-        static wxCMPFUNC_CONV           CompareOperators(Operator **l, Operator **h);
 };
 
 #endif // HUTILS_H

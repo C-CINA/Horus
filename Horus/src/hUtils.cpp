@@ -141,15 +141,18 @@ wxString const hUtils::GetTimeStampString(time_t now, bool fsfriendly)
     return GetTimeStampString(dt, fsfriendly);
 }
 
-
-wxCMPFUNC_CONV hUtils::CompareOperators(Operator **l, Operator **h)
-{
-    return (*l)->Name.CmpNoCase((*h)->Name);
-}
-
-
 // Magic of Operator dynamic array is just below
 //
 #include <wx/arrimpl.cpp>
 WX_DEFINE_OBJARRAY(wxArrayOperator);
+
+void wxHorusArrayOperator::SortOperators()
+{
+    wxArrayOperator::Sort(_compareOperators);
+}
+
+wxCMPFUNC_CONV wxHorusArrayOperator::_compareOperators(Operator **l, Operator **h)
+{
+    return (*l)->Name.CmpNoCase((*h)->Name);
+}
 

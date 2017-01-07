@@ -93,7 +93,7 @@ wxWindowID HorusDatabasePool::GetId()
     return m_id;
 }
 
-bool HorusDatabasePool::ReloadData(wxArrayOperator &operators, HorusDatabaseEventRestore *receiver)
+bool HorusDatabasePool::ReloadData(wxHorusArrayOperator &operators, HorusDatabaseEventRestore *receiver)
 {
     if (!m_initialized)
         return false;
@@ -289,7 +289,7 @@ bool HorusDatabasePool::_rotateCassette(const wxString &uuid)
             updateStatement.Bind(2, static_cast<int>(dt.GetTicks()));
             updateStatement.BindBool(3, false);
 
-            int ret = updateStatement.ExecuteUpdate();
+            /*int ret =*/(void) updateStatement.ExecuteUpdate();
 
             //wxLogStatus(updateStatement.GetSQL());
             //wxLogStatus(wxT("CassetteFunerals Updated: ") + wxString::Format(wxT("%d"), ret));
@@ -330,7 +330,7 @@ bool HorusDatabasePool::_rotateCassette(const wxString &uuid)
 
             updateStatement.Bind(1, 0);
 
-            int ret = updateStatement.ExecuteUpdate();
+            /*int ret =*/ (void) updateStatement.ExecuteUpdate();
 
             //wxLogStatus(updateStatement.GetSQL());
             //wxLogStatus(wxT("CassetteDockTS Updated: ") + wxString::Format(wxT("%d"), ret));
@@ -393,7 +393,7 @@ bool HorusDatabasePool::_rotateCassette(const wxString &uuid)
             insertStatement.Bind(3, op);
             insertStatement.Bind(4, text);
 
-            int ret = insertStatement.ExecuteUpdate();
+            /*int ret =*/ (void) insertStatement.ExecuteUpdate();
         }
 
         state = 8;
@@ -762,7 +762,7 @@ bool HorusDatabasePool::_reloadCassette()
     return ok;
 }
 
-bool HorusDatabasePool::_reloadOperators(wxArrayOperator &operators)
+bool HorusDatabasePool::_reloadOperators(wxHorusArrayOperator &operators)
 {
     bool    ok = true;
     size_t  opsCnt = static_cast<size_t>(m_dbOperators.ExecuteScalar("SELECT COUNT(*) FROM operators;"));
@@ -805,7 +805,7 @@ bool HorusDatabasePool::_reloadOperators(wxArrayOperator &operators)
         //wxLogStatus(wxT("OperatorCount: ") + wxString::Format(wxT("%zu"), operatorCount));
     }
 
-    operators.Sort(&hUtils::CompareOperators);
+    operators.SortOperators();
 
     return ok;
 }
@@ -1271,7 +1271,7 @@ bool HorusDatabasePool::_fillCartridgesData()
         insertStatement.BindBool(3, false);
         insertStatement.BindBool(4, false);
 
-        int ret = insertStatement.ExecuteUpdate();
+        /*int ret =*/ (void) insertStatement.ExecuteUpdate();
 
         ////wxLogStatus(wxT("SQL: ") + insertStatement.GetSQL());
         //wxLogStatus(wxT("dockTS and Docked Inserted: ") + wxString::Format(wxT("%d"), ret));
@@ -1307,7 +1307,7 @@ bool HorusDatabasePool::_fillCartridgesData()
                 insertStatement.BindBool(4, slot->GetEmptyFlag());
                 insertStatement.BindBool(5, slot->GetLoaded());
 
-                int ret = insertStatement.ExecuteUpdate();
+                /*int ret =*/ (void) insertStatement.ExecuteUpdate();
 
                 ////wxLogStatus(wxT("SQL: ") + insertStatement.GetSQL());
                 //wxLogStatus(wxT("Cartridge Inserted: ") + wxString::Format(wxT("%d"), ret));

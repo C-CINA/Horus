@@ -189,7 +189,7 @@ class HorusFrame: public wxFrame, HorusDatabaseEventRestore
         ///
         /// \param ts time_t event timestamp
         /// \param op const wxString& event operator
-        /// \param msg const wxString& event text
+        /// \param message const wxString& event text
         /// \return void
         ///
         ///
@@ -228,7 +228,7 @@ class HorusFrame: public wxFrame, HorusDatabaseEventRestore
         ///
         /// \param parent wxTreeItemId parent ID
         /// \param name const wxString& text string to find
-        /// \return wxTreeItemId found ID, ::IsOk() == true if found.
+        /// \return wxTreeItemId found ID, wxTreeItemId::IsOk() == true if found.
         ///
         ///
         wxTreeItemId                    _getItemID(wxTreeItemId parent, const wxString &name);
@@ -349,7 +349,7 @@ class HorusFrame: public wxFrame, HorusDatabaseEventRestore
 
         HorusCassette                  *m_cassette; ///< Cassette object
         HorusDatabasePool              *m_databases; ///< Database pool object
-        wxArrayOperator                 m_operators; ///< Operators list
+        wxHorusArrayOperator            m_operators; ///< Operators list
         bool                            m_eventLoggerLockout; ///< lockout events from database, used on database reload.
 
         DECLARE_EVENT_TABLE()
