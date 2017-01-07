@@ -37,6 +37,8 @@
 #include "HorusMain.h"
 
 //(*InternalHeaders(HorusFrame)
+#include <wx/settings.h>
+#include <wx/font.h>
 #include <wx/intl.h>
 #include <wx/string.h>
 //*)
@@ -85,6 +87,7 @@ const long HorusFrame::ID_STATICTEXT3 = wxNewId();
 const long HorusFrame::ID_SCROLLEDWINDOW1 = wxNewId();
 const long HorusFrame::ID_STATICTEXT1 = wxNewId();
 const long HorusFrame::ID_STATICTEXT2 = wxNewId();
+const long HorusFrame::ID_PANEL5 = wxNewId();
 const long HorusFrame::ID_CHECKBOX1 = wxNewId();
 const long HorusFrame::ID_BUTTON2 = wxNewId();
 const long HorusFrame::ID_SCROLLEDWINDOW2 = wxNewId();
@@ -137,6 +140,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     wxBoxSizer* BoxSizer4;
     wxStaticBoxSizer* StaticBoxSizer2;
     wxBoxSizer* BoxSizer6;
+    wxBoxSizer* BoxSizer29;
     wxBoxSizer* BoxSizer19;
     wxBoxSizer* BoxSizer15;
     wxBoxSizer* BoxSizer20;
@@ -156,6 +160,7 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     wxBoxSizer* BoxSizer16;
     wxBoxSizer* BoxSizer12;
     wxBoxSizer* BoxSizer18;
+    wxBoxSizer* BoxSizer28;
     wxBoxSizer* BoxSizer14;
     wxStaticBoxSizer* StaticBoxSizer3;
     wxStaticBoxSizer* StaticBoxSizer6;
@@ -222,9 +227,22 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     BoxSizer7 = new wxBoxSizer(wxHORIZONTAL);
     StaticText1 = new wxStaticText(m_wloggerPanel, ID_STATICTEXT1, _("Loaded Cartridge: "), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT, _T("ID_STATICTEXT1"));
     BoxSizer7->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_wcartridgeNum = new wxStaticText(m_wloggerPanel, ID_STATICTEXT2, _("<NONE>"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
+    BoxSizer28 = new wxBoxSizer(wxHORIZONTAL);
+    m_wcartridgeNumPanel = new wxPanel(m_wloggerPanel, ID_PANEL5, wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER|wxTAB_TRAVERSAL, _T("ID_PANEL5"));
+    m_wcartridgeNumPanel->SetBackgroundColour(wxColour(255,255,128));
+    BoxSizer29 = new wxBoxSizer(wxHORIZONTAL);
+    m_wcartridgeNum = new wxStaticText(m_wcartridgeNumPanel, ID_STATICTEXT2, _("<NONE>"), wxDefaultPosition, wxSize(80,-1), wxALIGN_CENTRE, _T("ID_STATICTEXT2"));
+    wxFont m_wcartridgeNumFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    if ( !m_wcartridgeNumFont.Ok() ) m_wcartridgeNumFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    m_wcartridgeNumFont.SetWeight(wxFONTWEIGHT_BOLD);
+    m_wcartridgeNum->SetFont(m_wcartridgeNumFont);
     m_wcartridgeNum->SetToolTip(_("Cartridge loaded on the stage."));
-    BoxSizer7->Add(m_wcartridgeNum, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    BoxSizer29->Add(m_wcartridgeNum, 0, wxTOP|wxBOTTOM|wxEXPAND, 6);
+    m_wcartridgeNumPanel->SetSizer(BoxSizer29);
+    BoxSizer29->Fit(m_wcartridgeNumPanel);
+    BoxSizer29->SetSizeHints(m_wcartridgeNumPanel);
+    BoxSizer28->Add(m_wcartridgeNumPanel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    BoxSizer7->Add(BoxSizer28, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     m_wstageSizer->Add(BoxSizer7, 0, wxALL|wxEXPAND, 5);
     BoxSizer17 = new wxBoxSizer(wxHORIZONTAL);
     m_wscrolledStage = new wxScrolledWindow(m_wloggerPanel, ID_SCROLLEDWINDOW2, wxDefaultPosition, wxDefaultSize, wxVSCROLL|wxHSCROLL, _T("ID_SCROLLEDWINDOW2"));
@@ -445,6 +463,9 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
 
             m_wunloadStage->Enable(true);
             m_wcartridgeNum->SetLabel(wxString::Format(wxT("%zu"), slot->GetNumber()));
+            m_wcartridgeNum->SetForegroundColour(wxColour(255, 255, 255));
+            m_wcartridgeNumPanel->SetBackgroundColour(wxColour(255, 0, 0));
+            m_wcartridgeNumPanel->Refresh();
         }
     }
 
@@ -1001,6 +1022,9 @@ void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
             case HORUS_EVENT_CARTRIDGE_LOAD:
                 //wxLogStatus(wxT("  ** Cartridge LOADED: ") + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()));
                 m_wcartridgeNum->SetLabel(wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()));
+                m_wcartridgeNumPanel->SetBackgroundColour(wxColour(255, 0, 0));
+                m_wcartridgeNum->SetForegroundColour(wxColour(255, 255, 255));
+                m_wcartridgeNumPanel->Refresh();
 
                 _logEvent(m_wtextLogger, data->TimeStamp, m_woperatorChoice->GetString(m_woperatorChoice->GetSelection()), wxT("Cartridge #")
                           + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()) + wxT(" loaded."), true);
@@ -1013,6 +1037,9 @@ void HorusFrame::OnCassetteEvent(wxCommandEvent &event)
             case HORUS_EVENT_CARTRIDGE_UNLOAD:
                 //wxLogStatus(wxT("  ** Cartridge UNLOADED: ") + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()));
                 m_wcartridgeNum->SetLabel(wxT("<NONE>"));
+                m_wcartridgeNumPanel->SetBackgroundColour(wxColour(255,255,128));
+                m_wcartridgeNum->SetForegroundColour(wxColour(0, 0, 0));
+                m_wcartridgeNumPanel->Refresh();
 
                 _logEvent(m_wtextLogger, data->TimeStamp, m_woperatorChoice->GetString(m_woperatorChoice->GetSelection()), wxT("Cartridge #")
                           + wxString::Format(wxT("%zu"), data->Cartridge->GetNumber()) + wxT(" unloaded."), true);

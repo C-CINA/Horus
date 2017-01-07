@@ -222,6 +222,7 @@ class HorusCartridge: public wxPanel
         ///
         void                            OnKeepIt(wxCommandEvent &event);
 
+#if 0
         /// \brief Load toggle button event receiver
         ///
         /// \param event wxCommandEvent& event
@@ -229,6 +230,15 @@ class HorusCartridge: public wxPanel
         ///
         ///
         void                            OnToggleLoad(wxCommandEvent &event);
+#endif // 0
+
+        /// \brief Catch mouse right down event to reflect wxBitmapToggleButton after confirmation and not before.
+        ///
+        /// \param event wxMouseEvent& event
+        /// \return void
+        ///
+        ///
+        void                            OnRightDown(wxMouseEvent& event);
 
         /// \brief Define the busy state and send event after text is altered
         ///

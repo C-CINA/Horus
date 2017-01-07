@@ -159,13 +159,34 @@
 																			<option>1</option>
 																		</object>
 																		<object class="sizeritem">
-																			<object class="wxStaticText" name="ID_STATICTEXT2" variable="m_wcartridgeNum" member="yes">
-																				<label>&lt;NONE&gt;</label>
-																				<tooltip>Cartridge loaded on the stage.</tooltip>
+																			<object class="wxBoxSizer" variable="BoxSizer28" member="no">
+																				<object class="sizeritem">
+																					<object class="wxPanel" name="ID_PANEL5" variable="Panel3" member="yes">
+																						<bg>#FFFF80</bg>
+																						<style>wxSIMPLE_BORDER|wxTAB_TRAVERSAL</style>
+																						<object class="wxBoxSizer" variable="BoxSizer29" member="no">
+																							<object class="sizeritem">
+																								<object class="wxStaticText" name="ID_STATICTEXT2" variable="m_wcartridgeNum" member="yes">
+																									<label>&lt;NONE&gt;</label>
+																									<size>80,-1</size>
+																									<font>
+																										<weight>bold</weight>
+																										<sysfont>wxSYS_DEFAULT_GUI_FONT</sysfont>
+																									</font>
+																									<tooltip>Cartridge loaded on the stage.</tooltip>
+																									<style>wxALIGN_CENTRE</style>
+																								</object>
+																								<flag>wxALIGN_LEFT</flag>
+																							</object>
+																						</object>
+																					</object>
+																					<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+																					<border>5</border>
+																					<option>1</option>
+																				</object>
 																			</object>
 																			<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 																			<border>5</border>
-																			<option>1</option>
 																		</object>
 																	</object>
 																	<flag>wxALL|wxEXPAND</flag>
@@ -523,7 +544,6 @@
 				<label>Help</label>
 				<object class="wxMenuItem" name="idMenuAbout" variable="MenuItem2" member="no">
 					<label>About</label>
-					<accel>F1</accel>
 					<help>Show info about this application</help>
 					<handler function="OnAbout" entry="EVT_MENU" />
 				</object>

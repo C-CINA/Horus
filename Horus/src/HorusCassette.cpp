@@ -119,8 +119,8 @@ HorusCartridge::HorusCartridge(HorusCassette *cassette, wxWindow *parent, size_t
     Connect(m_text->GetId(), wxEVT_COMMAND_TEXT_UPDATED, (wxObjectEventFunction)&HorusCartridge::OnText);
     Connect(m_empty->GetId(), wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&HorusCartridge::OnEmpty);
     Connect(m_keepIt->GetId(), wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&HorusCartridge::OnKeepIt);
-    Connect(m_loadToggle->GetId(), wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, (wxObjectEventFunction)&HorusCartridge::OnToggleLoad);
-
+    //Connect(m_loadToggle->GetId(), wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, (wxObjectEventFunction)&HorusCartridge::OnToggleLoad);
+    m_loadToggle->Connect(m_loadToggle->GetId(), wxEVT_LEFT_DOWN, (wxObjectEventFunction)&HorusCartridge::OnRightDown, NULL, this);
 
     _setState(m_state);
 }
@@ -274,11 +274,23 @@ void HorusCartridge::OnKeepIt(wxCommandEvent &event)
     event.Skip();
 }
 
+#if 0
 void HorusCartridge::OnToggleLoad(wxCommandEvent &event)
 {
-    Load(m_loadToggle->GetValue());
+    wxLogStatus(wxT("POUET"));
+    if (Load(m_loadToggle->GetValue()))
+        event.Skip();
+}
+#endif
 
-    event.Skip();
+void HorusCartridge::OnRightDown(wxMouseEvent& event)
+{
+    event.LeftUp();
+
+    // Need to invert GetValue() since the toggle button is not toggled yet because we
+    // catch got Down event.
+    if (! Load(! m_loadToggle->GetValue()))
+        event.Skip();
 }
 
 void HorusCartridge::_changeText(const wxString &str)

@@ -283,6 +283,7 @@ class HorusFrame: public wxFrame, HorusDatabaseEventRestore
         static const long ID_SCROLLEDWINDOW1;
         static const long ID_STATICTEXT1;
         static const long ID_STATICTEXT2;
+        static const long ID_PANEL5;
         static const long ID_CHECKBOX1;
         static const long ID_BUTTON2;
         static const long ID_SCROLLEDWINDOW2;
@@ -331,6 +332,7 @@ class HorusFrame: public wxFrame, HorusDatabaseEventRestore
         wxButton* m_wdockCassette;
         wxScrolledWindow* m_wscrolledCartridges;
         wxPanel* m_wloggerPanel;
+        wxPanel* m_wcartridgeNumPanel;
         wxRichTextCtrl* m_wbrowserText;
         wxGrid* m_wbrowserGrid;
         wxStatusBar* StatusBar1;
