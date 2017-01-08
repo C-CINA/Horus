@@ -6,23 +6,23 @@
 #define HORUS_UUID "{ab4c052f-2a67-46ac-ab32-b00f6e56ea2c}"
 
 [Setup]
-AppName=Horus Logger
-UninstallDisplayName=Horus Logger
+AppName=Horus
+UninstallDisplayName=Horus, a Cassette Logger
 AppID={{#HORUS_UUID}
 AppVersion={#HORUS_VERSION}
 AppCopyright=Copyright (C) 2016-2017 Daniel Caujolle-Bert, BioEM Lab.
 AppPublisher=BioEM Lab.
 AppPublisherURL=https://c-cina.unibas.ch/bioem/
-AppComments=Horus Logger {#HORUS_VERSION} {code:Architecture}
+AppComments=Horus {#HORUS_VERSION} {code:Architecture}
 ;AppUpdatesURL=http://www.example.com/updates.html
 ;AppContact=My Company Customer Support
 LicenseFile=LICENSE.txt
 WizardImageFile="Logos\BioEM-Lab-Vertical.bmp"
 WizardSmallImageFile="Logos\Horus-Icon55_58.bmp"
 SetupIconFile="Logos\Horus-Icon64.ico"
-OutputBaseFilename=Horus-Logger-{#HORUS_VERSION}-x64
-DefaultDirName={pf}\Horus Logger
-DefaultGroupName=Horus Logger
+OutputBaseFilename=Horus-{#HORUS_VERSION}-x64
+DefaultDirName={pf}\Horus
+DefaultGroupName=Horus
 UninstallDisplayIcon={uninstallexe}
 Compression=lzma2
 SolidCompression=yes
@@ -43,18 +43,18 @@ ArchitecturesInstallIn64BitMode=x64
 Source: "Horus\bin\Release\Horus.exe"; DestDir: "{app}"; DestName: "Horus.exe"; Check: Is64BitInstallMode
 Source: "Horus\releaselibs_x64\*.dll"; DestDir: "{app}"; Check: Is64BitInstallMode
 ; Place all common files here, first one should be marked 'solidbreak'
-Source: "LICENSE.txt"; DestDir: "{app}"; DestName: "Tool-LICENSE.txt"; Check: Is64BitInstallMode
+Source: "LICENSE.txt"; DestDir: "{app}"; DestName: "Horus-LICENSE.txt"; Check: Is64BitInstallMode
 
 [Icons]
-Name: "{group}\Horus Logger"; Filename: "{app}\Horus.exe"
-Name: "{commondesktop}\Horus Logger"; Filename: "{app}\Horus.exe"; Comment: "Horus Logger"
-Name: "{group}\Uninstall Horus Logger"; Filename: "{uninstallexe}"
+Name: "{group}\Horus"; Filename: "{app}\Horus.exe"
+Name: "{commondesktop}\Horus"; Filename: "{app}\Horus.exe"; Comment: "Horus Logger"
+Name: "{group}\Uninstall Horus"; Filename: "{uninstallexe}"
 Name: "{group}\Horus's License"; Filename: "{app}\Horus-LICENSE.txt"
 
 [Run]
 ;// User selected... these files are shown for launch after everything is done
 ;Filename: {app}\README.TXT; Description: View the README file; Flags: postinstall shellexec skipifsilent
-Filename: "{app}\Horus.exe"; Description: Start Horus Logger; Flags: postinstall nowait skipifsilent unchecked
+Filename: "{app}\Horus.exe"; Description: Start Horus; Flags: postinstall nowait skipifsilent unchecked
 
 [Code]
 // Some constants decl.
@@ -110,7 +110,7 @@ begin
           
           if (CompareVersion(oldVersion, HorusVersion) <> 0) then
               begin
-                  //MsgBox('Uninstall version ' + oldVersion + ' of Horus Logger', mbInformation, MB_OK);    
+                  //MsgBox('Uninstall version ' + oldVersion + ' of Horus', mbInformation, MB_OK);    
 
                   RegQueryStringValue(HKEY_LOCAL_MACHINE, RegKey, 'UninstallString', uninstaller);
                   ShellExec('runas', uninstaller, '/SILENT', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
@@ -120,14 +120,14 @@ begin
           else
               begin
               
-                  MsgBox('Version ' + oldVersion + ' of Horus Logger is already installed.'+#13#10+'This installer will exit.', mbInformation, MB_OK);    
+                  MsgBox('Version ' + oldVersion + ' of Horus is already installed.'+#13#10+'This installer will exit.', mbInformation, MB_OK);    
                   Result := False;
                   
               end;
       end
   else
       begin
-          //MsgBox('No uninstall of Horus Logger', mbInformation, MB_OK);    
+          //MsgBox('No uninstall of Horus', mbInformation, MB_OK);    
           Result := True;
       end;
 end;
