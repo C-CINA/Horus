@@ -1,7 +1,7 @@
 ; -- Horus.iss --
 ; Cassette logger for FEI's Polara microscope
 
-#define HORUS_VERSION "0.99.10.0"
+#define HORUS_VERSION "0.99.11.0"
 ;; [guid]::NewGuid()
 #define HORUS_UUID "{ab4c052f-2a67-46ac-ab32-b00f6e56ea2c}"
 
