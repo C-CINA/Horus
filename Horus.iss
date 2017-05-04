@@ -1,14 +1,14 @@
 ; -- Horus.iss --
 ; Cassette logger for FEI's Polara microscope
 
-#define HORUS_VERSION "0.99.11.0"
+#define HORUS_VERSION "0.99.20.0"
 ;; [guid]::NewGuid()
-#define HORUS_UUID "{ab4c052f-2a67-46ac-ab32-b00f6e56ea2c}"
+#define HORUS_GUID "{ab4c052f-2a67-46ac-ab32-b00f6e56ea2c}"
 
 [Setup]
 AppName=Horus
 UninstallDisplayName=Horus, a Cassette Logger
-AppID={{#HORUS_UUID}
+AppID={{#HORUS_GUID}
 AppVersion={#HORUS_VERSION}
 AppCopyright=Copyright (C) 2016-2017 Daniel Caujolle-Bert, BioEM Lab.
 AppPublisher=BioEM Lab.
@@ -59,7 +59,7 @@ Filename: "{app}\Horus.exe"; Description: Start Horus; Flags: postinstall nowait
 [Code]
 // Some constants decl.
 const
-    RegKey = 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\' + '{#HORUS_UUID}' + '_is1';
+    RegKey = 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\' + '{#HORUS_GUID}' + '_is1';
     HorusVersion = '{#HORUS_VERSION}';
 
 // Returns architecture string
