@@ -388,6 +388,12 @@ HorusFrame::HorusFrame(wxWindow* parent,wxWindowID id) : m_eventLoggerLockout(fa
     StatusBar1->SetFieldsCount(1,__wxStatusBarWidths_1);
     StatusBar1->SetStatusStyles(1,__wxStatusBarStyles_1);
     SetStatusBar(StatusBar1);
+    m_wSingleInstanceChecker.Create(wxTheApp->GetAppName() + _T("_") + wxGetUserId() + _T("_Guard"));
+    if (m_wSingleInstanceChecker.IsAnotherRunning())
+    {
+       hUtils::RaiseWindowNamed(wxGetApp().GetAppName() + wxT(" "));
+       exit(1);
+    }
     BoxSizer1->Fit(this);
     BoxSizer1->SetSizeHints(this);
 

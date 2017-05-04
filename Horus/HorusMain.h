@@ -38,15 +38,18 @@
 #include <wx/treectrl.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
+#include <wx/app.h>
 #include <wx/menu.h>
 #include <wx/checkbox.h>
 #include <wx/splitter.h>
 #include <wx/aui/aui.h>
 #include <wx/panel.h>
 #include <wx/grid.h>
+#include <wx/snglinst.h>
 #include <wx/choice.h>
 #include <wx/richtext/richtextctrl.h>
 #include <wx/button.h>
+#include <wx/utils.h>
 #include <wx/frame.h>
 #include <wx/statusbr.h>
 //*)
@@ -322,6 +325,7 @@ class HorusFrame: public wxFrame, HorusDatabaseEventRestore
         wxStaticBoxSizer* m_wcassetteSizer;
         wxButton* m_wundockCassette;
         wxButton* m_wtreeCollapseAll;
+        wxSingleInstanceChecker m_wSingleInstanceChecker;
         wxStaticText* m_wbrowserFuneral;
         wxStaticText* m_wcartridgeNum;
         wxButton* m_wunloadStage;

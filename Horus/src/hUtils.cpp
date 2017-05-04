@@ -141,6 +141,67 @@ wxString const hUtils::GetTimeStampString(time_t now, bool fsfriendly)
     return GetTimeStampString(dt, fsfriendly);
 }
 
+/// \brief Callback function used by RaiseWindowNamed
+///
+/// \param hWnd HWND
+/// \param lParam LPARAM
+/// \return BOOL CALLBACK
+///
+///
+static BOOL CALLBACK _enumWindowsProc(HWND hWnd, LPARAM lParam)
+{
+    BOOL    ret = TRUE;
+    TCHAR  *buffer;
+    int     length;
+
+    if ((length = ::GetWindowTextLength(hWnd))== 0)
+        return ret;
+
+    buffer = new TCHAR[length + 1];
+
+    memset(buffer, 0, (length + 1) * sizeof(TCHAR));
+
+    if (::GetWindowText(hWnd, buffer, length + 1) > 0)
+    {
+        TCHAR *str = reinterpret_cast<TCHAR *>(lParam);
+
+        if (_tcsncmp(buffer, str, _tcslen(str)) == 0)
+        {
+            if (::IsIconic(hWnd))
+            {
+                //::OpenIcon(hWnd);
+                ShowWindow(hWnd, SW_RESTORE);
+            }
+
+            SetForegroundWindow(hWnd);
+            SetFocus(hWnd);
+
+            ret = FALSE;
+        }
+    }
+
+    delete[] buffer;
+
+    return ret;
+}
+
+bool hUtils::RaiseWindowNamed(const wxString &windowName)
+{
+    const wxChar   *wcchar = windowName.c_str();
+    TCHAR          *buf    = new TCHAR[windowName.Len() + 1];
+
+    for (size_t i = 0; i < windowName.Len(); i++)
+        buf[i] = wcchar[i];
+
+    buf[windowName.Len()] = _T('\0'); // NULL ending
+
+    BOOL success = EnumWindows(_enumWindowsProc, reinterpret_cast<LPARAM>(buf));
+
+    delete[] buf;
+
+    return (success == FALSE); // Reverse logic
+}
+
 // Magic of Operator dynamic array is just below
 //
 #include <wx/arrimpl.cpp>

@@ -150,6 +150,15 @@ class hUtils
         ///
         ///
         static wxString const           GetTimeStampString(time_t ts, bool fsfriendly);
+
+        /// \brief Raise a window, identified by its name (only first windowName::Len() is compared)
+        ///
+        /// \param windowName const wxString& window name
+        /// \return bool true if found and raised, otherwise false
+        ///
+        ///
+        static bool                     RaiseWindowNamed(const wxString &windowName);
+
 };
 
 #endif // HUTILS_H

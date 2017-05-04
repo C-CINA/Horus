@@ -553,5 +553,8 @@
 			<widths>-1</widths>
 			<styles>wxSB_NORMAL</styles>
 		</object>
+		<object class="wxSingleInstanceChecker" variable="m_wSingleInstanceChecker" member="yes">
+			<extra_code>if (m__wSingleInstanceChecker.IsAnotherRunning())&#x0A;{&#x0A;   hUtils::RaiseWindowNamed(wxGetApp().GetAppName() + wxT(&quot; &quot;));&#x0A;   exit(1);&#x0A;}&#x0A;</extra_code>
+		</object>
 	</object>
 </wxsmith>

@@ -22,10 +22,10 @@
 					<Add directory="C:/wxWidgets-3.0.2-libs/lib/gcc_x64_dll/mswud" />
 				</ResourceCompiler>
 				<Linker>
+					<Add library="libwxsqlite3_msw30ud.a" />
 					<Add library="libwxmsw30ud_aui.a" />
 					<Add library="libwxmsw30ud_richtext.a" />
 					<Add library="libwxmsw30ud_core.a" />
-					<Add library="wxcode_msw30ud_wxsqlite3" />
 					<Add library="libwxmsw30ud_adv.a" />
 					<Add library="libwxbase30ud.a" />
 					<Add library="libwxpngd.a" />
@@ -41,6 +41,7 @@
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-DwxDEBUG_LEVEL=0" />
 					<Add directory="C:/wxWidgets-3.0.2-libs/lib/gcc_x64_dll/mswu" />
 					<Add directory="include" />
 				</Compiler>
@@ -49,10 +50,10 @@
 				</ResourceCompiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="libwxsqlite3_msw30u.a" />
 					<Add library="libwxmsw30u_aui.a" />
 					<Add library="libwxmsw30u_richtext.a" />
 					<Add library="libwxmsw30u_core.a" />
-					<Add library="wxcode_msw30u_wxsqlite3" />
 					<Add library="libwxmsw30u_adv.a" />
 					<Add library="libwxbase30u.a" />
 					<Add library="libwxpng.a" />
