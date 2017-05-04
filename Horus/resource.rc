@@ -7,18 +7,15 @@ HORUSLOGO RCDATA                   "../Logos/Horus-Icon128.png"
 BIOEMLABLOGO RCDATA                "../Logos/BioEM-Lab-small2.png"
 CINALOGO RCDATA                    "../Logos/C-Cina_Logo-Black.png"
 BIOZLOGO RCDATA                    "../Logos/BizentrumLogo-small.png"
+
 SPLASH RCDATA                      "images/Splash.png"
+
 TOGGLE_IN RCDATA                   "images/IN.png"
 TOGGLE_OUT RCDATA                  "images/OUT.png"
 TOGGLE_OUT_DISABLED RCDATA         "images/OUT_DISABLED.png"
 TOGGLE_IN_NOTHEME RCDATA           "images/IN-NOTHEME.png"
 TOGGLE_OUT_NOTHEME RCDATA          "images/OUT-NOTHEME.png"
 TOGGLE_OUT_DISABLED_NOTHEME RCDATA "images/OUT_DISABLED-NOTHEME.png"
-
-//ZUULLOGO    RCDATA "../Logos/Zuul-Icon128.png"
-//BIOEMLABLOGO    RCDATA  "../Logos/BioEM-Lab-small2.png"
-//CINALOGO    RCDATA  "../Logos/C-Cina_Logo-Black.png"
-//BIOZLOGO    RCDATA  "../Logos/BizentrumLogo-small.png"
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
@@ -39,7 +36,7 @@ VS_VERSION_INFO    VERSIONINFO
   {
     BLOCK "040904E4" // Lang=US English, CharSet=Windows Multilingual
     {
-      VALUE "Build",            "January 2017\0"
+      VALUE "Build",            "May 2017\0"
       VALUE "Comments",         "Free.\0"
       VALUE "CompanyName",      "BioEM Lab\0"
       VALUE "Developer",        "Daniel Caujolle-Bert\0"
