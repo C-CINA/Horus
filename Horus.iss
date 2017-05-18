@@ -5,6 +5,14 @@
 ;; [guid]::NewGuid()
 #define HORUS_GUID "{ab4c052f-2a67-46ac-ab32-b00f6e56ea2c}"
 
+;; g++ libs
+#define CLIBS_X64_DIR "C:\Program Files\mingw-w64\x86_64-6.2.0-posix-seh-rt_v5-rev1\mingw64\x86_64-w64-mingw32\lib"
+;; Used LIBS: libgcc_s_seh-1.dll libstdc++-6.dll libwinpthread-1.dll
+;; -- wxWidgets
+#define WXLIBS_X64_DIR "C:\wxWidgets-3.0.2-libs\lib\gcc_x64_dll"
+;; Used LIBS: wxbase30u_gcc_custom.dll wxbase30u_xml_gcc_custom.dll wxmsw30u_adv_gcc_custom.dll wxmsw30u_aui_gcc_custom.dll wxmsw30u_core_gcc_custom.dll wxmsw30u_html_gcc_custom.dll wxmsw30u_richtext_gcc_custom.dll wxsqlite3_msw30u.dll
+
+
 [Setup]
 AppName=Horus
 UninstallDisplayName=Horus, a Cassette Logger
@@ -41,8 +49,21 @@ ArchitecturesInstallIn64BitMode=x64
 [Files]
 ; Place all x86 files here, first one should be marked 'solidbreak'
 Source: "Horus\bin\Release\Horus.exe"; DestDir: "{app}"; DestName: "Horus.exe"; Check: Is64BitInstallMode
-Source: "Horus\releaselibs_x64\*.dll"; DestDir: "{app}"; Check: Is64BitInstallMode
-; Place all common files here, first one should be marked 'solidbreak'
+;; g++ Runtime
+Source: "{#CLIBS_X64_DIR}\libgcc_s_seh-1.dll"; DestDir: "{app}"; Flags: sharedfile onlyifdoesntexist; Check: Is64BitInstallMode
+Source: "{#CLIBS_X64_DIR}\libstdc++-6.dll"; DestDir: "{app}"; Flags: sharedfile onlyifdoesntexist; Check: Is64BitInstallMode
+Source: "{#CLIBS_X64_DIR}\libwinpthread-1.dll"; DestDir: "{app}"; Flags: sharedfile onlyifdoesntexist; Check: Is64BitInstallMode
+;; wxWidgets
+Source: "{#WXLIBS_X64_DIR}\wxbase30u_gcc_custom.dll"; DestDir: "{app}"; Flags: sharedfile onlyifdoesntexist; Check: Is64BitInstallMode
+Source: "{#WXLIBS_X64_DIR}\wxbase30u_xml_gcc_custom.dll"; DestDir: "{app}"; Flags: sharedfile onlyifdoesntexist; Check: Is64BitInstallMode
+Source: "{#WXLIBS_X64_DIR}\wxmsw30u_adv_gcc_custom.dll"; DestDir: "{app}"; Flags: sharedfile onlyifdoesntexist; Check: Is64BitInstallMode
+Source: "{#WXLIBS_X64_DIR}\wxmsw30u_aui_gcc_custom.dll"; DestDir: "{app}"; Flags: sharedfile onlyifdoesntexist; Check: Is64BitInstallMode
+Source: "{#WXLIBS_X64_DIR}\wxmsw30u_core_gcc_custom.dll"; DestDir: "{app}"; Flags: sharedfile onlyifdoesntexist; Check: Is64BitInstallMode
+Source: "{#WXLIBS_X64_DIR}\wxmsw30u_html_gcc_custom.dll"; DestDir: "{app}"; Flags: sharedfile onlyifdoesntexist; Check: Is64BitInstallMode
+Source: "{#WXLIBS_X64_DIR}\wxmsw30u_richtext_gcc_custom.dll"; DestDir: "{app}"; Flags: sharedfile onlyifdoesntexist; Check: Is64BitInstallMode
+Source: "{#WXLIBS_X64_DIR}\wxsqlite3_msw30u.dll"; DestDir: "{app}"; Flags: sharedfile onlyifdoesntexist; Check: Is64BitInstallMode
+;;
+;; Place all common files here, first one should be marked 'solidbreak'
 Source: "LICENSE.txt"; DestDir: "{app}"; DestName: "Horus-LICENSE.txt"; Check: Is64BitInstallMode
 
 [Icons]
